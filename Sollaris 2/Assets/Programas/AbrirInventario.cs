@@ -37,7 +37,6 @@ public class AbrirInventario : MonoBehaviour
         }
         int slotAtivo = InventarioJogador.Instance.slotSelecionado;
         for(int i = 0; i < textosSlotsRapidos.Count; i++){
-            if(i < InventarioJogador.Instance.slotsRapidos.Count){
             if(i < fundosSlotsRapidos.Count && fundosSlotsRapidos[i] != null){
                 if(i == slotAtivo){
                     fundosSlotsRapidos[i].color = corSelecionado;
@@ -46,6 +45,7 @@ public class AbrirInventario : MonoBehaviour
                     fundosSlotsRapidos[i].color = corNormal;
                 }
             }
+            if(i < InventarioJogador.Instance.slotsRapidos.Count){
                 var slot = InventarioJogador.Instance.slotsRapidos[i];
                 if(slot.quantidadeItem > 1){
                     textosSlotsRapidos[i].text = slot.nomeItem + "\nx" + slot.quantidadeItem;
@@ -95,3 +95,4 @@ public class AbrirInventario : MonoBehaviour
         }
     }
 }
+
