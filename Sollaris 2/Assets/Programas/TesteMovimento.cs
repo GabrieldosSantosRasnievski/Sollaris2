@@ -16,18 +16,28 @@ public class TesteMovimento : MonoBehaviour
     private bool consegueDash = true;
     public ParticleSystem particulaDash;
     public float emissaomaxima = 60f;
+    // teste homem
+    public Animator animacaoTeste;
 
     void Start(){
         if(particulaDash != null){
             particulaDash.Stop();
         }
-        AtualizarGenero();
         playerCollider = GetComponent<Collider2D>();
     }
     public void AtualizarGenero(){
         string generoEscolhido = PlayerPrefs.GetString("GeneroPlayer", "Homem");
         if(generoEscolhido == "Homem"){
-            spriteRenderer.sprite = spriteHomem;
+            if(animacaoTeste == null){
+                return;
+            }
+            if(Input.GetKey(KeyCode.S)){
+                animacaoTeste.Play("Bora");
+                Debug.Log("VAI CARALHO");
+            }
+            else if(!Input.anyKey){
+                animacaoTeste.Play("HomemParado");
+            }
         }
         else if (generoEscolhido == "Mulher"){
             spriteRenderer.sprite = spriteMulher;
@@ -36,10 +46,18 @@ public class TesteMovimento : MonoBehaviour
     void Update()
     {
         Vector2 direcaoInput = Vector2.zero;
-        if(Input.GetKey(KeyCode.W)) direcaoInput.y = direcaoInput.y + 1f;
-        if(Input.GetKey(KeyCode.S)) direcaoInput.y = direcaoInput.y - 1f;
-        if(Input.GetKey(KeyCode.D)) direcaoInput.x = direcaoInput.x + 1f;
-        if(Input.GetKey(KeyCode.A)) direcaoInput.x = direcaoInput.x - 1f;
+        if(Input.GetKey(KeyCode.W)){
+            direcaoInput.y = direcaoInput.y + 1f;
+        }
+        if(Input.GetKey(KeyCode.S)){
+            direcaoInput.y = direcaoInput.y - 1f;
+        }
+        if(Input.GetKey(KeyCode.D)){
+            direcaoInput.x = direcaoInput.x + 1f;
+        }
+        if(Input.GetKey(KeyCode.A)){ 
+            direcaoInput.x = direcaoInput.x - 1f;
+        }
         if(direcaoInput != Vector2.zero){
             ultimaDirecaoDash = direcaoInput.normalized;
         }
@@ -52,6 +70,7 @@ public class TesteMovimento : MonoBehaviour
         else{
             transform.Translate(direcaoInput.normalized * velocidade * Time.deltaTime);
         }
+        AtualizarGenero();
     }
         private IEnumerator DarDash(){
         consegueDash = false;
