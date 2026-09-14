@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 public class TesteMovimento : MonoBehaviour
-
 {
     public float velocidade = 5f;
     public float velocidadeDash = 15f;
@@ -19,6 +18,8 @@ public class TesteMovimento : MonoBehaviour
     // teste homem
     public Animator animacaoTeste;
 
+    public GameObject prefabItemArremessado;
+
     void Start(){
         if(particulaDash != null){
             particulaDash.Stop();
@@ -33,7 +34,6 @@ public class TesteMovimento : MonoBehaviour
             }
             if(Input.GetKey(KeyCode.S)){
                 animacaoTeste.Play("Bora");
-                Debug.Log("VAI CARALHO");
             }
             else if(!Input.anyKey){
                 animacaoTeste.Play("HomemParado");
@@ -63,6 +63,9 @@ public class TesteMovimento : MonoBehaviour
         }
         if(Input.GetKeyDown(KeyCode.LeftShift) && consegueDash){
             StartCoroutine(DarDash());
+        }
+        if(Input.GetKeyDown(KeyCode.Q)){
+            TentarArremessar();
         }
         if (realizandoDash){
             transform.Translate(ultimaDirecaoDash * velocidadeDash * Time.deltaTime);
@@ -98,5 +101,25 @@ public class TesteMovimento : MonoBehaviour
         realizandoDash = false;
         yield return new WaitForSeconds(recargaDash);
         consegueDash = true;
+    }
+    private void TentarArremessar(){
+        if (InventarioJogador.Instance == null){
+            return;
+        }
+        var itemRemovido = InventarioJogador.Instance.ArremessarItemSelecionado();
+        if (itemRemovido == null){
+            return;
+        }
+        Vector3 posicaoMouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        posicaoMouse.z = 0f;
+        Vector2 direcaoArremesso = (posicaoMouse - transform.position).normalized;
+        if (prefabItemArremessado != null){
+            GameObject itemObjeto = Instantiate(prefabItemArremessado, transform.position, Quaternion.identity);
+            ItemArremessado scriptArremesso = itemObjeto.GetComponent<ItemArremessado>();
+            if (scriptArremesso != null)
+            {
+                scriptArremesso.Inicializar(direcaoArremesso, itemRemovido.iconeItem, itemRemovido.nomeItem);
+            }
+        }
     }
 }

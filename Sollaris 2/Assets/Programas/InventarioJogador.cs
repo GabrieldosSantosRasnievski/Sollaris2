@@ -83,4 +83,29 @@ public class InventarioJogador : MonoBehaviour
         }
         return false;
     }
+    public ItemSlot ArremessarItemSelecionado(){
+        if (slotsRapidos == null || slotSelecionado < 0 || slotSelecionado >= slotsRapidos.Count){
+            return null;
+        }
+        ItemSlot slotAtivo = slotsRapidos[slotSelecionado];
+        if(slotAtivo == null || string.IsNullOrEmpty(slotAtivo.nomeItem) || slotAtivo.quantidadeItem <= 0){
+            return null;
+        }
+        ItemSlot ItemArremessado = new ItemSlot{
+            nomeItem = slotAtivo.nomeItem,
+            iconeItem = slotAtivo.iconeItem,
+            quantidadeItem = 1
+        };
+        slotAtivo.quantidadeItem--;
+        if(slotAtivo.quantidadeItem <= 0){
+            slotAtivo.nomeItem = "";
+            slotAtivo.iconeItem = null;
+            slotAtivo.quantidadeItem = 0;
+        }
+        AbrirInventario ui = FindObjectOfType<AbrirInventario>();
+        if(ui != null){
+            ui.AtualizarUI();
+        }
+        return ItemArremessado;
+    }
 }
