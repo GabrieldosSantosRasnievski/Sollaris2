@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 2027f8431cfa9cb45b3a7924df927719
+guid: 3db34c4563fa27848875f007a8234f8a
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2375364719847390374
-    second: FundoTeste2_0
+      213: 918659606131728755
+    second: FUNDO SLOT 100X100_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -102,7 +102,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: FundoTeste2_0
+      name: FUNDO SLOT 100X100_0
       rect:
         serializedVersion: 2
         x: 0
@@ -117,8 +117,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a53408d5f52090fd0800000000000000
-      internalID: -2375364719847390374
+      spriteID: 3716bf46b0cbfbc00800000000000000
+      internalID: 918659606131728755
       vertices: []
       indices: 
       edges: []
@@ -137,7 +137,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      FundoTeste2_0: -2375364719847390374
+      FUNDO SLOT 100X100_0: 918659606131728755
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
