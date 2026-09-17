@@ -135,4 +135,70 @@ public class InventarioJogador : MonoBehaviour
         }
         return ItemArremessado;
     }
+    public void SalvarInventario(){
+        PlayerPrefs.SetInt("SlotsRapidos_Count", slotsRapidos.Count);
+        for (int i = 0; i < slotsRapidos.Count; i++){
+            PlayerPrefs.SetString("SlotRapido_" + i + "_Nome", slotsRapidos[i].nomeItem);
+            PlayerPrefs.SetInt("SlotRapido_" + i + "_Qtd", slotsRapidos[i].quantidadeItem);
+        }
+        PlayerPrefs.SetInt("Inventario_Count", inventario.Count);
+        for (int i = 0; i < inventario.Count; i++){
+            PlayerPrefs.SetString("SlotNormal_" + i + "_Nome", inventario[i].nomeItem);
+            PlayerPrefs.SetInt("SlotNormal_" + i + "_Qtd", inventario[i].quantidadeItem);
+        }
+        PlayerPrefs.Save();
+        Debug.Log("Ta funcionando!");
+    }
+    public void CarregarInventario(){
+        if (PlayerPrefs.HasKey("SlotsRapidos_Count")){
+            int totalRapidos = PlayerPrefs.GetInt("SlotsRapidos_Count");
+            slotsRapidos.Clear();
+
+            for (int i = 0; i < totalRapidos; i++){
+                string nome = PlayerPrefs.GetString("SlotRapido_" + i + "_Nome", "");
+                int qtd = PlayerPrefs.GetInt("SlotRapido_" + i + "_Qtd", 0);
+                Sprite icone = CarregarIconePorNome(nome);
+
+                slotsRapidos.Add(new ItemSlot
+                {
+                    nomeItem = nome,
+                    quantidadeItem = qtd,
+                    iconeItem = icone
+                });
+            }
+        }
+        if (PlayerPrefs.HasKey("Inventario_Count")){
+            int totalNormal = PlayerPrefs.GetInt("Inventario_Count");
+            inventario.Clear();
+
+            for (int i = 0; i < totalNormal; i++){
+                string nome = PlayerPrefs.GetString("SlotNormal_" + i + "_Nome", "");
+                int qtd = PlayerPrefs.GetInt("SlotNormal_" + i + "_Qtd", 0);
+                Sprite icone = CarregarIconePorNome(nome);
+
+                inventario.Add(new ItemSlot
+                {
+                    nomeItem = nome,
+                    quantidadeItem = qtd,
+                    iconeItem = icone
+                });
+            }
+        }
+        AbrirInventario ui = FindObjectOfType<AbrirInventario>();
+        if (ui != null){
+            ui.AtualizarUI();
+        }
+
+        Debug.Log("Inventário Completo Carregado!");
+    }
+    private Sprite CarregarIconePorNome(string nomeItem){
+        if (string.IsNullOrEmpty(nomeItem)) return null;
+        return Resources.Load<Sprite>("Icones/" + nomeItem); 
+    }
+    private void Start(){
+        CarregarInventario();
+    }
+    private void OnApplicationQuit(){
+        SalvarInventario();
+    }
 }
