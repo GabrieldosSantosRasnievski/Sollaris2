@@ -15,6 +15,7 @@ public class TesteMovimento : MonoBehaviour
     private bool consegueDash = true;
     public ParticleSystem particulaDash;
     public float emissaomaxima = 60f;
+    public bool estaTomandoDano = false;
     // teste homem
     public Animator animacaoTeste;
 
@@ -29,6 +30,9 @@ public class TesteMovimento : MonoBehaviour
     public void AtualizarGenero(){
         string generoEscolhido = PlayerPrefs.GetString("GeneroPlayer", "Homem");
         if(generoEscolhido == "Homem"){
+            if(estaTomandoDano){
+                return;
+            }
             if(animacaoTeste == null){
                 return;
             }

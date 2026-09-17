@@ -58,26 +58,53 @@ public class InventarioJogador : MonoBehaviour
         }
         return null;
     }
-    public bool TentarAdicionar(string nomeDoItem, Sprite icone){
-        foreach (ItemSlot slot in slotsRapidos){
-            if(slot.nomeItem == nomeDoItem){
+    public bool TentarAdicionar(string nomeDoItem, Sprite icone)
+    {
+        foreach (ItemSlot slot in slotsRapidos)
+        {
+            if (slot.nomeItem == nomeDoItem)
+            {
                 slot.quantidadeItem++;
                 return true;
             }
         }
-        foreach (ItemSlot slot in inventario){
-            if(slot.nomeItem == nomeDoItem){
+        foreach (ItemSlot slot in inventario)
+        {
+            if (slot.nomeItem == nomeDoItem)
+            {
                 slot.quantidadeItem++;
                 return true;
             }
         }
-        if (slotsRapidos.Count < limiteTiposSlotsRapidos){
-            ItemSlot novoSlot = new ItemSlot {nomeItem = nomeDoItem, quantidadeItem = 1, iconeItem = icone};
+        foreach (ItemSlot slot in slotsRapidos)
+        {
+            if (string.IsNullOrEmpty(slot.nomeItem))
+            {
+                slot.nomeItem = nomeDoItem;
+                slot.iconeItem = icone;
+                slot.quantidadeItem = 1;
+                return true;
+            }
+        }
+        if (slotsRapidos.Count < limiteTiposSlotsRapidos)
+        {
+            ItemSlot novoSlot = new ItemSlot { nomeItem = nomeDoItem, quantidadeItem = 1, iconeItem = icone };
             slotsRapidos.Add(novoSlot);
             return true;
         }
-        if(inventario.Count < limiteTiposInventario){
-            ItemSlot novoSlot = new ItemSlot {nomeItem = nomeDoItem, quantidadeItem = 1, iconeItem = icone};
+        foreach (ItemSlot slot in inventario)
+        {
+            if (string.IsNullOrEmpty(slot.nomeItem))
+            {
+                slot.nomeItem = nomeDoItem;
+                slot.iconeItem = icone;
+                slot.quantidadeItem = 1;
+                return true;
+            }
+        }
+        if (inventario.Count < limiteTiposInventario)
+        {
+            ItemSlot novoSlot = new ItemSlot { nomeItem = nomeDoItem, quantidadeItem = 1, iconeItem = icone };
             inventario.Add(novoSlot);
             return true;
         }
