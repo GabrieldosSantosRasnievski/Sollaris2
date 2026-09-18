@@ -6,11 +6,13 @@ public class InteragirObjeto : MonoBehaviour
     public GameObject textoColetar;
     public string nomeItem;
     public Sprite iconeItem;
+    public bool podeConsumir;
+    public float valorFome;
     private bool taPerto = false;
     void Update(){
         if(taPerto && Input.GetKeyDown(KeyCode.E)){
             if(InventarioJogador.Instance != null){
-                bool pegou = InventarioJogador.Instance.TentarAdicionar(nomeItem, iconeItem);
+                bool pegou = InventarioJogador.Instance.TentarAdicionar(nomeItem, iconeItem, podeConsumir, valorFome);
                 if(pegou){
                     if(textoColetar != null)
                     {

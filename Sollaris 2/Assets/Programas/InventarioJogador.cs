@@ -9,6 +9,8 @@ public class InventarioJogador : MonoBehaviour
         public string nomeItem;
         public int quantidadeItem;
         public Sprite iconeItem;
+        public bool podeConsumir;
+        public float valorFome;
     }
     public List<ItemSlot> slotsRapidos = new List<ItemSlot>();
     public int limiteTiposSlotsRapidos = 9;
@@ -25,6 +27,10 @@ public class InventarioJogador : MonoBehaviour
         }
     }
     private void Update(){
+        if (Input.GetMouseButtonDown(0)){
+            Debug.Log("Clique detetado! A tentar usar o item...");
+            UsarItemSelecionado();
+        }
         if(Input.GetKeyDown(KeyCode.Alpha1)){
             slotSelecionado = 0;
         }
@@ -59,8 +65,7 @@ public class InventarioJogador : MonoBehaviour
         }
         return null;
     }
-    public bool TentarAdicionar(string nomeDoItem, Sprite icone)
-    {
+    public bool TentarAdicionar(string nomeDoItem, Sprite icone, bool podeConsumir2, float fomeRecuperada){
         foreach (ItemSlot slot in slotsRapidos)
         {
             if (slot.nomeItem == nomeDoItem)
@@ -84,12 +89,13 @@ public class InventarioJogador : MonoBehaviour
                 slot.nomeItem = nomeDoItem;
                 slot.iconeItem = icone;
                 slot.quantidadeItem = 1;
+                
                 return true;
             }
         }
         if (slotsRapidos.Count < limiteTiposSlotsRapidos)
         {
-            ItemSlot novoSlot = new ItemSlot { nomeItem = nomeDoItem, quantidadeItem = 1, iconeItem = icone };
+            ItemSlot novoSlot = new ItemSlot { nomeItem = nomeDoItem, quantidadeItem = 1, iconeItem = icone, podeConsumir = podeConsumir2, valorFome = fomeRecuperada };
             slotsRapidos.Add(novoSlot);
             return true;
         }
@@ -100,6 +106,8 @@ public class InventarioJogador : MonoBehaviour
                 slot.nomeItem = nomeDoItem;
                 slot.iconeItem = icone;
                 slot.quantidadeItem = 1;
+                slot.podeConsumir = podeConsumir2;
+                slot.valorFome = fomeRecuperada;
                 return true;
             }
         }
@@ -135,6 +143,36 @@ public class InventarioJogador : MonoBehaviour
             ui.AtualizarUI();
         }
         return ItemArremessado;
+    }
+    public void UsarItemSelecionado(){
+        ItemSlot slotAtivo = ObterItemSelecionado();
+        if (slotAtivo != null && slotAtivo.podeConsumir){
+            if (slotAtivo.podeConsumir){
+                GameObject jogador = GameObject.FindWithTag("Player");
+                FomeJogador sistemaFome = null;
+                if (jogador != null){
+                    sistemaFome = jogador.GetComponent<FomeJogador>();
+                }
+                if (sistemaFome != null){
+                    sistemaFome.Comer(slotAtivo.valorFome);
+                    slotAtivo.quantidadeItem--;
+                    if (slotAtivo.quantidadeItem <= 0){
+                        slotAtivo.nomeItem = "";
+                        slotAtivo.iconeItem = null;
+                        slotAtivo.quantidadeItem = 0;
+                        slotAtivo.podeConsumir = false;
+                        slotAtivo.valorFome = 0f;
+                    }
+                    AbrirInventario ui = Object.FindAnyObjectByType<AbrirInventario>();
+                    if (ui != null){
+                        ui.AtualizarUI();
+                    }
+                    Debug.Log("Sucesso! Item consumido e fome aumentada.");
+                } else{
+                    Debug.LogWarning("Não foi possível encontrar o FomeJogador no objeto com a tag 'Player'!");
+                }
+            }
+        }
     }
     public void SalvarInventario(){
         PlayerPrefs.SetInt("SlotsRapidos_Count", slotsRapidos.Count);
@@ -204,18 +242,15 @@ public class InventarioJogador : MonoBehaviour
 
         return spriteCarregado;
     }
-    private void Start()
-    {
+    private void Start(){
         CarregarInventario();
     }
 
-    private void OnDisable()
-    {
+    private void OnDisable(){
         SalvarInventario();
     }
 
-    private void OnApplicationQuit()
-    {
+    private void OnApplicationQuit(){
         SalvarInventario();
     }
 }
