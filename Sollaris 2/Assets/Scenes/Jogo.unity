@@ -4473,7 +4473,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteragirObjeto
   textoColetar: {fileID: 1813651558}
-  nomeItem: "caf\xE9"
+  nomeItem: "Caf\xE9"
   iconeItem: {fileID: 2878654558044855476, guid: cae7f5c327509a84fba306de195d4d5d, type: 3}
 --- !u!61 &1019378830
 BoxCollider2D:
@@ -6426,7 +6426,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b68eb9f10292c8479e17b7942116596, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventarioJogador
+  slotsRapidos: []
   limiteTiposSlotsRapidos: 9
+  inventario: []
   limiteTiposInventario: 20
   slotSelecionado: 0
 --- !u!4 &1675539560

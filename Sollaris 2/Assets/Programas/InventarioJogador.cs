@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public class InventarioJogador : MonoBehaviour
 {
     public static InventarioJogador Instance;
+    [System.Serializable]
     public class ItemSlot{
         public string nomeItem;
         public int quantidadeItem;
@@ -192,13 +193,29 @@ public class InventarioJogador : MonoBehaviour
         Debug.Log("Inventário Completo Carregado!");
     }
     private Sprite CarregarIconePorNome(string nomeItem){
-        if (string.IsNullOrEmpty(nomeItem)) return null;
-        return Resources.Load<Sprite>("Icones/" + nomeItem); 
+        if (string.IsNullOrEmpty(nomeItem)){
+            return null;
+        }
+        Sprite spriteCarregado = Resources.Load<Sprite>("Icones/" + nomeItem);
+
+        if (spriteCarregado == null){
+            Debug.LogWarning("Não foi possível encontrar o ícone para o item: " + nomeItem + " na pasta Resources/Icones/");
+        }
+
+        return spriteCarregado;
     }
-    private void Start(){
+    private void Start()
+    {
         CarregarInventario();
     }
-    private void OnApplicationQuit(){
+
+    private void OnDisable()
+    {
+        SalvarInventario();
+    }
+
+    private void OnApplicationQuit()
+    {
         SalvarInventario();
     }
 }
