@@ -4475,8 +4475,8 @@ MonoBehaviour:
   textoColetar: {fileID: 1813651558}
   nomeItem: "Caf\xE9"
   iconeItem: {fileID: 2878654558044855476, guid: cae7f5c327509a84fba306de195d4d5d, type: 3}
-  podeConsumir: 0
-  valorFome: 0
+  podeConsumir: 1
+  valorFome: 10
 --- !u!61 &1019378830
 BoxCollider2D:
   m_ObjectHideFlags: 0

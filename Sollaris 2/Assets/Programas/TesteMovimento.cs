@@ -107,22 +107,32 @@ public class TesteMovimento : MonoBehaviour
         consegueDash = true;
     }
     private void TentarArremessar(){
-        if (InventarioJogador.Instance == null){
+        if(InventarioJogador.Instance == null){
             return;
         }
+
+        var slotAtivo = InventarioJogador.Instance.ObterItemSelecionado();
+        if(slotAtivo == null || string.IsNullOrEmpty(slotAtivo.nomeItem) || slotAtivo.quantidadeItem <= 0){
+            return;
+        }
+
+        bool podeConsumir = slotAtivo.podeConsumir;
+        float valorFome = slotAtivo.valorFome;
+
         var itemRemovido = InventarioJogador.Instance.ArremessarItemSelecionado();
-        if (itemRemovido == null){
+        if(itemRemovido == null){
             return;
         }
+
         Vector3 posicaoMouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         posicaoMouse.z = 0f;
         Vector2 direcaoArremesso = (posicaoMouse - transform.position).normalized;
-        if (prefabItemArremessado != null){
+
+        if(prefabItemArremessado != null){
             GameObject itemObjeto = Instantiate(prefabItemArremessado, transform.position, Quaternion.identity);
             ItemArremessado scriptArremesso = itemObjeto.GetComponent<ItemArremessado>();
-            if (scriptArremesso != null)
-            {
-                scriptArremesso.Inicializar(direcaoArremesso, itemRemovido.iconeItem, itemRemovido.nomeItem);
+            if(scriptArremesso != null){
+                scriptArremesso.Inicializar(direcaoArremesso, itemRemovido.iconeItem, itemRemovido.nomeItem, podeConsumir, valorFome);
             }
         }
     }
