@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
-public class TesteMovimento : MonoBehaviour
-{
+
+public class TesteMovimento : MonoBehaviour{
     public float velocidade = 5f;
     public float velocidadeDash = 15f;
     public float duracaoDash = 0.5f;
@@ -16,9 +16,7 @@ public class TesteMovimento : MonoBehaviour
     public ParticleSystem particulaDash;
     public float emissaomaxima = 60f;
     public bool estaTomandoDano = false;
-    // teste homem
     public Animator animacaoTeste;
-
     public GameObject prefabItemArremessado;
 
     void Start(){
@@ -27,6 +25,7 @@ public class TesteMovimento : MonoBehaviour
         }
         playerCollider = GetComponent<Collider2D>();
     }
+
     public void AtualizarGenero(){
         string generoEscolhido = PlayerPrefs.GetString("GeneroPlayer", "Homem");
         if(generoEscolhido == "Homem"){
@@ -43,12 +42,12 @@ public class TesteMovimento : MonoBehaviour
                 animacaoTeste.Play("HomemParado");
             }
         }
-        else if (generoEscolhido == "Mulher"){
+        else if(generoEscolhido == "Mulher"){
             spriteRenderer.sprite = spriteMulher;
         }
     }
-    void Update()
-    {
+
+    void Update(){
         Vector2 direcaoInput = Vector2.zero;
         if(Input.GetKey(KeyCode.W)){
             direcaoInput.y = direcaoInput.y + 1f;
@@ -71,7 +70,7 @@ public class TesteMovimento : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Q)){
             TentarArremessar();
         }
-        if (realizandoDash){
+        if(realizandoDash){
             transform.Translate(ultimaDirecaoDash * velocidadeDash * Time.deltaTime);
         }
         else{
@@ -79,7 +78,8 @@ public class TesteMovimento : MonoBehaviour
         }
         AtualizarGenero();
     }
-        private IEnumerator DarDash(){
+
+    private IEnumerator DarDash(){
         consegueDash = false;
         realizandoDash = true;
         if(playerCollider != null){
@@ -106,6 +106,7 @@ public class TesteMovimento : MonoBehaviour
         yield return new WaitForSeconds(recargaDash);
         consegueDash = true;
     }
+
     private void TentarArremessar(){
         if(InventarioJogador.Instance == null){
             return;
@@ -118,6 +119,8 @@ public class TesteMovimento : MonoBehaviour
 
         bool podeConsumir = slotAtivo.podeConsumir;
         float valorFome = slotAtivo.valorFome;
+        float danoItem = slotAtivo.danoItem;
+        Vector2 tamanhoHitbox = slotAtivo.tamanhoHitbox;
 
         var itemRemovido = InventarioJogador.Instance.ArremessarItemSelecionado();
         if(itemRemovido == null){
@@ -132,7 +135,7 @@ public class TesteMovimento : MonoBehaviour
             GameObject itemObjeto = Instantiate(prefabItemArremessado, transform.position, Quaternion.identity);
             ItemArremessado scriptArremesso = itemObjeto.GetComponent<ItemArremessado>();
             if(scriptArremesso != null){
-                scriptArremesso.Inicializar(direcaoArremesso, itemRemovido.iconeItem, itemRemovido.nomeItem, podeConsumir, valorFome);
+                scriptArremesso.Inicializar(direcaoArremesso, itemRemovido.iconeItem, itemRemovido.nomeItem, podeConsumir, valorFome, danoItem, tamanhoHitbox);
             }
         }
     }

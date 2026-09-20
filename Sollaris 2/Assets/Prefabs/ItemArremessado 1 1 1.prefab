@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7687587766813943181}
   - component: {fileID: 6886415318044114834}
   - component: {fileID: 7136613641570021546}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: TextoColetar (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -149,7 +149,7 @@ GameObject:
   - component: {fileID: 2727933493639859264}
   - component: {fileID: 218874426081552448}
   - component: {fileID: 8694342592842754207}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -254,7 +254,7 @@ GameObject:
   - component: {fileID: 4159896380405696556}
   - component: {fileID: 6989397018009815095}
   - component: {fileID: 1886993159074585478}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ItemArremessado 1 1 1
   m_TagString: Objeto
   m_Icon: {fileID: 0}
@@ -382,7 +382,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -423,7 +423,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!114 &1886993159074585478
 MonoBehaviour:
@@ -440,3 +440,7 @@ MonoBehaviour:
   textoColetar: {fileID: 5116010086316099750}
   nomeItem: 
   iconeItem: {fileID: 0}
+  podeConsumir: 0
+  valorFome: 0
+  danoItem: 0
+  tamanhoHitbox: {x: 1, y: 1}

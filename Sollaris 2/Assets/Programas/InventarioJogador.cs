@@ -12,6 +12,8 @@ public class InventarioJogador : MonoBehaviour{
         public Sprite iconeItem;
         public bool podeConsumir;
         public float valorFome;
+        public float danoItem;
+        public Vector2 tamanhoHitbox = new Vector2(1f, 1f);
     }
 
     public List<ItemSlot> slotsRapidos = new List<ItemSlot>();
@@ -31,7 +33,6 @@ public class InventarioJogador : MonoBehaviour{
 
     private void Update(){
         if(Input.GetMouseButtonDown(0)){
-            Debug.Log("Clique detetado! A tentar usar o item...");
             UsarItemSelecionado();
         }
         if(Input.GetKeyDown(KeyCode.Alpha1)){
@@ -70,12 +71,14 @@ public class InventarioJogador : MonoBehaviour{
         return null;
     }
 
-    public bool TentarAdicionar(string nomeDoItem, Sprite icone, bool podeConsumir2, float fomeRecuperada){
+    public bool TentarAdicionar(string nomeDoItem, Sprite icone, bool podeConsumir2, float fomeRecuperada, float danoRecebido, Vector2 tamanhoCaixa){
         foreach(ItemSlot slot in slotsRapidos){
             if(slot.nomeItem == nomeDoItem){
                 slot.quantidadeItem++;
                 slot.podeConsumir = podeConsumir2;
                 slot.valorFome = fomeRecuperada;
+                slot.danoItem = danoRecebido;
+                slot.tamanhoHitbox = tamanhoCaixa;
                 return true;
             }
         }
@@ -84,6 +87,8 @@ public class InventarioJogador : MonoBehaviour{
                 slot.quantidadeItem++;
                 slot.podeConsumir = podeConsumir2;
                 slot.valorFome = fomeRecuperada;
+                slot.danoItem = danoRecebido;
+                slot.tamanhoHitbox = tamanhoCaixa;
                 return true;
             }
         }
@@ -94,11 +99,13 @@ public class InventarioJogador : MonoBehaviour{
                 slot.quantidadeItem = 1;
                 slot.podeConsumir = podeConsumir2;
                 slot.valorFome = fomeRecuperada;
+                slot.danoItem = danoRecebido;
+                slot.tamanhoHitbox = tamanhoCaixa;
                 return true;
             }
         }
         if(slotsRapidos.Count < limiteTiposSlotsRapidos){
-            ItemSlot novoSlot = new ItemSlot{ nomeItem = nomeDoItem, quantidadeItem = 1, iconeItem = icone, podeConsumir = podeConsumir2, valorFome = fomeRecuperada };
+            ItemSlot novoSlot = new ItemSlot{ nomeItem = nomeDoItem, quantidadeItem = 1, iconeItem = icone, podeConsumir = podeConsumir2, valorFome = fomeRecuperada, danoItem = danoRecebido, tamanhoHitbox = tamanhoCaixa };
             slotsRapidos.Add(novoSlot);
             return true;
         }
@@ -109,11 +116,13 @@ public class InventarioJogador : MonoBehaviour{
                 slot.quantidadeItem = 1;
                 slot.podeConsumir = podeConsumir2;
                 slot.valorFome = fomeRecuperada;
+                slot.danoItem = danoRecebido;
+                slot.tamanhoHitbox = tamanhoCaixa;
                 return true;
             }
         }
         if(inventario.Count < limiteTiposInventario){
-            ItemSlot novoSlot = new ItemSlot{ nomeItem = nomeDoItem, quantidadeItem = 1, iconeItem = icone, podeConsumir = podeConsumir2, valorFome = fomeRecuperada };
+            ItemSlot novoSlot = new ItemSlot{ nomeItem = nomeDoItem, quantidadeItem = 1, iconeItem = icone, podeConsumir = podeConsumir2, valorFome = fomeRecuperada, danoItem = danoRecebido, tamanhoHitbox = tamanhoCaixa };
             inventario.Add(novoSlot);
             return true;
         }
@@ -131,7 +140,11 @@ public class InventarioJogador : MonoBehaviour{
         ItemSlot ItemArremessado = new ItemSlot{
             nomeItem = slotAtivo.nomeItem,
             iconeItem = slotAtivo.iconeItem,
-            quantidadeItem = 1
+            quantidadeItem = 1,
+            podeConsumir = slotAtivo.podeConsumir,
+            valorFome = slotAtivo.valorFome,
+            danoItem = slotAtivo.danoItem,
+            tamanhoHitbox = slotAtivo.tamanhoHitbox
         };
         slotAtivo.quantidadeItem--;
         if(slotAtivo.quantidadeItem <= 0){
@@ -140,6 +153,8 @@ public class InventarioJogador : MonoBehaviour{
             slotAtivo.quantidadeItem = 0;
             slotAtivo.podeConsumir = false;
             slotAtivo.valorFome = 0f;
+            slotAtivo.danoItem = 0f;
+            slotAtivo.tamanhoHitbox = new Vector2(1f, 1f);
         }
         AbrirInventario ui = FindObjectOfType<AbrirInventario>();
         if(ui != null){
@@ -165,15 +180,13 @@ public class InventarioJogador : MonoBehaviour{
                     slotAtivo.quantidadeItem = 0;
                     slotAtivo.podeConsumir = false;
                     slotAtivo.valorFome = 0f;
+                    slotAtivo.danoItem = 0f;
+                    slotAtivo.tamanhoHitbox = new Vector2(1f, 1f);
                 }
                 AbrirInventario ui = Object.FindAnyObjectByType<AbrirInventario>();
                 if(ui != null){
                     ui.AtualizarUI();
                 }
-                Debug.Log("Sucesso! Item consumido e fome aumentada.");
-            }
-            else{
-                Debug.LogWarning("Não foi possível encontrar o FomeJogador no objeto com a tag 'Player'!");
             }
         }
     }
@@ -183,46 +196,71 @@ public class InventarioJogador : MonoBehaviour{
         for(int i = 0; i < slotsRapidos.Count; i++){
             PlayerPrefs.SetString("SlotRapido_" + i + "_Nome", slotsRapidos[i].nomeItem);
             PlayerPrefs.SetInt("SlotRapido_" + i + "_Qtd", slotsRapidos[i].quantidadeItem);
+            PlayerPrefs.SetInt("SlotRapido_" + i + "_Consumir", slotsRapidos[i].podeConsumir ? 1 : 0);
+            PlayerPrefs.SetFloat("SlotRapido_" + i + "_Fome", slotsRapidos[i].valorFome);
+            PlayerPrefs.SetFloat("SlotRapido_" + i + "_Dano", slotsRapidos[i].danoItem);
+            PlayerPrefs.SetFloat("SlotRapido_" + i + "_HitboxX", slotsRapidos[i].tamanhoHitbox.x);
+            PlayerPrefs.SetFloat("SlotRapido_" + i + "_HitboxY", slotsRapidos[i].tamanhoHitbox.y);
         }
         PlayerPrefs.SetInt("Inventario_Count", inventario.Count);
         for(int i = 0; i < inventario.Count; i++){
             PlayerPrefs.SetString("SlotNormal_" + i + "_Nome", inventario[i].nomeItem);
             PlayerPrefs.SetInt("SlotNormal_" + i + "_Qtd", inventario[i].quantidadeItem);
+            PlayerPrefs.SetInt("SlotNormal_" + i + "_Consumir", inventario[i].podeConsumir ? 1 : 0);
+            PlayerPrefs.SetFloat("SlotNormal_" + i + "_Fome", inventario[i].valorFome);
+            PlayerPrefs.SetFloat("SlotNormal_" + i + "_Dano", inventario[i].danoItem);
+            PlayerPrefs.SetFloat("SlotNormal_" + i + "_HitboxX", inventario[i].tamanhoHitbox.x);
+            PlayerPrefs.SetFloat("SlotNormal_" + i + "_HitboxY", inventario[i].tamanhoHitbox.y);
         }
         PlayerPrefs.Save();
-        Debug.Log("Ta funcionando!");
     }
 
     public void CarregarInventario(){
         if(PlayerPrefs.HasKey("SlotsRapidos_Count")){
             int totalRapidos = PlayerPrefs.GetInt("SlotsRapidos_Count");
             slotsRapidos.Clear();
-
             for(int i = 0; i < totalRapidos; i++){
                 string nome = PlayerPrefs.GetString("SlotRapido_" + i + "_Nome", "");
                 int qtd = PlayerPrefs.GetInt("SlotRapido_" + i + "_Qtd", 0);
+                bool consumir = PlayerPrefs.GetInt("SlotRapido_" + i + "_Consumir", 0) == 1;
+                float fome = PlayerPrefs.GetFloat("SlotRapido_" + i + "_Fome", 0f);
+                float dano = PlayerPrefs.GetFloat("SlotRapido_" + i + "_Dano", 0f);
+                float hx = PlayerPrefs.GetFloat("SlotRapido_" + i + "_HitboxX", 1f);
+                float hy = PlayerPrefs.GetFloat("SlotRapido_" + i + "_HitboxY", 1f);
                 Sprite icone = CarregarIconePorNome(nome);
-
+                
                 slotsRapidos.Add(new ItemSlot{
                     nomeItem = nome,
                     quantidadeItem = qtd,
-                    iconeItem = icone
+                    iconeItem = icone,
+                    podeConsumir = consumir,
+                    valorFome = fome,
+                    danoItem = dano,
+                    tamanhoHitbox = new Vector2(hx, hy)
                 });
             }
         }
         if(PlayerPrefs.HasKey("Inventario_Count")){
             int totalNormal = PlayerPrefs.GetInt("Inventario_Count");
             inventario.Clear();
-
             for(int i = 0; i < totalNormal; i++){
                 string nome = PlayerPrefs.GetString("SlotNormal_" + i + "_Nome", "");
                 int qtd = PlayerPrefs.GetInt("SlotNormal_" + i + "_Qtd", 0);
+                bool consumir = PlayerPrefs.GetInt("SlotNormal_" + i + "_Consumir", 0) == 1;
+                float fome = PlayerPrefs.GetFloat("SlotNormal_" + i + "_Fome", 0f);
+                float dano = PlayerPrefs.GetFloat("SlotNormal_" + i + "_Dano", 0f);
+                float hx = PlayerPrefs.GetFloat("SlotNormal_" + i + "_HitboxX", 1f);
+                float hy = PlayerPrefs.GetFloat("SlotNormal_" + i + "_HitboxY", 1f);
                 Sprite icone = CarregarIconePorNome(nome);
-
+                
                 inventario.Add(new ItemSlot{
                     nomeItem = nome,
                     quantidadeItem = qtd,
-                    iconeItem = icone
+                    iconeItem = icone,
+                    podeConsumir = consumir,
+                    valorFome = fome,
+                    danoItem = dano,
+                    tamanhoHitbox = new Vector2(hx, hy)
                 });
             }
         }
@@ -230,8 +268,6 @@ public class InventarioJogador : MonoBehaviour{
         if(ui != null){
             ui.AtualizarUI();
         }
-
-        Debug.Log("Inventário Completo Carregado!");
     }
 
     private Sprite CarregarIconePorNome(string nomeItem){
@@ -239,11 +275,6 @@ public class InventarioJogador : MonoBehaviour{
             return null;
         }
         Sprite spriteCarregado = Resources.Load<Sprite>("Icones/" + nomeItem);
-
-        if(spriteCarregado == null){
-            Debug.LogWarning("Não foi possível encontrar o ícone para o item: " + nomeItem + " na pasta Resources/Icones/");
-        }
-
         return spriteCarregado;
     }
 
