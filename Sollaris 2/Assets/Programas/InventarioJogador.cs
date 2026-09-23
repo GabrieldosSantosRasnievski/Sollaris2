@@ -14,6 +14,7 @@ public class InventarioJogador : MonoBehaviour{
         public float valorFome;
         public float danoItem;
         public Vector2 tamanhoHitbox = new Vector2(1f, 1f);
+        public bool quebraAoAtingir;
     }
 
     public List<ItemSlot> slotsRapidos = new List<ItemSlot>();
@@ -71,7 +72,7 @@ public class InventarioJogador : MonoBehaviour{
         return null;
     }
 
-    public bool TentarAdicionar(string nomeDoItem, Sprite icone, bool podeConsumir2, float fomeRecuperada, float danoRecebido, Vector2 tamanhoCaixa){
+    public bool TentarAdicionar(string nomeDoItem, Sprite icone, bool podeConsumir2, float fomeRecuperada, float danoRecebido, Vector2 tamanhoCaixa, bool quebraInimigo){
         foreach(ItemSlot slot in slotsRapidos){
             if(slot.nomeItem == nomeDoItem){
                 slot.quantidadeItem++;
@@ -79,6 +80,7 @@ public class InventarioJogador : MonoBehaviour{
                 slot.valorFome = fomeRecuperada;
                 slot.danoItem = danoRecebido;
                 slot.tamanhoHitbox = tamanhoCaixa;
+                slot.quebraAoAtingir = quebraInimigo;
                 return true;
             }
         }
@@ -89,6 +91,7 @@ public class InventarioJogador : MonoBehaviour{
                 slot.valorFome = fomeRecuperada;
                 slot.danoItem = danoRecebido;
                 slot.tamanhoHitbox = tamanhoCaixa;
+                slot.quebraAoAtingir = quebraInimigo;
                 return true;
             }
         }
@@ -101,11 +104,12 @@ public class InventarioJogador : MonoBehaviour{
                 slot.valorFome = fomeRecuperada;
                 slot.danoItem = danoRecebido;
                 slot.tamanhoHitbox = tamanhoCaixa;
+                slot.quebraAoAtingir = quebraInimigo;
                 return true;
             }
         }
         if(slotsRapidos.Count < limiteTiposSlotsRapidos){
-            ItemSlot novoSlot = new ItemSlot{ nomeItem = nomeDoItem, quantidadeItem = 1, iconeItem = icone, podeConsumir = podeConsumir2, valorFome = fomeRecuperada, danoItem = danoRecebido, tamanhoHitbox = tamanhoCaixa };
+            ItemSlot novoSlot = new ItemSlot{ nomeItem = nomeDoItem, quantidadeItem = 1, iconeItem = icone, podeConsumir = podeConsumir2, valorFome = fomeRecuperada, danoItem = danoRecebido, tamanhoHitbox = tamanhoCaixa, quebraAoAtingir = quebraInimigo };
             slotsRapidos.Add(novoSlot);
             return true;
         }
@@ -118,11 +122,12 @@ public class InventarioJogador : MonoBehaviour{
                 slot.valorFome = fomeRecuperada;
                 slot.danoItem = danoRecebido;
                 slot.tamanhoHitbox = tamanhoCaixa;
+                slot.quebraAoAtingir = quebraInimigo;
                 return true;
             }
         }
         if(inventario.Count < limiteTiposInventario){
-            ItemSlot novoSlot = new ItemSlot{ nomeItem = nomeDoItem, quantidadeItem = 1, iconeItem = icone, podeConsumir = podeConsumir2, valorFome = fomeRecuperada, danoItem = danoRecebido, tamanhoHitbox = tamanhoCaixa };
+            ItemSlot novoSlot = new ItemSlot{ nomeItem = nomeDoItem, quantidadeItem = 1, iconeItem = icone, podeConsumir = podeConsumir2, valorFome = fomeRecuperada, danoItem = danoRecebido, tamanhoHitbox = tamanhoCaixa, quebraAoAtingir = quebraInimigo };
             inventario.Add(novoSlot);
             return true;
         }
@@ -144,7 +149,8 @@ public class InventarioJogador : MonoBehaviour{
             podeConsumir = slotAtivo.podeConsumir,
             valorFome = slotAtivo.valorFome,
             danoItem = slotAtivo.danoItem,
-            tamanhoHitbox = slotAtivo.tamanhoHitbox
+            tamanhoHitbox = slotAtivo.tamanhoHitbox,
+            quebraAoAtingir = slotAtivo.quebraAoAtingir
         };
         slotAtivo.quantidadeItem--;
         if(slotAtivo.quantidadeItem <= 0){
@@ -155,6 +161,7 @@ public class InventarioJogador : MonoBehaviour{
             slotAtivo.valorFome = 0f;
             slotAtivo.danoItem = 0f;
             slotAtivo.tamanhoHitbox = new Vector2(1f, 1f);
+            slotAtivo.quebraAoAtingir = false;
         }
         AbrirInventario ui = FindObjectOfType<AbrirInventario>();
         if(ui != null){
@@ -182,6 +189,7 @@ public class InventarioJogador : MonoBehaviour{
                     slotAtivo.valorFome = 0f;
                     slotAtivo.danoItem = 0f;
                     slotAtivo.tamanhoHitbox = new Vector2(1f, 1f);
+                    slotAtivo.quebraAoAtingir = false;
                 }
                 AbrirInventario ui = Object.FindAnyObjectByType<AbrirInventario>();
                 if(ui != null){
@@ -201,6 +209,7 @@ public class InventarioJogador : MonoBehaviour{
             PlayerPrefs.SetFloat("SlotRapido_" + i + "_Dano", slotsRapidos[i].danoItem);
             PlayerPrefs.SetFloat("SlotRapido_" + i + "_HitboxX", slotsRapidos[i].tamanhoHitbox.x);
             PlayerPrefs.SetFloat("SlotRapido_" + i + "_HitboxY", slotsRapidos[i].tamanhoHitbox.y);
+            PlayerPrefs.SetInt("SlotRapido_" + i + "_Quebra", slotsRapidos[i].quebraAoAtingir ? 1 : 0);
         }
         PlayerPrefs.SetInt("Inventario_Count", inventario.Count);
         for(int i = 0; i < inventario.Count; i++){
@@ -211,6 +220,7 @@ public class InventarioJogador : MonoBehaviour{
             PlayerPrefs.SetFloat("SlotNormal_" + i + "_Dano", inventario[i].danoItem);
             PlayerPrefs.SetFloat("SlotNormal_" + i + "_HitboxX", inventario[i].tamanhoHitbox.x);
             PlayerPrefs.SetFloat("SlotNormal_" + i + "_HitboxY", inventario[i].tamanhoHitbox.y);
+            PlayerPrefs.SetInt("SlotNormal_" + i + "_Quebra", inventario[i].quebraAoAtingir ? 1 : 0);
         }
         PlayerPrefs.Save();
     }
@@ -227,6 +237,7 @@ public class InventarioJogador : MonoBehaviour{
                 float dano = PlayerPrefs.GetFloat("SlotRapido_" + i + "_Dano", 0f);
                 float hx = PlayerPrefs.GetFloat("SlotRapido_" + i + "_HitboxX", 1f);
                 float hy = PlayerPrefs.GetFloat("SlotRapido_" + i + "_HitboxY", 1f);
+                bool quebra = PlayerPrefs.GetInt("SlotRapido_" + i + "_Quebra", 0) == 1;
                 Sprite icone = CarregarIconePorNome(nome);
                 
                 slotsRapidos.Add(new ItemSlot{
@@ -236,7 +247,8 @@ public class InventarioJogador : MonoBehaviour{
                     podeConsumir = consumir,
                     valorFome = fome,
                     danoItem = dano,
-                    tamanhoHitbox = new Vector2(hx, hy)
+                    tamanhoHitbox = new Vector2(hx, hy),
+                    quebraAoAtingir = quebra
                 });
             }
         }
@@ -251,6 +263,7 @@ public class InventarioJogador : MonoBehaviour{
                 float dano = PlayerPrefs.GetFloat("SlotNormal_" + i + "_Dano", 0f);
                 float hx = PlayerPrefs.GetFloat("SlotNormal_" + i + "_HitboxX", 1f);
                 float hy = PlayerPrefs.GetFloat("SlotNormal_" + i + "_HitboxY", 1f);
+                bool quebra = PlayerPrefs.GetInt("SlotNormal_" + i + "_Quebra", 0) == 1;
                 Sprite icone = CarregarIconePorNome(nome);
                 
                 inventario.Add(new ItemSlot{
@@ -260,7 +273,8 @@ public class InventarioJogador : MonoBehaviour{
                     podeConsumir = consumir,
                     valorFome = fome,
                     danoItem = dano,
-                    tamanhoHitbox = new Vector2(hx, hy)
+                    tamanhoHitbox = new Vector2(hx, hy),
+                    quebraAoAtingir = quebra
                 });
             }
         }

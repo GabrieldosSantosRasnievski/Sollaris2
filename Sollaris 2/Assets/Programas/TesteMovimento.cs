@@ -135,7 +135,7 @@ public class TesteMovimento : MonoBehaviour{
             GameObject itemObjeto = Instantiate(prefabItemArremessado, transform.position, Quaternion.identity);
             ItemArremessado scriptArremesso = itemObjeto.GetComponent<ItemArremessado>();
             if(scriptArremesso != null){
-                scriptArremesso.Inicializar(direcaoArremesso, itemRemovido.iconeItem, itemRemovido.nomeItem, podeConsumir, valorFome, danoItem, tamanhoHitbox);
+                scriptArremesso.Inicializar(direcaoArremesso, itemRemovido.iconeItem, itemRemovido.nomeItem, podeConsumir, valorFome, danoItem, tamanhoHitbox, itemRemovido.quebraAoAtingir);
             }
         }
     }

@@ -14,13 +14,14 @@ public class ItemArremessado : MonoBehaviour{
     private float valorFomeItem;
     private float danoItemArremessado;
     private Vector2 tamanhoHitboxItem;
+    private bool quebraItemAoAtingir;
 
     void Awake(){
         rb = GetComponent<Rigidbody2D>();
         colisor2d = GetComponent<Collider2D>();
     }
 
-    public void Inicializar(Vector2 direcaoArremesso, Sprite iconeItem, string nome, bool podeConsumir, float valorFome, float danoItem, Vector2 tamanhoHitbox){
+    public void Inicializar(Vector2 direcaoArremesso, Sprite iconeItem, string nome, bool podeConsumir, float valorFome, float danoItem, Vector2 tamanhoHitbox, bool quebraAoAtingir){
         direcao = direcaoArremesso.normalized;
         iconeDoItem = iconeItem;
         nomeDoItem = nome;
@@ -28,6 +29,7 @@ public class ItemArremessado : MonoBehaviour{
         valorFomeItem = valorFome;
         danoItemArremessado = danoItem;
         tamanhoHitboxItem = tamanhoHitbox;
+        quebraItemAoAtingir = quebraAoAtingir;
 
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
         if(sr != null){
@@ -88,6 +90,7 @@ public class ItemArremessado : MonoBehaviour{
             interacao.valorFome = valorFomeItem;
             interacao.danoItem = danoItemArremessado;
             interacao.tamanhoHitbox = tamanhoHitboxItem;
+            interacao.quebraAoAtingir = quebraItemAoAtingir;
             interacao.enabled = true;
         }
     }
@@ -101,7 +104,14 @@ public class ItemArremessado : MonoBehaviour{
             VidaInimigo vida = collision.gameObject.GetComponent<VidaInimigo>();
             if(vida != null){
                 vida.TomarDano(danoItemArremessado);
-                Destroy(gameObject);
+
+                if(quebraItemAoAtingir){
+                    Destroy(gameObject);
+                }
+                else{
+                    CancelInvoke(nameof(PararNoChao));
+                    PararNoChao();
+                }
                 return;
             }
 

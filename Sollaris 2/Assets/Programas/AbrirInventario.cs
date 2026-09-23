@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 
 public class AbrirInventario : MonoBehaviour{
+    public GameObject painelMenuGeral;
     public GameObject painelInventario;
+    public GameObject painelCrafting;
     public List<TextMeshProUGUI> textosSlotsRapidos;
     public List<Image> imagensSlotsRapidos;
     public List<Image> fundosSlotsRapidos;
@@ -13,23 +15,53 @@ public class AbrirInventario : MonoBehaviour{
     public List<TextMeshProUGUI> textosSlotsInventario;
     public List<Image> imagensSlotsInventario;
 
-    void Update(){
-        if(Input.GetKeyDown(KeyCode.B)){
-            AlternarInventario();
+    void Start(){
+        if(painelMenuGeral != null){
+            painelMenuGeral.SetActive(false);
         }
-        AtualizarUI();
+        AbrirPainelCrafting();
     }
 
-    public void AlternarInventario(){
-        if(painelInventario != null){
-            bool ativar = !painelInventario.activeSelf;
-            painelInventario.SetActive(ativar);
+    void Update(){
+        if(Input.GetKeyDown(KeyCode.B) || Input.GetKeyDown(KeyCode.Escape)){
+            AlternarMenuGeral();
+        }
+
+        if(painelMenuGeral != null && painelMenuGeral.activeSelf){
+            AtualizarUI();
+        }
+    }
+
+    public void AlternarMenuGeral(){
+        if(painelMenuGeral != null){
+            bool ativar = !painelMenuGeral.activeSelf;
+            painelMenuGeral.SetActive(ativar);
+
             if(ativar){
                 Time.timeScale = 0f;
+                AbrirPainelCrafting();
             }
             else{
                 Time.timeScale = 1f;
             }
+        }
+    }
+
+    public void AbrirPainelInventario(){
+        if(painelInventario != null){
+            painelInventario.SetActive(true);
+        }
+        if(painelCrafting != null){
+            painelCrafting.SetActive(false);
+        }
+    }
+
+    public void AbrirPainelCrafting(){
+        if(painelCrafting != null){
+            painelCrafting.SetActive(true);
+        }
+        if(painelInventario != null){
+            painelInventario.SetActive(false);
         }
     }
 
