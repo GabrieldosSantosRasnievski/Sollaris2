@@ -17,6 +17,11 @@ public class InteragirObjeto : MonoBehaviour{
             if(InventarioJogador.Instance != null){
                 bool pegou = InventarioJogador.Instance.TentarAdicionar(nomeItem, iconeItem, podeConsumir, valorFome, danoItem, tamanhoHitbox, quebraAoAtingir);
                 if(pegou){
+                    AbrirInventario ui = FindObjectOfType<AbrirInventario>();
+                    if(ui != null){
+                        ui.AtualizarUI();
+                    }
+
                     if(textoColetar != null){
                         textoColetar.SetActive(false);
                     }
