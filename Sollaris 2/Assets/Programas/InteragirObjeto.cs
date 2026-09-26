@@ -1,5 +1,4 @@
 using UnityEngine;
-using TMPro;
 
 public class InteragirObjeto : MonoBehaviour{
     public GameObject textoColetar;
@@ -10,41 +9,70 @@ public class InteragirObjeto : MonoBehaviour{
     public float danoItem;
     public Vector2 tamanhoHitbox = new Vector2(1f, 1f);
     public bool quebraAoAtingir;
-    private bool taPerto = false;
+    
+    private Transform playerTransform;
+    public float distanciaInteracao = 1.5f;
+
+    void Start(){
+        GameObject player = GameObject.FindWithTag("Player");
+        if(player != null){
+            playerTransform = player.transform;
+        }
+
+        if(textoColetar == null){
+            GameObject txt = GameObject.FindWithTag("TextoColetar");
+            if(txt != null) textoColetar = txt;
+        }
+
+        if(iconeItem == null && !string.IsNullOrEmpty(nomeItem)){
+            iconeItem = Resources.Load<Sprite>("Icones/" + nomeItem);
+        }
+    }
 
     void Update(){
-        if(taPerto && Input.GetKeyDown(KeyCode.E)){
-            if(InventarioJogador.Instance != null){
-                bool pegou = InventarioJogador.Instance.TentarAdicionar(nomeItem, iconeItem, podeConsumir, valorFome, danoItem, tamanhoHitbox, quebraAoAtingir);
-                if(pegou){
-                    AbrirInventario ui = FindObjectOfType<AbrirInventario>();
-                    if(ui != null){
-                        ui.AtualizarUI();
+        if(playerTransform == null) return;
+
+        float distancia = Vector2.Distance(transform.position, playerTransform.position);
+
+        if(distancia <= distanciaInteracao){
+            if(textoColetar != null && !textoColetar.activeSelf){
+                textoColetar.SetActive(true);
+            }
+
+            if(Input.GetKeyDown(KeyCode.E)){
+                Debug.Log("Tecla E pressionada para o item: " + nomeItem);
+
+                if(InventarioJogador.Instance != null){
+                    if(iconeItem == null && !string.IsNullOrEmpty(nomeItem)){
+                        iconeItem = Resources.Load<Sprite>("Icones/" + nomeItem);
                     }
 
-                    if(textoColetar != null){
-                        textoColetar.SetActive(false);
+                    bool pegou = InventarioJogador.Instance.TentarAdicionar(nomeItem, iconeItem, podeConsumir, valorFome, danoItem, tamanhoHitbox, quebraAoAtingir);
+                    
+                    Debug.Log("Resultado de TentarAdicionar para [" + nomeItem + "]: " + pegou);
+
+                    if(pegou){
+                        AbrirInventario ui = FindObjectOfType<AbrirInventario>();
+                        if(ui != null){
+                            ui.AtualizarUI();
+                        }
+
+                        if(textoColetar != null){
+                            textoColetar.SetActive(false);
+                        }
+                        Destroy(gameObject);
                     }
-                    taPerto = false;
-                    Destroy(gameObject);
+                    else{
+                        Debug.LogWarning("O inventário recusou o item! Verifique se os slots rápidos e o inventário principal estão cheios ou se há algum erro de nome.");
+                    }
+                }
+                else{
+                    Debug.LogError("InventarioJogador.Instance não foi encontrado na cena!");
                 }
             }
         }
-    }
-
-    private void OnTriggerEnter2D(Collider2D outro){
-        if(outro.CompareTag("Player")){
-            taPerto = true;
-            if(textoColetar != null){
-                textoColetar.SetActive(true);
-            }
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D outro){
-        if(outro.CompareTag("Player")){
-            taPerto = false;
-            if(textoColetar != null){
+        else{
+            if(textoColetar != null && textoColetar.activeSelf && distancia > distanciaInteracao + 0.2f){
                 textoColetar.SetActive(false);
             }
         }

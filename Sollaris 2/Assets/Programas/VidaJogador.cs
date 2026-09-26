@@ -6,11 +6,14 @@ public class VidaJogador : MonoBehaviour
 {
     public float vidaMaxima = 100f;
     public float vidaAtual;
+    public float defesaBase = 0f;
+    public float defesaEquipamento = 0f;
     public UnityEvent<float, float> OnVidaAlterada;
     public TelaMorte telaMorte;
     public Transform pontoRespawn;
     public Animator animacaoDano;
     public TesteMovimento scriptMovimento;
+
     private void Awake(){
         if(PlayerPrefs.HasKey("VidaSalva")){
             vidaAtual = PlayerPrefs.GetFloat("VidaSalva");
@@ -29,10 +32,18 @@ public class VidaJogador : MonoBehaviour
             pontoRespawn.position = transform.position;
         }
     }
-    public void TomarDano(float quantidade){
-            vidaAtual = vidaAtual - quantidade;
-            vidaAtual = Mathf.Clamp(vidaAtual, 0, vidaMaxima);
-
+    public float ObterDefesaTotal(){
+        return defesaBase + defesaEquipamento;
+    }
+    public void ModificarDefesaEquipamento(float valor){
+        defesaEquipamento += valor;
+        Debug.Log("Defesa de equipamento alterada! Defesa Total: " + ObterDefesaTotal());
+    }
+    public void TomarDano(float quantidadeBruta){
+        float defesaTotal = ObterDefesaTotal();
+        float quantidadeFinal = Mathf.Max(1f, quantidadeBruta - defesaTotal);
+        vidaAtual = vidaAtual - quantidadeFinal;
+        vidaAtual = Mathf.Clamp(vidaAtual, 0, vidaMaxima);
         if(OnVidaAlterada != null){
             OnVidaAlterada.Invoke(vidaAtual, vidaMaxima);
         }
@@ -69,13 +80,6 @@ public class VidaJogador : MonoBehaviour
         PlayerPrefs.SetFloat("VidaSalva", vidaAtual);
         PlayerPrefs.Save();
     }
-
-
-        // private void Update(){
-        //     if(Input.GetKeyDown(KeyCode.Space)){
-        //         TomarDano(20f);
-        //     }
-        // }
     public IEnumerator RotinaTomarDano()
     {
         scriptMovimento.estaTomandoDano = true;
@@ -84,4 +88,3 @@ public class VidaJogador : MonoBehaviour
         scriptMovimento.estaTomandoDano = false;
     }
 }
-
