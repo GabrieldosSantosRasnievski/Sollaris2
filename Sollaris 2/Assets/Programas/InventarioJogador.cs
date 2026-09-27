@@ -75,15 +75,33 @@ public class InventarioJogador : MonoBehaviour {
         if (Input.GetMouseButtonDown(0)) {
             UsarItemSelecionado();
         }
-        if (Input.GetKeyDown(KeyCode.Alpha1)){ slotSelecionado = 0; }
-        if (Input.GetKeyDown(KeyCode.Alpha2)){ slotSelecionado = 1; }
-        if (Input.GetKeyDown(KeyCode.Alpha3)){ slotSelecionado = 2; }
-        if (Input.GetKeyDown(KeyCode.Alpha4)){ slotSelecionado = 3; }
-        if (Input.GetKeyDown(KeyCode.Alpha5)){ slotSelecionado = 4; }
-        if (Input.GetKeyDown(KeyCode.Alpha6)){ slotSelecionado = 5; }
-        if (Input.GetKeyDown(KeyCode.Alpha7)){ slotSelecionado = 6; }
-        if (Input.GetKeyDown(KeyCode.Alpha8)){ slotSelecionado = 7; }
-        if (Input.GetKeyDown(KeyCode.Alpha9)){ slotSelecionado = 8; }
+        if (Input.GetKeyDown(KeyCode.Alpha1)){
+            slotSelecionado = 0;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2)){
+            slotSelecionado = 1;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3)){
+            slotSelecionado = 2;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4)){
+            slotSelecionado = 3;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha5)){
+            slotSelecionado = 4;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha6)){
+            slotSelecionado = 5;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha7)){
+            slotSelecionado = 6;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha8)){
+            slotSelecionado = 7;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha9)){
+            slotSelecionado = 8;
+        }
 
         AbrirInventario ui = FindObjectOfType<AbrirInventario>();
         if (ui != null) {
@@ -383,12 +401,49 @@ public class InventarioJogador : MonoBehaviour {
         ItemSlot slotOrigemObj = ObterSlotPorTipo(tipoOrigem, indexOrigem);
         ItemSlot slotDestinoObj = ObterSlotPorTipo(tipoDestino, indexDestino);
 
-        if (slotOrigemObj == null || slotDestinoObj == null) return;
-        if (tipoDestino == ArrasteSlot.TipoSlot.Cabeca && !slotOrigemObj.podeColocarCabeca && !string.IsNullOrEmpty(slotOrigemObj.nomeItem)) return;
-        if (tipoDestino == ArrasteSlot.TipoSlot.Torso && !slotOrigemObj.podeColocarTorso && !string.IsNullOrEmpty(slotOrigemObj.nomeItem)) return;
-        if (tipoDestino == ArrasteSlot.TipoSlot.Cintura && !slotOrigemObj.podeColocarCintura && !string.IsNullOrEmpty(slotOrigemObj.nomeItem)) return;
-        if (tipoDestino == ArrasteSlot.TipoSlot.Calca && !slotOrigemObj.podeColocarCalca && !string.IsNullOrEmpty(slotOrigemObj.nomeItem)) return;
-        if (tipoDestino == ArrasteSlot.TipoSlot.Bota && !slotOrigemObj.podeColocarBota && !string.IsNullOrEmpty(slotOrigemObj.nomeItem)) return;
+        if (slotOrigemObj == null || slotDestinoObj == null || string.IsNullOrEmpty(slotOrigemObj.nomeItem)){
+            return;
+        }
+        if (tipoDestino == ArrasteSlot.TipoSlot.Cabeca && !slotOrigemObj.podeColocarCabeca){
+            return;
+        }
+        if (tipoDestino == ArrasteSlot.TipoSlot.Torso && !slotOrigemObj.podeColocarTorso){
+            return;
+        }
+        if (tipoDestino == ArrasteSlot.TipoSlot.Cintura && !slotOrigemObj.podeColocarCintura){
+            return;
+        }
+        if (tipoDestino == ArrasteSlot.TipoSlot.Calca && !slotOrigemObj.podeColocarCalca){
+            return;
+        }
+        if (tipoDestino == ArrasteSlot.TipoSlot.Bota && !slotOrigemObj.podeColocarBota){
+            return;
+        }
+        bool destinoEhEquipamento = (tipoDestino == ArrasteSlot.TipoSlot.Cabeca || 
+                                     tipoDestino == ArrasteSlot.TipoSlot.Torso || 
+                                     tipoDestino == ArrasteSlot.TipoSlot.Cintura || 
+                                     tipoDestino == ArrasteSlot.TipoSlot.Calca || 
+                                     tipoDestino == ArrasteSlot.TipoSlot.Bota);
+
+        if (destinoEhEquipamento && slotOrigemObj.quantidadeItem > 1 && string.IsNullOrEmpty(slotDestinoObj.nomeItem)) {
+            slotDestinoObj.nomeItem = slotOrigemObj.nomeItem;
+            slotDestinoObj.iconeItem = slotOrigemObj.iconeItem;
+            slotDestinoObj.quantidadeItem = 1;
+            slotDestinoObj.podeConsumir = slotOrigemObj.podeConsumir;
+            slotDestinoObj.valorFome = slotOrigemObj.valorFome;
+            slotDestinoObj.danoItem = slotOrigemObj.danoItem;
+            slotDestinoObj.defesaItem = slotOrigemObj.defesaItem;
+            slotDestinoObj.tamanhoHitbox = slotOrigemObj.tamanhoHitbox;
+            slotDestinoObj.quebraAoAtingir = slotOrigemObj.quebraAoAtingir;
+            slotDestinoObj.podeColocarCabeca = slotOrigemObj.podeColocarCabeca;
+            slotDestinoObj.podeColocarTorso = slotOrigemObj.podeColocarTorso;
+            slotDestinoObj.podeColocarCintura = slotOrigemObj.podeColocarCintura;
+            slotDestinoObj.podeColocarCalca = slotOrigemObj.podeColocarCalca;
+            slotDestinoObj.podeColocarBota = slotOrigemObj.podeColocarBota;
+
+            slotOrigemObj.quantidadeItem--;
+            return;
+        }
         ItemSlot temp = new ItemSlot(
             slotDestinoObj.nomeItem, slotDestinoObj.quantidadeItem, slotDestinoObj.iconeItem,
             slotDestinoObj.podeConsumir, slotDestinoObj.valorFome, slotDestinoObj.danoItem,
@@ -439,7 +494,6 @@ public class InventarioJogador : MonoBehaviour {
             default: return null;
         }
     }
-
     private List<ItemSlot> ObterListaPorTipo(ArrasteSlot.TipoSlot tipo) {
         if (tipo == ArrasteSlot.TipoSlot.Rapido) return slotsRapidos;
         if (tipo == ArrasteSlot.TipoSlot.Inventario) return inventario;
