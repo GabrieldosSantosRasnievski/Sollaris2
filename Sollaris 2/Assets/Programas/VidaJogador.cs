@@ -7,7 +7,8 @@ public class VidaJogador : MonoBehaviour
     public float vidaMaxima = 100f;
     public float vidaAtual;
     public float defesaBase = 0f;
-    public float defesaEquipamento = 0f;
+    private float defesaEquipamento = 0f;
+    private float defesaTemporariaF = 0f;
     public UnityEvent<float, float> OnVidaAlterada;
     public TelaMorte telaMorte;
     public Transform pontoRespawn;
@@ -33,15 +34,27 @@ public class VidaJogador : MonoBehaviour
         }
     }
     public float ObterDefesaTotal(){
-        return defesaBase + defesaEquipamento;
+        return defesaBase + defesaEquipamento + defesaTemporariaF;
     }
-    public void ModificarDefesaEquipamento(float valor){
-        defesaEquipamento += valor;
-        Debug.Log("Defesa de equipamento alterada! Defesa Total: " + ObterDefesaTotal());
+    public void DefinirDefesaEquipamento(float valorNovo){
+        defesaEquipamento = valorNovo;
     }
-    public void TomarDano(float quantidadeBruta){
-        float defesaTotal = ObterDefesaTotal();
-        float quantidadeFinal = Mathf.Max(1f, quantidadeBruta - defesaTotal);
+    public void AdicionarDefesaTemporaria(float valor){
+        defesaTemporariaF = valor;
+    }
+
+    public void TomarDano(float quantidadeBruta, bool ignorarDefesa = false){
+        float quantidadeFinal;
+
+        if (ignorarDefesa)
+        {
+            quantidadeFinal = quantidadeBruta;
+        }
+        else
+        {
+            float defesaTotal = ObterDefesaTotal();
+            quantidadeFinal = Mathf.Max(1f, quantidadeBruta - defesaTotal);
+        }
         vidaAtual = vidaAtual - quantidadeFinal;
         vidaAtual = Mathf.Clamp(vidaAtual, 0, vidaMaxima);
         if(OnVidaAlterada != null){

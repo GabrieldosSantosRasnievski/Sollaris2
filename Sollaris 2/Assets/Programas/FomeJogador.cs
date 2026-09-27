@@ -14,6 +14,7 @@ public class FomeJogador : MonoBehaviour
     public float curaFome = 5f;
     public float intervaloCura = 2f;
     private float temporizadorCura = 2f;
+    
     private void Awake(){
         vidaJogador = GetComponent<VidaJogador>();
         if (!PlayerPrefs.HasKey("FomeSalva")){
@@ -50,14 +51,13 @@ public class FomeJogador : MonoBehaviour
             else{
                 temporizadorCura = 0f;
             }
-
         }
         else{
             temporizadorCura = 0f;
             temporizadorFome = temporizadorFome + Time.deltaTime;
             if(temporizadorFome >= intevaloDano){
                 if(vidaJogador != null){
-                    vidaJogador.TomarDano(danoFome);
+                    vidaJogador.TomarDano(danoFome, true);
                 }
                 temporizadorFome = 0f;
             }

@@ -7,8 +7,14 @@ public class InteragirObjeto : MonoBehaviour{
     public bool podeConsumir;
     public float valorFome;
     public float danoItem;
+    public float defesaItem;
     public Vector2 tamanhoHitbox = new Vector2(1f, 1f);
     public bool quebraAoAtingir;
+    public bool podeColocarCabeca;
+    public bool podeColocarTorso;
+    public bool podeColocarCintura;
+    public bool podeColocarCalca;
+    public bool podeColocarBota;
     
     private Transform playerTransform;
     public float distanciaInteracao = 1.5f;
@@ -40,16 +46,15 @@ public class InteragirObjeto : MonoBehaviour{
             }
 
             if(Input.GetKeyDown(KeyCode.E)){
-                Debug.Log("Tecla E pressionada para o item: " + nomeItem);
-
                 if(InventarioJogador.Instance != null){
                     if(iconeItem == null && !string.IsNullOrEmpty(nomeItem)){
                         iconeItem = Resources.Load<Sprite>("Icones/" + nomeItem);
                     }
-
-                    bool pegou = InventarioJogador.Instance.TentarAdicionar(nomeItem, iconeItem, podeConsumir, valorFome, danoItem, tamanhoHitbox, quebraAoAtingir);
-                    
-                    Debug.Log("Resultado de TentarAdicionar para [" + nomeItem + "]: " + pegou);
+                    bool pegou = InventarioJogador.Instance.TentarAdicionar(
+                        nomeItem, iconeItem, podeConsumir, valorFome, danoItem, 
+                        tamanhoHitbox, quebraAoAtingir, defesaItem, 
+                        podeColocarCabeca, podeColocarTorso, podeColocarCintura, podeColocarCalca, podeColocarBota
+                    );
 
                     if(pegou){
                         AbrirInventario ui = FindObjectOfType<AbrirInventario>();
@@ -63,11 +68,8 @@ public class InteragirObjeto : MonoBehaviour{
                         Destroy(gameObject);
                     }
                     else{
-                        Debug.LogWarning("O inventário recusou o item! Verifique se os slots rápidos e o inventário principal estão cheios ou se há algum erro de nome.");
+                        Debug.LogWarning("O inventário recusou o item!");
                     }
-                }
-                else{
-                    Debug.LogError("InventarioJogador.Instance não foi encontrado na cena!");
                 }
             }
         }

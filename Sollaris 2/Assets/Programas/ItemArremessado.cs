@@ -13,22 +13,36 @@ public class ItemArremessado : MonoBehaviour{
     private bool podeConsumirItem;
     private float valorFomeItem;
     private float danoItemArremessado;
+    private float defesaItemArremessado;
     private Vector2 tamanhoHitboxItem;
     private bool quebraItemAoAtingir;
+    private bool cabecaItem;
+    private bool torsoItem;
+    private bool cinturaItem;
+    private bool calcaItem;
+    private bool botaItem;
 
     void Awake(){
         rb = GetComponent<Rigidbody2D>();
         colisor2d = GetComponent<Collider2D>();
     }
-    public void Inicializar(Vector2 direcaoArremesso, Sprite iconeItem, string nome, bool podeConsumir, float valorFome, float danoItem, Vector2 tamanhoHitbox, bool quebraAoAtingir){
+
+    public void Inicializar(Vector2 direcaoArremesso, Sprite iconeItem, string nome, bool podeConsumir, float valorFome, float danoItem, Vector2 tamanhoHitbox, bool quebraAoAtingir, float defesaItem = 0f, bool cabeca = false, bool torso = false, bool cintura = false, bool calca = false, bool bota = false){
         direcao = direcaoArremesso.normalized;
         iconeDoItem = iconeItem;
         nomeDoItem = nome;
         podeConsumirItem = podeConsumir;
         valorFomeItem = valorFome;
         danoItemArremessado = danoItem;
+        defesaItemArremessado = defesaItem;
         tamanhoHitboxItem = tamanhoHitbox;
         quebraItemAoAtingir = quebraAoAtingir;
+        cabecaItem = cabeca;
+        torsoItem = torso;
+        cinturaItem = cintura;
+        calcaItem = calca;
+        botaItem = bota;
+
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
         if(sr != null){
             sr.sprite = iconeItem;
@@ -71,7 +85,7 @@ public class ItemArremessado : MonoBehaviour{
             colisor2d.isTrigger = true;
             BoxCollider2D boxCol = colisor2d as BoxCollider2D;
             if(boxCol != null){
-                boxCol.size = new Vector2(0.2f, 0.2f); // Hitbox reduzida e exata
+                boxCol.size = new Vector2(0.2f, 0.2f);
             }
         }
         gameObject.tag = "Objeto";
@@ -84,10 +98,18 @@ public class ItemArremessado : MonoBehaviour{
         interacao.podeConsumir = podeConsumirItem;
         interacao.valorFome = valorFomeItem;
         interacao.danoItem = danoItemArremessado;
+        interacao.defesaItem = defesaItemArremessado;
         interacao.tamanhoHitbox = tamanhoHitboxItem;
         interacao.quebraAoAtingir = quebraItemAoAtingir;
+        interacao.podeColocarCabeca = cabecaItem;
+        interacao.podeColocarTorso = torsoItem;
+        interacao.podeColocarCintura = cinturaItem;
+        interacao.podeColocarCalca = calcaItem;
+        interacao.podeColocarBota = botaItem;
+
         interacao.enabled = true;
     }
+
     void OnCollisionEnter2D(Collision2D collision){
         if(voando){
             if(collision.gameObject.CompareTag("Player")){
