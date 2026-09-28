@@ -48,8 +48,6 @@ public class InventarioJogador : MonoBehaviour {
     public int limiteTiposInventario = 20;
     public int slotSelecionado = 0;
     public GameObject prefabItemArremessado;
-
-    [Header("Slots de Equipamento")]
     public ItemSlot slotCabeca = new ItemSlot();
     public ItemSlot slotTorso = new ItemSlot();
     public ItemSlot slotCintura = new ItemSlot();
@@ -108,14 +106,12 @@ public class InventarioJogador : MonoBehaviour {
             ui.AtualizarUI();
         }
     }
-
     public ItemSlot ObterItemSelecionado(){
         if (slotSelecionado >= 0 && slotSelecionado < slotsRapidos.Count){
             return slotsRapidos[slotSelecionado];
         }
         return null;
     }
-
     public bool TentarAdicionar(string nomeDoItem, Sprite icone, bool podeConsumir2, float fomeRecuperada, float danoRecebido, Vector2 tamanhoCaixa, bool quebraInimigo, float defesaRecebida = 0f, bool cabeca = false, bool torso = false, bool cintura = false, bool calca = false, bool bota = false) {
         foreach (ItemSlot slot in slotsRapidos) {
             if (slot.nomeItem == nomeDoItem) {
@@ -134,7 +130,6 @@ public class InventarioJogador : MonoBehaviour {
                 return true;
             }
         }
-
         foreach (ItemSlot slot in inventario) {
             if (slot.nomeItem == nomeDoItem) {
                 slot.quantidadeItem++;
@@ -152,7 +147,6 @@ public class InventarioJogador : MonoBehaviour {
                 return true;
             }
         }
-
         foreach (ItemSlot slot in slotsRapidos) {
             if (string.IsNullOrEmpty(slot.nomeItem)) {
                 slot.nomeItem = nomeDoItem;
@@ -172,7 +166,6 @@ public class InventarioJogador : MonoBehaviour {
                 return true;
             }
         }
-
         foreach (ItemSlot slot in inventario) {
             if (string.IsNullOrEmpty(slot.nomeItem)) {
                 slot.nomeItem = nomeDoItem;
@@ -195,17 +188,14 @@ public class InventarioJogador : MonoBehaviour {
 
         return false;
     }
-
     public ItemSlot ArremessarItemSelecionado(){
         if (slotsRapidos == null || slotSelecionado < 0 || slotSelecionado >= slotsRapidos.Count){
             return null;
         }
-
         ItemSlot slotAtivo = slotsRapidos[slotSelecionado];
         if (slotAtivo == null || string.IsNullOrEmpty(slotAtivo.nomeItem) || slotAtivo.quantidadeItem <= 0){
             return null;
         }
-
         ItemSlot itemArremessado = new ItemSlot{
             nomeItem = slotAtivo.nomeItem,
             iconeItem = slotAtivo.iconeItem,
@@ -236,19 +226,16 @@ public class InventarioJogador : MonoBehaviour {
                 );
             }
         }
-
         slotAtivo.quantidadeItem--;
         if (slotAtivo.quantidadeItem <= 0){
             LimparSlot(slotAtivo);
         }
-
         AbrirInventario ui = FindObjectOfType<AbrirInventario>();
         if (ui != null) {
             ui.AtualizarUI();
         }
         return itemArremessado;
     }
-
     public void UsarItemSelecionado(){
         ItemSlot slotAtivo = ObterItemSelecionado();
         if (slotAtivo != null && slotAtivo.podeConsumir && slotAtivo.quantidadeItem > 0){
@@ -270,7 +257,6 @@ public class InventarioJogador : MonoBehaviour {
             }
         }
     }
-
     private void LimparSlot(ItemSlot slot) {
         slot.nomeItem = "";
         slot.iconeItem = null;
@@ -345,7 +331,6 @@ public class InventarioJogador : MonoBehaviour {
                 bool cintura = PlayerPrefs.GetInt("SlotRapido_" + i + "_Cintura", 0) == 1;
                 bool calca = PlayerPrefs.GetInt("SlotRapido_" + i + "_Calca", 0) == 1;
                 bool bota = PlayerPrefs.GetInt("SlotRapido_" + i + "_Bota", 0) == 1;
-
                 Sprite icone = CarregarIconePorNome(nome);
                 slotsRapidos.Add(new ItemSlot(nome, qtd, icone, consumir, fome, dano, defesa, new Vector2(hx, hy), quebra, cabeca, torso, cintura, calca, bota));
             }
@@ -368,7 +353,6 @@ public class InventarioJogador : MonoBehaviour {
                 bool cintura = PlayerPrefs.GetInt("SlotNormal_" + i + "_Cintura", 0) == 1;
                 bool calca = PlayerPrefs.GetInt("SlotNormal_" + i + "_Calca", 0) == 1;
                 bool bota = PlayerPrefs.GetInt("SlotNormal_" + i + "_Bota", 0) == 1;
-
                 Sprite icone = CarregarIconePorNome(nome);
                 inventario.Add(new ItemSlot(nome, qtd, icone, consumir, fome, dano, defesa, new Vector2(hx, hy), quebra, cabeca, torso, cintura, calca, bota));
             }
@@ -395,28 +379,29 @@ public class InventarioJogador : MonoBehaviour {
         SalvarInventario();
     }
     public void MoverItem(ArrasteSlot.TipoSlot tipoOrigem, int indexOrigem, ArrasteSlot.TipoSlot tipoDestino, int indexDestino) {
+        if (tipoOrigem == tipoDestino && indexOrigem == indexDestino) {
+            return;
+        }
         List<ItemSlot> listaOrigem = ObterListaPorTipo(tipoOrigem);
         List<ItemSlot> listaDestino = ObterListaPorTipo(tipoDestino);
-
         ItemSlot slotOrigemObj = ObterSlotPorTipo(tipoOrigem, indexOrigem);
         ItemSlot slotDestinoObj = ObterSlotPorTipo(tipoDestino, indexDestino);
-
-        if (slotOrigemObj == null || slotDestinoObj == null || string.IsNullOrEmpty(slotOrigemObj.nomeItem)){
+        if (slotOrigemObj == null || slotDestinoObj == null || string.IsNullOrEmpty(slotOrigemObj.nomeItem)) {
             return;
         }
-        if (tipoDestino == ArrasteSlot.TipoSlot.Cabeca && !slotOrigemObj.podeColocarCabeca){
+        if (tipoDestino == ArrasteSlot.TipoSlot.Cabeca && !slotOrigemObj.podeColocarCabeca) {
             return;
         }
-        if (tipoDestino == ArrasteSlot.TipoSlot.Torso && !slotOrigemObj.podeColocarTorso){
+        if (tipoDestino == ArrasteSlot.TipoSlot.Torso && !slotOrigemObj.podeColocarTorso) {
             return;
         }
-        if (tipoDestino == ArrasteSlot.TipoSlot.Cintura && !slotOrigemObj.podeColocarCintura){
+        if (tipoDestino == ArrasteSlot.TipoSlot.Cintura && !slotOrigemObj.podeColocarCintura) {
             return;
         }
-        if (tipoDestino == ArrasteSlot.TipoSlot.Calca && !slotOrigemObj.podeColocarCalca){
+        if (tipoDestino == ArrasteSlot.TipoSlot.Calca && !slotOrigemObj.podeColocarCalca) {
             return;
         }
-        if (tipoDestino == ArrasteSlot.TipoSlot.Bota && !slotOrigemObj.podeColocarBota){
+        if (tipoDestino == ArrasteSlot.TipoSlot.Bota && !slotOrigemObj.podeColocarBota) {
             return;
         }
         bool destinoEhEquipamento = (tipoDestino == ArrasteSlot.TipoSlot.Cabeca || 
@@ -424,7 +409,6 @@ public class InventarioJogador : MonoBehaviour {
                                      tipoDestino == ArrasteSlot.TipoSlot.Cintura || 
                                      tipoDestino == ArrasteSlot.TipoSlot.Calca || 
                                      tipoDestino == ArrasteSlot.TipoSlot.Bota);
-
         if (destinoEhEquipamento && slotOrigemObj.quantidadeItem > 1 && string.IsNullOrEmpty(slotDestinoObj.nomeItem)) {
             slotDestinoObj.nomeItem = slotOrigemObj.nomeItem;
             slotDestinoObj.iconeItem = slotOrigemObj.iconeItem;
@@ -440,8 +424,12 @@ public class InventarioJogador : MonoBehaviour {
             slotDestinoObj.podeColocarCintura = slotOrigemObj.podeColocarCintura;
             slotDestinoObj.podeColocarCalca = slotOrigemObj.podeColocarCalca;
             slotDestinoObj.podeColocarBota = slotOrigemObj.podeColocarBota;
-
             slotOrigemObj.quantidadeItem--;
+            return;
+        }
+        if (!string.IsNullOrEmpty(slotDestinoObj.nomeItem) && slotDestinoObj.nomeItem == slotOrigemObj.nomeItem) {
+            slotDestinoObj.quantidadeItem += slotOrigemObj.quantidadeItem;
+            LimparSlot(slotOrigemObj);
             return;
         }
         ItemSlot temp = new ItemSlot(
@@ -451,7 +439,6 @@ public class InventarioJogador : MonoBehaviour {
             slotDestinoObj.podeColocarCabeca, slotDestinoObj.podeColocarTorso, slotDestinoObj.podeColocarCintura,
             slotDestinoObj.podeColocarCalca, slotDestinoObj.podeColocarBota
         );
-
         slotDestinoObj.nomeItem = slotOrigemObj.nomeItem;
         slotDestinoObj.quantidadeItem = slotOrigemObj.quantidadeItem;
         slotDestinoObj.iconeItem = slotOrigemObj.iconeItem;
@@ -466,7 +453,6 @@ public class InventarioJogador : MonoBehaviour {
         slotDestinoObj.podeColocarCintura = slotOrigemObj.podeColocarCintura;
         slotDestinoObj.podeColocarCalca = slotOrigemObj.podeColocarCalca;
         slotDestinoObj.podeColocarBota = slotOrigemObj.podeColocarBota;
-
         slotOrigemObj.nomeItem = temp.nomeItem;
         slotOrigemObj.quantidadeItem = temp.quantidadeItem;
         slotOrigemObj.iconeItem = temp.iconeItem;
@@ -482,7 +468,68 @@ public class InventarioJogador : MonoBehaviour {
         slotOrigemObj.podeColocarCalca = temp.podeColocarCalca;
         slotOrigemObj.podeColocarBota = temp.podeColocarBota;
     }
-    private ItemSlot ObterSlotPorTipo(ArrasteSlot.TipoSlot tipo, int indice) {
+    public void MoverUmItem(ArrasteSlot.TipoSlot tipoOrigem, int indexOrigem, ArrasteSlot.TipoSlot tipoDestino, int indexDestino) {
+        if (tipoOrigem == tipoDestino && indexOrigem == indexDestino) {
+            return;
+        }
+        ItemSlot slotOrigemObj = ObterSlotPorTipo(tipoOrigem, indexOrigem);
+        ItemSlot slotDestinoObj = ObterSlotPorTipo(tipoDestino, indexDestino);
+        if (slotOrigemObj == null || slotDestinoObj == null || string.IsNullOrEmpty(slotOrigemObj.nomeItem)) {
+            return;
+        }
+        bool destinoEhEquipamento = (tipoDestino == ArrasteSlot.TipoSlot.Cabeca || 
+                                     tipoDestino == ArrasteSlot.TipoSlot.Torso || 
+                                     tipoDestino == ArrasteSlot.TipoSlot.Cintura || 
+                                     tipoDestino == ArrasteSlot.TipoSlot.Calca || 
+                                     tipoDestino == ArrasteSlot.TipoSlot.Bota);
+        if (destinoEhEquipamento) {
+            if (tipoDestino == ArrasteSlot.TipoSlot.Cabeca && !slotOrigemObj.podeColocarCabeca) {
+                return;
+            }
+            if (tipoDestino == ArrasteSlot.TipoSlot.Torso && !slotOrigemObj.podeColocarTorso) {
+                return;
+            }
+            if (tipoDestino == ArrasteSlot.TipoSlot.Cintura && !slotOrigemObj.podeColocarCintura) {
+                return;
+            }
+            if (tipoDestino == ArrasteSlot.TipoSlot.Calca && !slotOrigemObj.podeColocarCalca) {
+                return;
+            }
+            if (tipoDestino == ArrasteSlot.TipoSlot.Bota && !slotOrigemObj.podeColocarBota) {
+                return;
+            }
+        }
+        if (string.IsNullOrEmpty(slotDestinoObj.nomeItem)) {
+            slotDestinoObj.nomeItem = slotOrigemObj.nomeItem;
+            slotDestinoObj.iconeItem = slotOrigemObj.iconeItem;
+            slotDestinoObj.quantidadeItem = 1;
+            slotDestinoObj.podeConsumir = slotOrigemObj.podeConsumir;
+            slotDestinoObj.valorFome = slotOrigemObj.valorFome;
+            slotDestinoObj.danoItem = slotOrigemObj.danoItem;
+            slotDestinoObj.defesaItem = slotOrigemObj.defesaItem;
+            slotDestinoObj.tamanhoHitbox = slotOrigemObj.tamanhoHitbox;
+            slotDestinoObj.quebraAoAtingir = slotOrigemObj.quebraAoAtingir;
+            slotDestinoObj.podeColocarCabeca = slotOrigemObj.podeColocarCabeca;
+            slotDestinoObj.podeColocarTorso = slotOrigemObj.podeColocarTorso;
+            slotDestinoObj.podeColocarCintura = slotOrigemObj.podeColocarCintura;
+            slotDestinoObj.podeColocarCalca = slotOrigemObj.podeColocarCalca;
+            slotDestinoObj.podeColocarBota = slotOrigemObj.podeColocarBota;
+            slotOrigemObj.quantidadeItem--;
+            if (slotOrigemObj.quantidadeItem <= 0) {
+                LimparSlot(slotOrigemObj);
+            }
+            return;
+        }
+        if (slotDestinoObj.nomeItem == slotOrigemObj.nomeItem && !destinoEhEquipamento) {
+            slotDestinoObj.quantidadeItem++;
+            slotOrigemObj.quantidadeItem--;
+            if (slotOrigemObj.quantidadeItem <= 0) {
+                LimparSlot(slotOrigemObj);
+            }
+            return;
+        }
+    }
+    private ItemSlot ObterSlotPorTipo(ArrasteSlot.TipoSlot tipo, int indice){
         switch (tipo) {
             case ArrasteSlot.TipoSlot.Rapido: return slotsRapidos[indice];
             case ArrasteSlot.TipoSlot.Inventario: return inventario[indice];
@@ -494,7 +541,7 @@ public class InventarioJogador : MonoBehaviour {
             default: return null;
         }
     }
-    private List<ItemSlot> ObterListaPorTipo(ArrasteSlot.TipoSlot tipo) {
+    private List<ItemSlot> ObterListaPorTipo(ArrasteSlot.TipoSlot tipo){
         if (tipo == ArrasteSlot.TipoSlot.Rapido) return slotsRapidos;
         if (tipo == ArrasteSlot.TipoSlot.Inventario) return inventario;
         return null;
