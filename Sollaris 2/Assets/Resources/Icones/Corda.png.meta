@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: f8e310a607a8c764fb58d9bb3b1d81a0
+guid: de69aee10fe38774699e68dc7e727069
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2405988275685974165
-    second: pedra media 16x16_0
+      213: -1181119092920677631
+    second: corda 16x16_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -102,7 +102,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: pedra media 16x16_0
+      name: corda 16x16_0
       rect:
         serializedVersion: 2
         x: 0
@@ -117,8 +117,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 590640ad699c36120800000000000000
-      internalID: 2405988275685974165
+      spriteID: 10b080d5172db9fe0800000000000000
+      internalID: -1181119092920677631
       vertices: []
       indices: 
       edges: []
@@ -137,7 +137,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      pedra media 16x16_0: 2405988275685974165
+      corda 16x16_0: -1181119092920677631
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

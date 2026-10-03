@@ -17,6 +17,8 @@ MonoBehaviour:
     quantidade: 2
   - nomeItem: Madeira
     quantidade: 1
+  - nomeItem: Corda
+    quantidade: 1
   nomeItemResultado: EspadBizarra
   iconeResultado: {fileID: 21300000, guid: 8ebe149669c793a43aa3e5bee81f7a67, type: 3}
   quantidadeResultado: 1

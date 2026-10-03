@@ -1,31 +1,31 @@
 fileFormatVersion: 2
-guid: 46ad169aaeb4d834caec266fa9593df5
+guid: bc880fcf343317f4b9faf3c386928357
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7868365708086590105
-    second: spritesheet 32x32_0
+      213: -8395592168031367116
+    second: corte_0
   - first:
-      213: 4899903838989366422
-    second: spritesheet 32x32_1
+      213: -443813452866190955
+    second: corte_1
   - first:
-      213: 9133802670688737395
-    second: spritesheet 32x32_2
+      213: 5817775603154968592
+    second: corte_2
   - first:
-      213: 381063847410725253
-    second: spritesheet 32x32_3
+      213: -8151375374548552967
+    second: corte_3
   - first:
-      213: -3505031806748407094
-    second: spritesheet 32x32_4
+      213: 6018950807970562347
+    second: corte_4
   - first:
-      213: 5342437498615731920
-    second: spritesheet 32x32_5
+      213: 830354195136376555
+    second: corte_5
   - first:
-      213: -7096142278005095225
-    second: spritesheet 32x32_6
+      213: 8293882116653973104
+    second: corte_6
   - first:
-      213: 5392551207931022182
-    second: spritesheet 32x32_7
+      213: -6255235125446511932
+    second: corte_7
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -123,12 +123,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: spritesheet 32x32_0
+      name: corte_0
       rect:
         serializedVersion: 2
-        x: 7
+        x: 0
         y: 0
-        width: 19
+        width: 32
         height: 32
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -138,19 +138,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 99abd515cec023d60800000000000000
-      internalID: 7868365708086590105
+      spriteID: 4305079a76ddc7b80800000000000000
+      internalID: -8395592168031367116
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: spritesheet 32x32_1
+      name: corte_1
       rect:
         serializedVersion: 2
-        x: 40
+        x: 32
         y: 0
-        width: 16
+        width: 32
         height: 32
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -160,19 +160,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 694b88ca494fff340800000000000000
-      internalID: 4899903838989366422
+      spriteID: 5910f5b140247d9f0800000000000000
+      internalID: -443813452866190955
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: spritesheet 32x32_2
+      name: corte_2
       rect:
         serializedVersion: 2
-        x: 72
+        x: 64
         y: 0
-        width: 16
+        width: 32
         height: 32
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -182,19 +182,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3789ae2d229c1ce70800000000000000
-      internalID: 9133802670688737395
+      spriteID: 0106cf05614ecb050800000000000000
+      internalID: 5817775603154968592
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: spritesheet 32x32_3
+      name: corte_3
       rect:
         serializedVersion: 2
-        x: 104
+        x: 96
         y: 0
-        width: 16
+        width: 32
         height: 32
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -204,19 +204,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 581f8addc8fc94500800000000000000
-      internalID: 381063847410725253
+      spriteID: 9f2ba21e84f70ee80800000000000000
+      internalID: -8151375374548552967
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: spritesheet 32x32_4
+      name: corte_4
       rect:
         serializedVersion: 2
-        x: 135
+        x: 128
         y: 0
-        width: 19
+        width: 32
         height: 32
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -226,19 +226,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: acac0586420ab5fc0800000000000000
-      internalID: -3505031806748407094
+      spriteID: b21c2adbedb978350800000000000000
+      internalID: 6018950807970562347
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: spritesheet 32x32_5
+      name: corte_5
       rect:
         serializedVersion: 2
-        x: 169
+        x: 160
         y: 0
-        width: 16
+        width: 32
         height: 32
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -248,19 +248,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0d697bb7996242a40800000000000000
-      internalID: 5342437498615731920
+      spriteID: beeebd6bdb2068b00800000000000000
+      internalID: 830354195136376555
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: spritesheet 32x32_6
+      name: corte_6
       rect:
         serializedVersion: 2
-        x: 201
+        x: 192
         y: 0
-        width: 16
+        width: 32
         height: 32
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -270,19 +270,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 7c400e3f130758d90800000000000000
-      internalID: -7096142278005095225
+      spriteID: 07eff1c97d9c91370800000000000000
+      internalID: 8293882116653973104
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: spritesheet 32x32_7
+      name: corte_7
       rect:
         serializedVersion: 2
-        x: 233
+        x: 224
         y: 0
-        width: 16
+        width: 32
         height: 32
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -292,8 +292,30 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 66b05dda0c036da40800000000000000
-      internalID: 5392551207931022182
+      spriteID: 4c2f6398bc0f039a0800000000000000
+      internalID: -6255235125446511932
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: corte_8
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bf1b318afc550114b9e21d95a9133a9d
+      internalID: -942835787
       vertices: []
       indices: 
       edges: []
@@ -302,7 +324,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 18e53ea4a2f7f1e44903e8c90e8cc55c
+    spriteID: 052410851f8047a439698e115d3c5b28
     internalID: 0
     vertices: []
     indices: 
@@ -310,16 +332,19 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":32.0,"y":32.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      spritesheet 32x32_0: 7868365708086590105
-      spritesheet 32x32_1: 4899903838989366422
-      spritesheet 32x32_2: 9133802670688737395
-      spritesheet 32x32_3: 381063847410725253
-      spritesheet 32x32_4: -3505031806748407094
-      spritesheet 32x32_5: 5342437498615731920
-      spritesheet 32x32_6: -7096142278005095225
-      spritesheet 32x32_7: 5392551207931022182
+      corte_0: -8395592168031367116
+      corte_1: -443813452866190955
+      corte_2: 5817775603154968592
+      corte_3: -8151375374548552967
+      corte_4: 6018950807970562347
+      corte_5: 830354195136376555
+      corte_6: 8293882116653973104
+      corte_7: -6255235125446511932
+      corte_8: -942835787
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

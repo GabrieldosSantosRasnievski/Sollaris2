@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 9b2a2c6d7e6460f4fb12de31c3919ae1
+guid: 3d2324f5aa0a65741a561471e280de94
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2895876136232118216
-    second: pedraComMusgo1_0
+      213: 2405988275685974165
+    second: pedra media 16x16_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -102,13 +102,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: pedraComMusgo1_0
+      name: pedra media 16x16_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 3
-        width: 31
-        height: 26
+        y: 0
+        width: 16
+        height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -117,8 +117,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8389a524ff7cfc7d0800000000000000
-      internalID: -2895876136232118216
+      spriteID: 590640ad699c36120800000000000000
+      internalID: 2405988275685974165
       vertices: []
       indices: 
       edges: []
@@ -137,7 +137,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      pedraComMusgo1_0: -2895876136232118216
+      pedra media 16x16_0: 2405988275685974165
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

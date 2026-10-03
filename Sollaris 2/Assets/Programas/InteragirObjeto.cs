@@ -15,7 +15,6 @@ public class InteragirObjeto : MonoBehaviour{
     public bool podeColocarCintura;
     public bool podeColocarCalca;
     public bool podeColocarBota;
-    
     private Transform playerTransform;
     public float distanciaInteracao = 1.5f;
 
@@ -24,10 +23,11 @@ public class InteragirObjeto : MonoBehaviour{
         if(player != null){
             playerTransform = player.transform;
         }
-
         if(textoColetar == null){
             GameObject txt = GameObject.FindWithTag("TextoColetar");
-            if(txt != null) textoColetar = txt;
+            if(txt != null) {
+                textoColetar = txt;
+            }
         }
 
         if(iconeItem == null && !string.IsNullOrEmpty(nomeItem)){
