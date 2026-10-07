@@ -6,7 +6,6 @@ public class InimigoIA : MonoBehaviour {
     public float distanciaAtaque = 1.5f;
     public float tempoEntreAtaques = 1.5f;
     private float proximoAtaque;
-    
     private bool playerNaAreaDeVisao = false;
     private GameObject playerAlvo;
     private bool aAtacar = false;
@@ -86,5 +85,14 @@ public class InimigoIA : MonoBehaviour {
             objetoHitbox.SetActive(false);
         }
         aAtacar = false;
+    }
+    public void PararAtaque(){
+        if(aAtacar){
+            StopAllCoroutines();
+            if(objetoHitbox != null){
+                objetoHitbox.SetActive(false);
+            }
+            aAtacar = false;
+        }
     }
 }

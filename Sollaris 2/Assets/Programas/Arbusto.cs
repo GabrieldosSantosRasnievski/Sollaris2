@@ -7,8 +7,8 @@ public class Arbusto : MonoBehaviour {
     public GameObject prefabFruta; 
     private bool temFruta = true;
     private bool playerNaArea = false;
-    public GameObject textoInteracao; 
-    private static bool jogadorOcupado = false;
+    public GameObject textoInteracao;
+    public static bool jogadorOcupado = false;
 
     private void Start(){
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -35,7 +35,6 @@ public class Arbusto : MonoBehaviour {
     }
     private void ColherFruta(){
         temFruta = false;
-        
         if (spriteRenderer != null && spriteSemFrutas != null){
             spriteRenderer.sprite = spriteSemFrutas;
         }   
@@ -45,9 +44,19 @@ public class Arbusto : MonoBehaviour {
         if (prefabFruta != null){
             int quantidadeFrutas = Random.Range(1, 6);
             for (int i = 0; i < quantidadeFrutas; i++){
-                float offsetX = Random.Range(-1.1f, 1.1f);
-                float offsetY = Random.Range(-1.1f, 1.1f); 
-                Vector3 posicaoSpawn = transform.position + new Vector3(offsetX, offsetY, 0f);
+                Vector3 posicaoSpawn = Vector3.zero;
+                bool posicaoValida = false;
+                int tentativas = 0;
+                while (!posicaoValida && tentativas < 10){
+                    float offsetX = Random.Range(-1.2f, 1.2f);
+                    float offsetY = Random.Range(-1.2f, 1.2f);
+                    posicaoSpawn = transform.position + new Vector3(offsetX, offsetY, 0f);
+                    float distanciaAoCentro = Vector2.Distance(transform.position, posicaoSpawn);
+                    if (distanciaAoCentro > 0.6f){
+                        posicaoValida = true;
+                    }
+                    tentativas++;
+                }
                 Instantiate(prefabFruta, posicaoSpawn, Quaternion.identity);
             }
         }

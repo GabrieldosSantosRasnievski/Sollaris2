@@ -6,12 +6,20 @@ public class AtaqueJogador : MonoBehaviour{
     public float danoBaseSoco = 1f;
     public Vector2 tamanhoSocoPadrao = new Vector2(0.8f, 0.8f);
     public float distanciaAtaque = 1.5f;
+    public float tempoEntreAtaques = 0.5f;
+    private float proximoAtaqueTempo = 0f;
     private Vector2 tamanhoHitboxAtual;
 
     void Update(){
         if(Input.GetMouseButtonDown(0)){
-            Debug.Log(">>> CLIQUE DO MOUSE (M1) DETETADO PELO UPDATE! <<<");
-            TentarAtacar();
+            if(Time.time >= proximoAtaqueTempo){
+                Debug.Log(">>> CLIQUE DO MOUSE (M1) DETETADO PELO UPDATE! <<<");
+                TentarAtacar();
+                proximoAtaqueTempo = Time.time + tempoEntreAtaques;
+            }
+            else{
+                Debug.Log("Ataque em cooldown! Espere um pouco.");
+            }
         }
     }
 
@@ -58,23 +66,32 @@ public class AtaqueJogador : MonoBehaviour{
 
         float danoFinal = danoBaseSoco;
         tamanhoHitboxAtual = tamanhoSocoPadrao;
+        bool ehMachado = false;
 
         if(slotAtivo != null && !string.IsNullOrEmpty(slotAtivo.nomeItem)){
             danoFinal = slotAtivo.danoItem;
             tamanhoHitboxAtual = slotAtivo.tamanhoHitbox;
+            ehMachado = slotAtivo.ehMachado;
         }
 
         Collider2D[] inimigosAtingidos = Physics2D.OverlapBoxAll(pontoAtaque.position, tamanhoHitboxAtual, 0f, camadaInimigo);
-        Debug.Log("Quantidade de inimigos detetados na área: " + inimigosAtingidos.Length);
+        Debug.Log("Quantidade de objetos detetados na área: " + inimigosAtingidos.Length);
 
-        foreach(Collider2D inimigo in inimigosAtingidos){
-            VidaInimigo vida = inimigo.GetComponent<VidaInimigo>();
+        foreach(Collider2D alvo in inimigosAtingidos){
+            VidaInimigo vida = alvo.GetComponent<VidaInimigo>();
             if(vida != null){
                 vida.TomarDano(danoFinal);
                 Debug.Log("Dano aplicado com sucesso ao inimigo!");
             }
-            else{
-                Debug.Log("Aviso: O objeto detetado na Layer de inimigo não tem o script VidaInimigo!");
+
+            Arvore arvore = alvo.GetComponent<Arvore>();
+            if(arvore != null){
+                arvore.ReceberDano(danoFinal, ehMachado);
+                Debug.Log("Dano aplicado com sucesso à árvore!");
+            }
+
+            if(vida == null && arvore == null){
+                Debug.Log("Aviso: O objeto detetado na Layer não tem o script VidaInimigo ou Arvore!");
             }
         }
     }

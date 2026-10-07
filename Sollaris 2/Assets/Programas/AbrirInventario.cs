@@ -16,8 +16,6 @@ public class AbrirInventario : MonoBehaviour {
     public Color corSelecionado = new Color(0.5f, 0.5f, 0.5f, 1f);
     public List<TextMeshProUGUI> textosSlotsInventario;
     public List<Image> imagensSlotsInventario;
-
-    [Header("UI de Equipamentos")]
     public Image imagemCabeca;
     public Image imagemTorso;
     public Image imagemCintura;
@@ -33,7 +31,6 @@ public class AbrirInventario : MonoBehaviour {
             painelSlotsRapidos.SetActive(true);
         }
     }
-
     void Update() {
         if (Input.GetKeyDown(KeyCode.B) || Input.GetKeyDown(KeyCode.Escape)) {
             AlternarMenuGeral();
@@ -42,7 +39,6 @@ public class AbrirInventario : MonoBehaviour {
             AtualizarUI();
         }
     }
-
     public void AlternarMenuGeral() {
         if (painelMenuGeral != null) {
             bool ativar = !painelMenuGeral.activeSelf;
@@ -58,7 +54,6 @@ public class AbrirInventario : MonoBehaviour {
             }
         }
     }
-
     public void AbrirPainelInventario() {
         if (painelInventario != null) {
             painelInventario.SetActive(true);
@@ -70,7 +65,6 @@ public class AbrirInventario : MonoBehaviour {
             painelSlotsRapidos.SetActive(true);
         }
     }
-
     public void AbrirPainelCrafting() {
         if (painelCrafting != null) {
             painelCrafting.SetActive(true);
@@ -82,12 +76,10 @@ public class AbrirInventario : MonoBehaviour {
             painelSlotsRapidos.SetActive(false);
         }
     }
-
     public void AtualizarUI() {
         if (InventarioJogador.Instance == null) {
             return;
         }
-
         int slotAtivo = InventarioJogador.Instance.slotSelecionado;
         for (int i = 0; i < textosSlotsRapidos.Count; i++) {
             if (i < fundosSlotsRapidos.Count && fundosSlotsRapidos[i] != null) {
@@ -159,7 +151,6 @@ public class AbrirInventario : MonoBehaviour {
         AtualizarIconeEquipamento(imagemCalca, inv.slotCalca);
         AtualizarIconeEquipamento(imagemBota, inv.slotBota);
     }
-
     private void AtualizarIconeEquipamento(Image imagemUI, InventarioJogador.ItemSlot slotEquipado) {
         if (imagemUI != null) {
             if (slotEquipado != null && !string.IsNullOrEmpty(slotEquipado.nomeItem) && slotEquipado.iconeItem != null) {

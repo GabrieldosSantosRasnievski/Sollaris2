@@ -27,3 +27,5 @@ MonoBehaviour:
   danoResultado: 10
   tamanhoHitboxResultado: {x: 1, y: 1}
   quebraAoAtingirResultado: 0
+  ehMachadoResultado: 1
+  ehPicaretaResultado: 0

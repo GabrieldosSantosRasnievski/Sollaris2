@@ -42,10 +42,11 @@ public class VidaJogador : MonoBehaviour
     public void AdicionarDefesaTemporaria(float valor){
         defesaTemporariaF = valor;
     }
-
     public void TomarDano(float quantidadeBruta, bool ignorarDefesa = false){
+        if(scriptMovimento != null && scriptMovimento.estaEmDash){
+            return; 
+        }
         float quantidadeFinal;
-
         if (ignorarDefesa)
         {
             quantidadeFinal = quantidadeBruta;

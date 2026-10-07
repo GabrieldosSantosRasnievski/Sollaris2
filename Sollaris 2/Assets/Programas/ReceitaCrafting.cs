@@ -17,4 +17,6 @@ public class ReceitaCrafting : ScriptableObject{
     public float danoResultado;
     public Vector2 tamanhoHitboxResultado = new Vector2(1f, 1f);
     public bool quebraAoAtingirResultado;
+    public bool ehMachadoResultado;
+    public bool ehPicaretaResultado;
 }

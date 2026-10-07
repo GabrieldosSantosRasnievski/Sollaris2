@@ -11,18 +11,20 @@ public class TesteMovimento : MonoBehaviour{
     public Sprite spriteHomem;
     public Sprite spriteMulher;
     private Collider2D playerCollider;
+    private Rigidbody2D rb;
     private Vector2 ultimaDirecaoDash = Vector2.right;
     private bool realizandoDash = false;
     private bool consegueDash = true;
+    [HideInInspector] public bool estaEmDash = false;
     public ParticleSystem particulaDash;
     public float emissaomaxima = 60f;
     public bool estaTomandoDano = false;
     public Animator animacaoTeste;
     public GameObject prefabItemArremessado;
-
     public GameObject objetoEscudoVisual;
 
     void Start(){
+        rb = GetComponent<Rigidbody2D>();
         if(particulaDash != null){
             particulaDash.Stop();
         }
@@ -71,6 +73,15 @@ public class TesteMovimento : MonoBehaviour{
                 vida.AdicionarDefesaTemporaria(-5f);
             }
         }
+        if(Input.GetKeyDown(KeyCode.LeftShift) && consegueDash && !defendendo){
+            StartCoroutine(DarDash());
+        }
+        if(Input.GetKeyDown(KeyCode.Q)){
+            TentarArremessar();
+        }
+        AtualizarGenero();
+    }
+    void FixedUpdate(){
         Vector2 direcaoInput = Vector2.zero;
         if(Input.GetKey(KeyCode.W)){
             direcaoInput.y = direcaoInput.y + 1f;
@@ -84,30 +95,33 @@ public class TesteMovimento : MonoBehaviour{
         if(Input.GetKey(KeyCode.A)){ 
             direcaoInput.x = direcaoInput.x - 1f;
         }
+
         if(direcaoInput != Vector2.zero){
             ultimaDirecaoDash = direcaoInput.normalized;
         }
-        if(Input.GetKeyDown(KeyCode.LeftShift) && consegueDash && !defendendo){
-            StartCoroutine(DarDash());
-        }
-
-        if(Input.GetKeyDown(KeyCode.Q)){
-            TentarArremessar();
-        }
+        bool defendendo = Input.GetKey(KeyCode.F);
         float velocidadeAtualMovimento = defendendo ? velocidadeDefendendo : velocidade;
+
         if(realizandoDash){
-            transform.Translate(ultimaDirecaoDash * velocidadeDash * Time.deltaTime);
+            rb.MovePosition(rb.position + ultimaDirecaoDash * velocidadeDash * Time.fixedDeltaTime);
         }
         else{
-            transform.Translate(direcaoInput.normalized * velocidadeAtualMovimento * Time.deltaTime);
+            rb.MovePosition(rb.position + direcaoInput.normalized * velocidadeAtualMovimento * Time.fixedDeltaTime);
         }
-        AtualizarGenero();
     }
     private IEnumerator DarDash(){
         consegueDash = false;
         realizandoDash = true;
-        if(playerCollider != null){
-            playerCollider.isTrigger = true;
+        estaEmDash = true;
+        InimigoIA[] inimigosNaCena = FindObjectsOfType<InimigoIA>();
+        foreach(var inimigo in inimigosNaCena){
+            if(Vector2.Distance(transform.position, inimigo.transform.position) < 5f){
+                inimigo.PararAtaque();
+                Collider2D colisorInimigo = inimigo.GetComponent<Collider2D>();
+                if(colisorInimigo != null && playerCollider != null){
+                    Physics2D.IgnoreCollision(playerCollider, colisorInimigo, true);
+                }
+            }
         }
         if(particulaDash != null){
             particulaDash.Play();
@@ -123,10 +137,16 @@ public class TesteMovimento : MonoBehaviour{
         if(particulaDash != null){
             particulaDash.Stop();
         }
-        if(playerCollider != null){
-            playerCollider.isTrigger = false;
+        foreach(var inimigo in inimigosNaCena){
+            if(inimigo != null){
+                Collider2D colisorInimigo = inimigo.GetComponent<Collider2D>();
+                if(colisorInimigo != null && playerCollider != null){
+                    Physics2D.IgnoreCollision(playerCollider, colisorInimigo, false);
+                }
+            }
         }
         realizandoDash = false;
+        estaEmDash = false;
         yield return new WaitForSeconds(recargaDash);
         consegueDash = true;
     }

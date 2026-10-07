@@ -21,13 +21,14 @@ public class ItemArremessado : MonoBehaviour{
     private bool cinturaItem;
     private bool calcaItem;
     private bool botaItem;
+    private bool ehMachadoItem;
+    private bool ehPicaretaItem;
 
     void Awake(){
         rb = GetComponent<Rigidbody2D>();
         colisor2d = GetComponent<Collider2D>();
     }
-
-    public void Inicializar(Vector2 direcaoArremesso, Sprite iconeItem, string nome, bool podeConsumir, float valorFome, float danoItem, Vector2 tamanhoHitbox, bool quebraAoAtingir, float defesaItem = 0f, bool cabeca = false, bool torso = false, bool cintura = false, bool calca = false, bool bota = false){
+    public void Inicializar(Vector2 direcaoArremesso, Sprite iconeItem, string nome, bool podeConsumir, float valorFome, float danoItem, Vector2 tamanhoHitbox, bool quebraAoAtingir, float defesaItem = 0f, bool cabeca = false, bool torso = false, bool cintura = false, bool calca = false, bool bota = false, bool ehMachado = false, bool ehPicareta = false){
         direcao = direcaoArremesso.normalized;
         iconeDoItem = iconeItem;
         nomeDoItem = nome;
@@ -42,7 +43,8 @@ public class ItemArremessado : MonoBehaviour{
         cinturaItem = cintura;
         calcaItem = calca;
         botaItem = bota;
-
+        ehMachadoItem = ehMachado;
+        ehPicaretaItem = ehPicareta;
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
         if(sr != null){
             sr.sprite = iconeItem;
@@ -106,10 +108,11 @@ public class ItemArremessado : MonoBehaviour{
         interacao.podeColocarCintura = cinturaItem;
         interacao.podeColocarCalca = calcaItem;
         interacao.podeColocarBota = botaItem;
+        interacao.ehMachado = ehMachadoItem;
+        interacao.ehPicareta = ehPicaretaItem;
 
         interacao.enabled = true;
     }
-
     void OnCollisionEnter2D(Collision2D collision){
         if(voando){
             if(collision.gameObject.CompareTag("Player")){
