@@ -1,11 +1,61 @@
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Collections;
 using System.Collections.Generic;
 
 public class SlotEquipamento : MonoBehaviour, IDropHandler {
     public enum TipoEquipamento { Cabeca, Torso, Cintura, Calca, Bota }
     public TipoEquipamento tipoSlot;
+    public GameObject imagemSolDeFundo;
+    private Vector3 posicaoOriginalSlot;
+    private Coroutine corrotinaEfeito;
 
+    void Start() {
+        posicaoOriginalSlot = transform.localPosition;
+        if (imagemSolDeFundo != null) {
+            imagemSolDeFundo.SetActive(false);
+        }
+    }
+    public void LigarDestaqueVisual() {
+        if (imagemSolDeFundo != null) {
+            imagemSolDeFundo.SetActive(true);
+        }
+        if (corrotinaEfeito != null) {
+            StopCoroutine(corrotinaEfeito);
+        }
+        corrotinaEfeito = StartCoroutine(EfeitoTremerEGirar());
+    }
+    public void DesligarDestaqueVisual() {
+        if (corrotinaEfeito != null) {
+            StopCoroutine(corrotinaEfeito);
+        }
+        transform.localPosition = posicaoOriginalSlot;
+        if (imagemSolDeFundo != null) {
+            imagemSolDeFundo.SetActive(false);
+        }
+    }
+    private IEnumerator EfeitoTremerEGirar() {
+        float magnitude = 3f;
+        float velocidadeGiro = 150f;
+
+        while (true) {
+            float offsetX = Mathf.Sin(Time.unscaledTime * 40f) * magnitude;
+            float offsetY = Mathf.Cos(Time.unscaledTime * 45f) * magnitude;
+            
+            transform.localPosition = new Vector3(
+                posicaoOriginalSlot.x + offsetX, 
+                posicaoOriginalSlot.y + offsetY, 
+                posicaoOriginalSlot.z
+            );
+
+            if (imagemSolDeFundo != null) {
+                imagemSolDeFundo.transform.Rotate(0f, 0f, velocidadeGiro * Time.unscaledDeltaTime);
+            }
+
+            yield return null;
+        }
+    }
     public void OnDrop(PointerEventData eventData) {
         GameObject objetoArrastado = eventData.pointerDrag;
         if (objetoArrastado == null){
@@ -15,7 +65,6 @@ public class SlotEquipamento : MonoBehaviour, IDropHandler {
         if (slotOrigemUI == null){
             return;
         }
-
         List<InventarioJogador.ItemSlot> listaOrigem = (slotOrigemUI.tipoSlot == ArrasteSlot.TipoSlot.Rapido) ? 
             InventarioJogador.Instance.slotsRapidos : InventarioJogador.Instance.inventario;
 
@@ -63,7 +112,6 @@ public class SlotEquipamento : MonoBehaviour, IDropHandler {
             Debug.LogWarning("Este item não pode ser equipado neste espaço!");
         }
     }
-
     bool VerificarSePodeEquipar(InventarioJogador.ItemSlot item) {
         switch (tipoSlot) {
             case TipoEquipamento.Cabeca: return item.podeColocarCabeca;
@@ -74,7 +122,6 @@ public class SlotEquipamento : MonoBehaviour, IDropHandler {
             default: return false;
         }
     }
-
     InventarioJogador.ItemSlot ObterSlotEquipamentoCorrespondente() {
         var inv = InventarioJogador.Instance;
         switch (tipoSlot) {

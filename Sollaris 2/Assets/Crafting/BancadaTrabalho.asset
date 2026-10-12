@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7891d202c28f24a48be8ad2803a72b42, type: 3}
+  m_Name: BancadaTrabalho
+  m_EditorClassIdentifier: Assembly-CSharp::ReceitaCrafting
+  ingredientes: []
+  nomeItemResultado: Bancada de Trabalho
+  iconeResultado: {fileID: 0}
+  quantidadeResultado: 1
+  podeConsumirResultado: 0
+  valorFomeResultado: 0
+  danoResultado: 0
+  tamanhoHitboxResultado: {x: 1, y: 1}
+  quebraAoAtingirResultado: 0
+  ehMachadoResultado: 0
+  ehPicaretaResultado: 0
+  ehCortanteResultado: 0

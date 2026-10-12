@@ -1,21 +1,33 @@
 using UnityEngine;
+using System.Collections;
 
-public class AtaqueJogador : MonoBehaviour{
-    public Transform pontoAtaque;
-    public LayerMask camadaInimigo;
-    public float danoBaseSoco = 1f;
-    public Vector2 tamanhoSocoPadrao = new Vector2(0.8f, 0.8f);
+public class AtaqueJogador : MonoBehaviour {
     public float distanciaAtaque = 1.5f;
     public float tempoEntreAtaques = 0.5f;
-    private float proximoAtaqueTempo = 0f;
-    private Vector2 tamanhoHitboxAtual;
+    private float proximoAtaque = 0f;
+    private bool aAtacar = false;
+    public Transform pivotAtaque; 
+    public GameObject objetoHitbox;
 
-    void Update(){
-        if(Input.GetMouseButtonDown(0)){
-            if(Time.time >= proximoAtaqueTempo){
-                Debug.Log(">>> CLIQUE DO MOUSE (M1) DETETADO PELO UPDATE! <<<");
+    private void Start(){
+        if (objetoHitbox != null){
+            BoxCollider2D col = objetoHitbox.GetComponent<BoxCollider2D>();
+            if (col != null) col.enabled = false;
+        }
+    }
+
+    private void Update() {
+        if (pivotAtaque != null && !aAtacar){
+            Vector3 posicaoMouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            posicaoMouse.z = 0f;
+            Vector2 direcao = posicaoMouse - pivotAtaque.position;
+            float anguloDoAtaque = Mathf.Atan2(direcao.y, direcao.x) * Mathf.Rad2Deg;
+            pivotAtaque.rotation = Quaternion.Euler(new Vector3(0, 0, anguloDoAtaque));
+        }
+        if (Input.GetMouseButtonDown(0)){
+            if (Time.time >= proximoAtaque && !aAtacar){
                 TentarAtacar();
-                proximoAtaqueTempo = Time.time + tempoEntreAtaques;
+                proximoAtaque = Time.time + tempoEntreAtaques;
             }
             else{
                 Debug.Log("Ataque em cooldown! Espere um pouco.");
@@ -23,83 +35,72 @@ public class AtaqueJogador : MonoBehaviour{
         }
     }
 
-    void TentarAtacar(){
-        if(InventarioJogador.Instance == null){
+    private void TentarAtacar(){
+        if (InventarioJogador.Instance == null){
             Debug.Log("Erro: InventarioJogador.Instance está nulo.");
             return;
         }
-
         var slotAtivo = InventarioJogador.Instance.ObterItemSelecionado();
-
-        if(slotAtivo != null && !string.IsNullOrEmpty(slotAtivo.nomeItem) && slotAtivo.podeConsumir){
+        if (slotAtivo != null && !string.IsNullOrEmpty(slotAtivo.nomeItem) && slotAtivo.podeConsumir){
             Debug.Log("Ataque ignorado: O item selecionado é consumível.");
             return;
         }
 
-        AtualizarPosicaoPontoAtaque();
-        ExecutarAtaque(slotAtivo);
+        StartCoroutine(AtacarComHitbox(slotAtivo));
     }
 
-    void AtualizarPosicaoPontoAtaque(){
-        if(pontoAtaque == null){
-            Debug.Log("Erro: O Transform do PontoAtaque não foi atribuído no Inspetor!");
-            return;
-        }
-
-        Vector3 posicaoMouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        posicaoMouse.z = 0f;
-
-        Vector2 direcao = (posicaoMouse - transform.position).normalized;
-        float distanciaReal = Vector2.Distance(transform.position, posicaoMouse);
-        
-        if(distanciaReal > distanciaAtaque){
-            distanciaReal = distanciaAtaque;
-        }
-
-        pontoAtaque.position = (Vector2)transform.position + (direcao * distanciaReal);
-    }
-
-    void ExecutarAtaque(InventarioJogador.ItemSlot slotAtivo){
-        if(pontoAtaque == null){
-            return;
-        }
-
-        float danoFinal = danoBaseSoco;
-        tamanhoHitboxAtual = tamanhoSocoPadrao;
+    private IEnumerator AtacarComHitbox(InventarioJogador.ItemSlot slotAtivo){
+        aAtacar = true;
+        float danoFinal = 1f;
         bool ehMachado = false;
-
-        if(slotAtivo != null && !string.IsNullOrEmpty(slotAtivo.nomeItem)){
+        bool ehCortante = false;
+        if (slotAtivo != null && !string.IsNullOrEmpty(slotAtivo.nomeItem)){
             danoFinal = slotAtivo.danoItem;
-            tamanhoHitboxAtual = slotAtivo.tamanhoHitbox;
             ehMachado = slotAtivo.ehMachado;
+            ehCortante = slotAtivo.ehCortante;
         }
 
-        Collider2D[] inimigosAtingidos = Physics2D.OverlapBoxAll(pontoAtaque.position, tamanhoHitboxAtual, 0f, camadaInimigo);
-        Debug.Log("Quantidade de objetos detetados na área: " + inimigosAtingidos.Length);
+        if (objetoHitbox != null){
+            objetoHitbox.SetActive(true);
 
-        foreach(Collider2D alvo in inimigosAtingidos){
-            VidaInimigo vida = alvo.GetComponent<VidaInimigo>();
-            if(vida != null){
-                vida.TomarDano(danoFinal);
-                Debug.Log("Dano aplicado com sucesso ao inimigo!");
+            Animator animHitbox = objetoHitbox.GetComponent<Animator>();
+            if (animHitbox != null){
+                if (ehCortante){
+                    animHitbox.SetTrigger("Corte");
+                }
+                else{
+                    animHitbox.SetTrigger("Impacto");
+                }
             }
+            BoxCollider2D col = objetoHitbox.GetComponent<BoxCollider2D>();
+            if (col != null) col.enabled = true;
+            yield return new WaitForSeconds(0.05f);
 
-            Arvore arvore = alvo.GetComponent<Arvore>();
-            if(arvore != null){
-                arvore.ReceberDano(danoFinal, ehMachado);
-                Debug.Log("Dano aplicado com sucesso à árvore!");
-            }
+            Collider2D[] alvosAtingidos = Physics2D.OverlapBoxAll(
+                objetoHitbox.transform.position, 
+                col != null ? col.size : new Vector2(1f, 1f), 
+                objetoHitbox.transform.rotation.eulerAngles.z
+            );
 
-            if(vida == null && arvore == null){
-                Debug.Log("Aviso: O objeto detetado na Layer não tem o script VidaInimigo ou Arvore!");
+            foreach(Collider2D alvo in alvosAtingidos){
+                if(alvo.gameObject == gameObject) continue;
+                VidaInimigo vida = alvo.GetComponent<VidaInimigo>();
+                if(vida != null){
+                    vida.TomarDano(danoFinal);
+                    Debug.Log("Dano aplicado com sucesso ao inimigo!");
+                }
+
+                Arvore arvore = alvo.GetComponent<Arvore>();
+                if(arvore != null){
+                    arvore.ReceberDano(danoFinal, ehMachado);
+                    Debug.Log("Dano aplicado com sucesso à árvore!");
+                }
             }
+            yield return new WaitForSeconds(0.3f);
+
+            if (col != null) col.enabled = false;
+            objetoHitbox.SetActive(false);
         }
-    }
-
-    private void OnDrawGizmosSelected(){
-        if(pontoAtaque != null){
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireCube(pontoAtaque.position, tamanhoHitboxAtual);
-        }
+        aAtacar = false;
     }
 }

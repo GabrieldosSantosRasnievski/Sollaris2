@@ -14,10 +14,12 @@ public class InimigoIA : MonoBehaviour {
     public GameObject objetoHitbox;
     public GameObject objetoExclamacao; 
     private bool aPiscarExclamacao = false;
+    public float danoInimigo = 10f;
 
     private void Start(){
         if (objetoHitbox != null){
-            objetoHitbox.SetActive(false);
+            BoxCollider2D col = objetoHitbox.GetComponent<BoxCollider2D>();
+            if (col != null) col.enabled = false;
         }
         if (objetoExclamacao != null){
             objetoExclamacao.SetActive(false); 
@@ -56,6 +58,8 @@ public class InimigoIA : MonoBehaviour {
             playerNaAreaDeVisao = false;
             playerAlvo = null;
             if (objetoHitbox != null){
+                BoxCollider2D col = objetoHitbox.GetComponent<BoxCollider2D>();
+                if (col != null) col.enabled = false;
                 objetoHitbox.SetActive(false);
             }
             if (objetoExclamacao != null){
@@ -76,12 +80,36 @@ public class InimigoIA : MonoBehaviour {
     private IEnumerator AtacarInstantaneo(){
         aAtacar = true;
         if (objetoHitbox != null){
+            objetoHitbox.SetActive(true);
             Animator animHitbox = objetoHitbox.GetComponent<Animator>();
             if (animHitbox != null){
-                animHitbox.SetTrigger("Atacar");
+                animHitbox.SetTrigger("Corte");
             }
-            objetoHitbox.SetActive(true);
+            BoxCollider2D col = objetoHitbox.GetComponent<BoxCollider2D>();
+            if (col != null){
+                col.enabled = true;
+            }
+            yield return new WaitForSeconds(0.05f);
+            Collider2D[] alvosAtingidos = Physics2D.OverlapBoxAll(
+                objetoHitbox.transform.position, 
+                col != null ? col.size : new Vector2(1f, 1f), 
+                objetoHitbox.transform.rotation.eulerAngles.z
+            );
+            foreach(Collider2D alvo in alvosAtingidos){
+                if(alvo.gameObject == gameObject){
+                    continue;
+                }
+                VidaJogador vidaPlayer = alvo.GetComponent<VidaJogador>();
+                if(vidaPlayer != null){
+                    vidaPlayer.TomarDano(danoInimigo);
+                    Debug.Log("Inimigo acertou o player com Corte!");
+                    break;
+                }
+            }
             yield return new WaitForSeconds(0.2f); 
+            if (col != null){
+                col.enabled = false;
+            }
             objetoHitbox.SetActive(false);
         }
         aAtacar = false;
@@ -90,6 +118,8 @@ public class InimigoIA : MonoBehaviour {
         if(aAtacar){
             StopAllCoroutines();
             if(objetoHitbox != null){
+                BoxCollider2D col = objetoHitbox.GetComponent<BoxCollider2D>();
+                if (col != null) col.enabled = false;
                 objetoHitbox.SetActive(false);
             }
             aAtacar = false;

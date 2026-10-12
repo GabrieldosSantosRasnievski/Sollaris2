@@ -26,6 +26,23 @@ public class ArrasteSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IDrop
             indiceOrigem = -1;
             return;
         }
+
+        SlotEquipamento[] todosSlotsEquipamento = FindObjectsOfType<SlotEquipamento>();
+        foreach (var slotEq in todosSlotsEquipamento) {
+            bool compativel = false;
+            if (slotEq.tipoSlot == SlotEquipamento.TipoEquipamento.Cabeca && slotDados.podeColocarCabeca) compativel = true;
+            if (slotEq.tipoSlot == SlotEquipamento.TipoEquipamento.Torso && slotDados.podeColocarTorso) compativel = true;
+            if (slotEq.tipoSlot == SlotEquipamento.TipoEquipamento.Cintura && slotDados.podeColocarCintura) compativel = true;
+            if (slotEq.tipoSlot == SlotEquipamento.TipoEquipamento.Calca && slotDados.podeColocarCalca) compativel = true;
+            if (slotEq.tipoSlot == SlotEquipamento.TipoEquipamento.Bota && slotDados.podeColocarBota) compativel = true;
+
+            if (compativel) {
+                InventarioJogador.ItemSlot slotDestinoEquip = ObterSlotEquipamentoDoInventario(slotEq.tipoSlot, inventario);
+                if (slotDestinoEquip != null && string.IsNullOrEmpty(slotDestinoEquip.nomeItem)) {
+                    slotEq.LigarDestaqueVisual();
+                }
+            }
+        }
         iconeArrastadoObj = new GameObject("IconeArrastado");
         iconeArrastadoObj.transform.SetParent(transform.root);
         iconeArrastadoObj.transform.SetAsLastSibling();
@@ -59,6 +76,10 @@ public class ArrasteSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IDrop
         LimparArrasto();
     }
     private void LimparArrasto() {
+        SlotEquipamento[] todosSlotsEquipamento = FindObjectsOfType<SlotEquipamento>();
+        foreach (var slotEq in todosSlotsEquipamento) {
+            slotEq.DesligarDestaqueVisual();
+        }
         if(iconeArrastadoObj != null){
             Destroy(iconeArrastadoObj);
         }
@@ -83,5 +104,15 @@ public class ArrasteSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IDrop
             case TipoSlot.Bota: return inv.slotBota;
         }
         return null;
+    }
+    private InventarioJogador.ItemSlot ObterSlotEquipamentoDoInventario(SlotEquipamento.TipoEquipamento tipo, InventarioJogador inv) {
+        switch (tipo) {
+            case SlotEquipamento.TipoEquipamento.Cabeca: return inv.slotCabeca;
+            case SlotEquipamento.TipoEquipamento.Torso: return inv.slotTorso;
+            case SlotEquipamento.TipoEquipamento.Cintura: return inv.slotCintura;
+            case SlotEquipamento.TipoEquipamento.Calca: return inv.slotCalca;
+            case SlotEquipamento.TipoEquipamento.Bota: return inv.slotBota;
+            default: return null;
+        }
     }
 }

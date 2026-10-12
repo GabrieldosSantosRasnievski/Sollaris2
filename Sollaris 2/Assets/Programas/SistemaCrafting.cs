@@ -31,7 +31,8 @@ public class SistemaCrafting : MonoBehaviour{
             0f,
             false, false, false, false, false,
             receita.ehMachadoResultado,
-            receita.ehPicaretaResultado
+            receita.ehPicaretaResultado,
+            receita.ehCortanteResultado
         );
         if(adicionado){
             Debug.Log("Item craftado com sucesso: " + receita.nomeItemResultado);
@@ -84,6 +85,7 @@ public class SistemaCrafting : MonoBehaviour{
                         slot.podeColocarBota = false;
                         slot.ehMachado = false;
                         slot.ehPicareta = false;
+                        slot.ehCortante = false;
                     }
                 }
             }
@@ -114,6 +116,7 @@ public class SistemaCrafting : MonoBehaviour{
                         slot.podeColocarBota = false;
                         slot.ehMachado = false;
                         slot.ehPicareta = false;
+                        slot.ehCortante = false;
                     }
                 }
             }

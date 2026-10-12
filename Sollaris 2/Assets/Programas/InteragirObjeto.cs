@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class InteragirObjeto : MonoBehaviour{
     public GameObject textoColetar;
@@ -17,6 +18,7 @@ public class InteragirObjeto : MonoBehaviour{
     public bool podeColocarBota;
     public bool ehMachado;
     public bool ehPicareta;
+    public bool ehCortante;
     private Transform playerTransform;
     public float distanciaInteracao = 1.5f;
 
@@ -51,7 +53,8 @@ public class InteragirObjeto : MonoBehaviour{
                         bool pegou = InventarioJogador.Instance.TentarAdicionar(
                             nomeItem, iconeItem, podeConsumir, valorFome, danoItem, 
                             tamanhoHitbox, quebraAoAtingir, defesaItem, 
-                            podeColocarCabeca, podeColocarTorso, podeColocarCintura, podeColocarCalca, podeColocarBota
+                            podeColocarCabeca, podeColocarTorso, podeColocarCintura, podeColocarCalca, podeColocarBota,
+                            ehMachado, ehPicareta, ehCortante
                         );
                         if(pegou){
                             AbrirInventario ui = FindObjectOfType<AbrirInventario>();

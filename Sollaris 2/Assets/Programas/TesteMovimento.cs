@@ -33,6 +33,7 @@ public class TesteMovimento : MonoBehaviour{
             objetoEscudoVisual.SetActive(false);
         }
     }
+
     public void AtualizarGenero(){
         string generoEscolhido = PlayerPrefs.GetString("GeneroPlayer", "Homem");
         if(generoEscolhido == "Homem"){
@@ -53,6 +54,7 @@ public class TesteMovimento : MonoBehaviour{
             spriteRenderer.sprite = spriteMulher;
         }
     }
+
     void Update(){
         bool defendendo = Input.GetKey(KeyCode.F);
         if(Input.GetKeyDown(KeyCode.F)){
@@ -81,6 +83,7 @@ public class TesteMovimento : MonoBehaviour{
         }
         AtualizarGenero();
     }
+
     void FixedUpdate(){
         Vector2 direcaoInput = Vector2.zero;
         if(Input.GetKey(KeyCode.W)){
@@ -95,13 +98,11 @@ public class TesteMovimento : MonoBehaviour{
         if(Input.GetKey(KeyCode.A)){ 
             direcaoInput.x = direcaoInput.x - 1f;
         }
-
         if(direcaoInput != Vector2.zero){
             ultimaDirecaoDash = direcaoInput.normalized;
         }
         bool defendendo = Input.GetKey(KeyCode.F);
         float velocidadeAtualMovimento = defendendo ? velocidadeDefendendo : velocidade;
-
         if(realizandoDash){
             rb.MovePosition(rb.position + ultimaDirecaoDash * velocidadeDash * Time.fixedDeltaTime);
         }
@@ -109,6 +110,7 @@ public class TesteMovimento : MonoBehaviour{
             rb.MovePosition(rb.position + direcaoInput.normalized * velocidadeAtualMovimento * Time.fixedDeltaTime);
         }
     }
+
     private IEnumerator DarDash(){
         consegueDash = false;
         realizandoDash = true;
@@ -150,6 +152,7 @@ public class TesteMovimento : MonoBehaviour{
         yield return new WaitForSeconds(recargaDash);
         consegueDash = true;
     }
+
     private void TentarArremessar(){
         if(InventarioJogador.Instance == null){
             return;
@@ -161,7 +164,18 @@ public class TesteMovimento : MonoBehaviour{
         bool podeConsumir = slotAtivo.podeConsumir;
         float valorFome = slotAtivo.valorFome;
         float danoItem = slotAtivo.danoItem;
+        float defesaItem = slotAtivo.defesaItem;
         Vector2 tamanhoHitbox = slotAtivo.tamanhoHitbox;
+        bool quebraAoAtingir = slotAtivo.quebraAoAtingir;
+        bool cabeca = slotAtivo.podeColocarCabeca;
+        bool torso = slotAtivo.podeColocarTorso;
+        bool cintura = slotAtivo.podeColocarCintura;
+        bool calca = slotAtivo.podeColocarCalca;
+        bool bota = slotAtivo.podeColocarBota;
+        bool ehMachado = slotAtivo.ehMachado;
+        bool ehPicareta = slotAtivo.ehPicareta;
+        bool ehCortante = slotAtivo.ehCortante;
+
         var itemRemovido = InventarioJogador.Instance.ArremessarItemSelecionado();
         if(itemRemovido == null){
             return;
@@ -173,7 +187,25 @@ public class TesteMovimento : MonoBehaviour{
             GameObject itemObjeto = Instantiate(prefabItemArremessado, transform.position, Quaternion.identity);
             ItemArremessado scriptArremesso = itemObjeto.GetComponent<ItemArremessado>();
             if(scriptArremesso != null){
-                scriptArremesso.Inicializar(direcaoArremesso, itemRemovido.iconeItem, itemRemovido.nomeItem, podeConsumir, valorFome, danoItem, tamanhoHitbox, itemRemovido.quebraAoAtingir);
+                scriptArremesso.Inicializar(
+                    direcaoArremesso, 
+                    itemRemovido.iconeItem, 
+                    itemRemovido.nomeItem, 
+                    podeConsumir, 
+                    valorFome, 
+                    danoItem, 
+                    tamanhoHitbox, 
+                    quebraAoAtingir, 
+                    defesaItem, 
+                    cabeca, 
+                    torso, 
+                    cintura, 
+                    calca, 
+                    bota, 
+                    ehMachado, 
+                    ehPicareta,
+                    ehCortante
+                );
             }
         }
     }

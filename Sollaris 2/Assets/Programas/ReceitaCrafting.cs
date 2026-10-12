@@ -19,4 +19,5 @@ public class ReceitaCrafting : ScriptableObject{
     public bool quebraAoAtingirResultado;
     public bool ehMachadoResultado;
     public bool ehPicaretaResultado;
+    public bool ehCortanteResultado;
 }

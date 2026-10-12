@@ -23,10 +23,10 @@ public class InventarioJogador : MonoBehaviour {
         public bool podeColocarBota = false;
         public bool ehMachado = false;
         public bool ehPicareta = false;
+        public bool ehCortante = false;
 
         public ItemSlot() { }
-        
-        public ItemSlot(string nome, int qtd, Sprite icone, bool consumir, float fome, float dano, float defesa, Vector2 hitbox, bool quebra, bool cabeca = false, bool torso = false, bool cintura = false, bool calca = false, bool bota = false, bool machado = false, bool picareta = false){
+        public ItemSlot(string nome, int qtd, Sprite icone, bool consumir, float fome, float dano, float defesa, Vector2 hitbox, bool quebra, bool cabeca = false, bool torso = false, bool cintura = false, bool calca = false, bool bota = false, bool machado = false, bool picareta = false, bool cortante = false){
             nomeItem = nome;
             quantidadeItem = qtd;
             iconeItem = icone;
@@ -43,6 +43,7 @@ public class InventarioJogador : MonoBehaviour {
             podeColocarBota = bota;
             ehMachado = machado;
             ehPicareta = picareta;
+            ehCortante = cortante;
         }
     }
 
@@ -57,7 +58,6 @@ public class InventarioJogador : MonoBehaviour {
     public ItemSlot slotCintura = new ItemSlot();
     public ItemSlot slotCalca = new ItemSlot();
     public ItemSlot slotBota = new ItemSlot();
-
     private void Awake(){
         if (Instance == null) {
             Instance = this;
@@ -72,7 +72,6 @@ public class InventarioJogador : MonoBehaviour {
             inventario.Add(new ItemSlot());
         }
     }
-
     private void Update() {
         if (Input.GetMouseButtonDown(0)) {
             UsarItemSelecionado();
@@ -104,7 +103,6 @@ public class InventarioJogador : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Alpha9)){
             slotSelecionado = 8;
         }
-
         AbrirInventario ui = FindObjectOfType<AbrirInventario>();
         if (ui != null) {
             ui.AtualizarUI();
@@ -116,7 +114,7 @@ public class InventarioJogador : MonoBehaviour {
         }
         return null;
     }
-    public bool TentarAdicionar(string nomeDoItem, Sprite icone, bool podeConsumir2, float fomeRecuperada, float danoRecebido, Vector2 tamanhoCaixa, bool quebraInimigo, float defesaRecebida = 0f, bool cabeca = false, bool torso = false, bool cintura = false, bool calca = false, bool bota = false, bool machado = false, bool picareta = false) {
+    public bool TentarAdicionar(string nomeDoItem, Sprite icone, bool podeConsumir2, float fomeRecuperada, float danoRecebido, Vector2 tamanhoCaixa, bool quebraInimigo, float defesaRecebida = 0f, bool cabeca = false, bool torso = false, bool cintura = false, bool calca = false, bool bota = false, bool machado = false, bool picareta = false, bool cortante = false) {
         foreach (ItemSlot slot in slotsRapidos) {
             if (slot.nomeItem == nomeDoItem) {
                 slot.quantidadeItem++;
@@ -133,6 +131,7 @@ public class InventarioJogador : MonoBehaviour {
                 slot.podeColocarBota = bota;
                 slot.ehMachado = machado;
                 slot.ehPicareta = picareta;
+                slot.ehCortante = cortante;
                 return true;
             }
         }
@@ -152,6 +151,7 @@ public class InventarioJogador : MonoBehaviour {
                 slot.podeColocarBota = bota;
                 slot.ehMachado = machado;
                 slot.ehPicareta = picareta;
+                slot.ehCortante = cortante;
                 return true;
             }
         }
@@ -173,6 +173,7 @@ public class InventarioJogador : MonoBehaviour {
                 slot.podeColocarBota = bota;
                 slot.ehMachado = machado;
                 slot.ehPicareta = picareta;
+                slot.ehCortante = cortante;
                 return true;
             }
         }
@@ -194,6 +195,7 @@ public class InventarioJogador : MonoBehaviour {
                 slot.podeColocarBota = bota;
                 slot.ehMachado = machado;
                 slot.ehPicareta = picareta;
+                slot.ehCortante = cortante;
                 return true;
             }
         }
@@ -224,7 +226,8 @@ public class InventarioJogador : MonoBehaviour {
             podeColocarCalca = slotAtivo.podeColocarCalca,
             podeColocarBota = slotAtivo.podeColocarBota,
             ehMachado = slotAtivo.ehMachado,
-            ehPicareta = slotAtivo.ehPicareta
+            ehPicareta = slotAtivo.ehPicareta,
+            ehCortante = slotAtivo.ehCortante
         };
         GameObject jogador = GameObject.FindWithTag("Player");
         if (jogador != null && prefabItemArremessado != null) {
@@ -237,7 +240,7 @@ public class InventarioJogador : MonoBehaviour {
                     slotAtivo.valorFome, slotAtivo.danoItem, slotAtivo.tamanhoHitbox, slotAtivo.quebraAoAtingir, 
                     slotAtivo.defesaItem, slotAtivo.podeColocarCabeca, slotAtivo.podeColocarTorso, 
                     slotAtivo.podeColocarCintura, slotAtivo.podeColocarCalca, slotAtivo.podeColocarBota,
-                    slotAtivo.ehMachado, slotAtivo.ehPicareta
+                    slotAtivo.ehMachado, slotAtivo.ehPicareta, slotAtivo.ehCortante
                 );
             }
         }
@@ -289,6 +292,7 @@ public class InventarioJogador : MonoBehaviour {
         slot.podeColocarBota = false;
         slot.ehMachado = false;
         slot.ehPicareta = false;
+        slot.ehCortante = false;
     }
 
     public void SalvarInventario(){
@@ -310,6 +314,7 @@ public class InventarioJogador : MonoBehaviour {
             PlayerPrefs.SetInt("SlotRapido_" + i + "_Bota", slotsRapidos[i].podeColocarBota ? 1 : 0);
             PlayerPrefs.SetInt("SlotRapido_" + i + "_Machado", slotsRapidos[i].ehMachado ? 1 : 0);
             PlayerPrefs.SetInt("SlotRapido_" + i + "_Picareta", slotsRapidos[i].ehPicareta ? 1 : 0);
+            PlayerPrefs.SetInt("SlotRapido_" + i + "_Cortante", slotsRapidos[i].ehCortante ? 1 : 0);
         }
         PlayerPrefs.SetInt("Inventario_Count", inventario.Count);
         for (int i = 0; i < inventario.Count; i++){
@@ -329,6 +334,7 @@ public class InventarioJogador : MonoBehaviour {
             PlayerPrefs.SetInt("SlotNormal_" + i + "_Bota", inventario[i].podeColocarBota ? 1 : 0);
             PlayerPrefs.SetInt("SlotNormal_" + i + "_Machado", inventario[i].ehMachado ? 1 : 0);
             PlayerPrefs.SetInt("SlotNormal_" + i + "_Picareta", inventario[i].ehPicareta ? 1 : 0);
+            PlayerPrefs.SetInt("SlotNormal_" + i + "_Cortante", inventario[i].ehCortante ? 1 : 0);
         }
         PlayerPrefs.Save();
     }
@@ -354,8 +360,9 @@ public class InventarioJogador : MonoBehaviour {
                 bool bota = PlayerPrefs.GetInt("SlotRapido_" + i + "_Bota", 0) == 1;
                 bool machado = PlayerPrefs.GetInt("SlotRapido_" + i + "_Machado", 0) == 1;
                 bool picareta = PlayerPrefs.GetInt("SlotRapido_" + i + "_Picareta", 0) == 1;
+                bool cortante = PlayerPrefs.GetInt("SlotRapido_" + i + "_Cortante", 0) == 1;
                 Sprite icone = CarregarIconePorNome(nome);
-                slotsRapidos.Add(new ItemSlot(nome, qtd, icone, consumir, fome, dano, defesa, new Vector2(hx, hy), quebra, cabeca, torso, cintura, calca, bota, machado, picareta));
+                slotsRapidos.Add(new ItemSlot(nome, qtd, icone, consumir, fome, dano, defesa, new Vector2(hx, hy), quebra, cabeca, torso, cintura, calca, bota, machado, picareta, cortante));
             }
         }
         if (PlayerPrefs.HasKey("Inventario_Count")){
@@ -378,8 +385,9 @@ public class InventarioJogador : MonoBehaviour {
                 bool bota = PlayerPrefs.GetInt("SlotNormal_" + i + "_Bota", 0) == 1;
                 bool machado = PlayerPrefs.GetInt("SlotNormal_" + i + "_Machado", 0) == 1;
                 bool picareta = PlayerPrefs.GetInt("SlotNormal_" + i + "_Picareta", 0) == 1;
+                bool cortante = PlayerPrefs.GetInt("SlotNormal_" + i + "_Cortante", 0) == 1;
                 Sprite icone = CarregarIconePorNome(nome);
-                inventario.Add(new ItemSlot(nome, qtd, icone, consumir, fome, dano, defesa, new Vector2(hx, hy), quebra, cabeca, torso, cintura, calca, bota, machado, picareta));
+                inventario.Add(new ItemSlot(nome, qtd, icone, consumir, fome, dano, defesa, new Vector2(hx, hy), quebra, cabeca, torso, cintura, calca, bota, machado, picareta, cortante));
             }
         }
         AbrirInventario ui = FindObjectOfType<AbrirInventario>();
@@ -449,6 +457,7 @@ public class InventarioJogador : MonoBehaviour {
             slotDestinoObj.podeColocarBota = slotOrigemObj.podeColocarBota;
             slotDestinoObj.ehMachado = slotOrigemObj.ehMachado;
             slotDestinoObj.ehPicareta = slotOrigemObj.ehPicareta;
+            slotDestinoObj.ehCortante = slotOrigemObj.ehCortante;
             slotOrigemObj.quantidadeItem--;
             return;
         }
@@ -462,7 +471,7 @@ public class InventarioJogador : MonoBehaviour {
             slotDestinoObj.podeConsumir, slotDestinoObj.valorFome, slotDestinoObj.danoItem,
             slotDestinoObj.defesaItem, slotDestinoObj.tamanhoHitbox, slotDestinoObj.quebraAoAtingir,
             slotDestinoObj.podeColocarCabeca, slotDestinoObj.podeColocarTorso, slotDestinoObj.podeColocarCintura,
-            slotDestinoObj.podeColocarCalca, slotDestinoObj.podeColocarBota, slotDestinoObj.ehMachado, slotDestinoObj.ehPicareta
+            slotDestinoObj.podeColocarCalca, slotDestinoObj.podeColocarBota, slotDestinoObj.ehMachado, slotDestinoObj.ehPicareta, slotDestinoObj.ehCortante
         );
         slotDestinoObj.nomeItem = slotOrigemObj.nomeItem;
         slotDestinoObj.quantidadeItem = slotOrigemObj.quantidadeItem;
@@ -480,7 +489,7 @@ public class InventarioJogador : MonoBehaviour {
         slotDestinoObj.podeColocarBota = slotOrigemObj.podeColocarBota;
         slotDestinoObj.ehMachado = slotOrigemObj.ehMachado;
         slotDestinoObj.ehPicareta = slotOrigemObj.ehPicareta;
-
+        slotDestinoObj.ehCortante = slotOrigemObj.ehCortante;
         slotOrigemObj.nomeItem = temp.nomeItem;
         slotOrigemObj.quantidadeItem = temp.quantidadeItem;
         slotOrigemObj.iconeItem = temp.iconeItem;
@@ -497,6 +506,7 @@ public class InventarioJogador : MonoBehaviour {
         slotOrigemObj.podeColocarBota = temp.podeColocarBota;
         slotOrigemObj.ehMachado = temp.ehMachado;
         slotOrigemObj.ehPicareta = temp.ehPicareta;
+        slotOrigemObj.ehCortante = temp.ehCortante;
     }
     public void MoverUmItem(ArrasteSlot.TipoSlot tipoOrigem, int indexOrigem, ArrasteSlot.TipoSlot tipoDestino, int indexDestino) {
         if (tipoOrigem == tipoDestino && indexOrigem == indexDestino) {
@@ -546,6 +556,7 @@ public class InventarioJogador : MonoBehaviour {
             slotDestinoObj.podeColocarBota = slotOrigemObj.podeColocarBota;
             slotDestinoObj.ehMachado = slotOrigemObj.ehMachado;
             slotDestinoObj.ehPicareta = slotOrigemObj.ehPicareta;
+            slotDestinoObj.ehCortante = slotOrigemObj.ehCortante;
             slotOrigemObj.quantidadeItem--;
             if (slotOrigemObj.quantidadeItem <= 0) {
                 LimparSlot(slotOrigemObj);

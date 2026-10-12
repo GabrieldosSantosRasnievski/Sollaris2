@@ -23,12 +23,14 @@ public class ItemArremessado : MonoBehaviour{
     private bool botaItem;
     private bool ehMachadoItem;
     private bool ehPicaretaItem;
+    private bool ehCortanteItem;
 
     void Awake(){
         rb = GetComponent<Rigidbody2D>();
         colisor2d = GetComponent<Collider2D>();
     }
-    public void Inicializar(Vector2 direcaoArremesso, Sprite iconeItem, string nome, bool podeConsumir, float valorFome, float danoItem, Vector2 tamanhoHitbox, bool quebraAoAtingir, float defesaItem = 0f, bool cabeca = false, bool torso = false, bool cintura = false, bool calca = false, bool bota = false, bool ehMachado = false, bool ehPicareta = false){
+
+    public void Inicializar(Vector2 direcaoArremesso, Sprite iconeItem, string nome, bool podeConsumir, float valorFome, float danoItem, Vector2 tamanhoHitbox, bool quebraAoAtingir, float defesaItem = 0f, bool cabeca = false, bool torso = false, bool cintura = false, bool calca = false, bool bota = false, bool ehMachado = false, bool ehPicareta = false, bool ehCortante = false){
         direcao = direcaoArremesso.normalized;
         iconeDoItem = iconeItem;
         nomeDoItem = nome;
@@ -45,34 +47,43 @@ public class ItemArremessado : MonoBehaviour{
         botaItem = bota;
         ehMachadoItem = ehMachado;
         ehPicaretaItem = ehPicareta;
+        ehCortanteItem = ehCortante;
+
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
         if(sr != null){
             sr.sprite = iconeItem;
         }
+
         InteragirObjeto interacao = GetComponent<InteragirObjeto>();
         if(interacao != null){
             interacao.enabled = false;
         }
+
         if(rb != null){
             rb.bodyType = RigidbodyType2D.Dynamic;
             rb.gravityScale = 0f;
             rb.linearVelocity = direcao * velocidade;
         }
+
         if(colisor2d != null){
             colisor2d.isTrigger = false;
         }
+
         Invoke(nameof(PararNoChao), tempoDeVoo);
     }
+
     void Update(){
         if(voando){
             transform.Rotate(0, 0, giroObjeto * Time.deltaTime);
         }
     }
+
     void FixedUpdate(){
         if(voando && rb != null){
             rb.linearVelocity = direcao * velocidade;
         }
     }
+
     void PararNoChao(){
         if(!voando){
             return;
@@ -81,6 +92,7 @@ public class ItemArremessado : MonoBehaviour{
         transform.rotation = Quaternion.identity;
         if(rb != null){
             rb.linearVelocity = Vector2.zero;
+            rb.angularVelocity = 0f;
             rb.bodyType = RigidbodyType2D.Kinematic;
         }
         if(colisor2d != null){
@@ -91,6 +103,7 @@ public class ItemArremessado : MonoBehaviour{
             }
         }
         gameObject.tag = "Objeto";
+
         InteragirObjeto interacao = GetComponent<InteragirObjeto>();
         if(interacao == null){
             interacao = gameObject.AddComponent<InteragirObjeto>();
@@ -110,9 +123,10 @@ public class ItemArremessado : MonoBehaviour{
         interacao.podeColocarBota = botaItem;
         interacao.ehMachado = ehMachadoItem;
         interacao.ehPicareta = ehPicaretaItem;
-
+        interacao.ehCortante = ehCortanteItem;
         interacao.enabled = true;
     }
+
     void OnCollisionEnter2D(Collision2D collision){
         if(voando){
             if(collision.gameObject.CompareTag("Player")){
@@ -121,7 +135,6 @@ public class ItemArremessado : MonoBehaviour{
             VidaInimigo vida = collision.gameObject.GetComponent<VidaInimigo>();
             if(vida != null){
                 vida.TomarDano(danoItemArremessado);
-
                 if(quebraItemAoAtingir){
                     Destroy(gameObject);
                 }
