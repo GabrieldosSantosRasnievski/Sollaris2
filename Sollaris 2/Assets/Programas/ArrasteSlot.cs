@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using System.Collections.Generic;
+using System.Collections;
 
 public class ArrasteSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IDropHandler, IEndDragHandler {
     
@@ -12,6 +14,9 @@ public class ArrasteSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IDrop
     private static int indiceOrigem = -1;
     private static TipoSlot origemTipo;
     private static PointerEventData.InputButton botaoUtilizado;
+    private static Coroutine corrotinaTremorIcone;
+    private static List<GameObject> listaFantasmasAtivos = new List<GameObject>();
+    public Material materialPixelArt;
     
     public void OnBeginDrag(PointerEventData eventData) {
         var inventario = InventarioJogador.Instance;
@@ -26,16 +31,24 @@ public class ArrasteSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IDrop
             indiceOrigem = -1;
             return;
         }
-
         SlotEquipamento[] todosSlotsEquipamento = FindObjectsOfType<SlotEquipamento>();
         foreach (var slotEq in todosSlotsEquipamento) {
             bool compativel = false;
-            if (slotEq.tipoSlot == SlotEquipamento.TipoEquipamento.Cabeca && slotDados.podeColocarCabeca) compativel = true;
-            if (slotEq.tipoSlot == SlotEquipamento.TipoEquipamento.Torso && slotDados.podeColocarTorso) compativel = true;
-            if (slotEq.tipoSlot == SlotEquipamento.TipoEquipamento.Cintura && slotDados.podeColocarCintura) compativel = true;
-            if (slotEq.tipoSlot == SlotEquipamento.TipoEquipamento.Calca && slotDados.podeColocarCalca) compativel = true;
-            if (slotEq.tipoSlot == SlotEquipamento.TipoEquipamento.Bota && slotDados.podeColocarBota) compativel = true;
-
+            if (slotEq.tipoSlot == SlotEquipamento.TipoEquipamento.Cabeca && slotDados.podeColocarCabeca){
+                compativel = true;
+            }
+            if (slotEq.tipoSlot == SlotEquipamento.TipoEquipamento.Torso && slotDados.podeColocarTorso){
+                compativel = true;
+            }
+            if (slotEq.tipoSlot == SlotEquipamento.TipoEquipamento.Cintura && slotDados.podeColocarCintura){
+                compativel = true;
+            }
+            if (slotEq.tipoSlot == SlotEquipamento.TipoEquipamento.Calca && slotDados.podeColocarCalca){
+                compativel = true;
+            }
+            if (slotEq.tipoSlot == SlotEquipamento.TipoEquipamento.Bota && slotDados.podeColocarBota){
+                compativel = true;
+            }
             if (compativel) {
                 InventarioJogador.ItemSlot slotDestinoEquip = ObterSlotEquipamentoDoInventario(slotEq.tipoSlot, inventario);
                 if (slotDestinoEquip != null && string.IsNullOrEmpty(slotDestinoEquip.nomeItem)) {
@@ -43,19 +56,100 @@ public class ArrasteSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IDrop
                 }
             }
         }
+        
+        LimparFantasmas();
+
         iconeArrastadoObj = new GameObject("IconeArrastado");
         iconeArrastadoObj.transform.SetParent(transform.root);
         iconeArrastadoObj.transform.SetAsLastSibling();
         Image img = iconeArrastadoObj.AddComponent<Image>();
         img.sprite = slotDados.iconeItem;
         img.raycastTarget = false; 
+
         RectTransform rect = iconeArrastadoObj.GetComponent<RectTransform>();
         rect.sizeDelta = new Vector2(50f, 50f);
-    }
-    public void OnDrag(PointerEventData eventData) {
-        if(iconeArrastadoObj != null){
-            iconeArrastadoObj.transform.position = Input.mousePosition;
+        
+        ArrasteSlot instanciaBase = FindObjectOfType<ArrasteSlot>();
+        if (instanciaBase != null) {
+            corrotinaTremorIcone = instanciaBase.StartCoroutine(EfeitoTremerEPosImagem(slotDados.iconeItem, instanciaBase));
         }
+    }
+    
+    private IEnumerator EfeitoTremerEPosImagem(Sprite spriteItem, ArrasteSlot contexto) {
+        float magnitude = 3f;
+        float timer = 0f;
+        
+        while (iconeArrastadoObj != null) {
+            float offsetX = Mathf.Sin(Time.unscaledTime * 40f) * magnitude;
+            float offsetY = Mathf.Cos(Time.unscaledTime * 45f) * magnitude;      
+            Vector3 posicaoMouse = Input.mousePosition;
+            iconeArrastadoObj.transform.position = posicaoMouse + new Vector3(offsetX, offsetY, 0f);
+            
+            iconeArrastadoObj.transform.SetAsLastSibling();
+            
+            timer += Time.unscaledDeltaTime;
+            if (timer >= 0.03f) {
+                timer = 0f;
+                SpawnGhost(iconeArrastadoObj.transform.position, spriteItem, contexto);
+            }
+            
+            yield return null;
+        }
+    }
+
+    private void SpawnGhost(Vector3 pos, Sprite spr, ArrasteSlot contexto) {
+        if (iconeArrastadoObj == null) return;
+
+        GameObject ghost = new GameObject("IconeGhost");
+        ghost.transform.SetParent(transform.root, false);
+        ghost.transform.position = pos;
+        
+        ghost.transform.SetAsLastSibling();
+        if (iconeArrastadoObj != null) {
+            iconeArrastadoObj.transform.SetAsLastSibling();
+        }
+        
+        Image ghostImg = ghost.AddComponent<Image>();
+        ghostImg.sprite = spr;
+        ghostImg.raycastTarget = false;
+        ghostImg.color = new Color(1f, 1f, 1f, 0.4f);
+        
+        RectTransform ghostRect = ghost.GetComponent<RectTransform>();
+        ghostRect.sizeDelta = new Vector2(50f, 50f);
+        
+        listaFantasmasAtivos.Add(ghost);
+        contexto.StartCoroutine(FadeOutGhost(ghost, ghostImg));
+    }
+
+    private IEnumerator FadeOutGhost(GameObject ghostObj, Image ghostImg) {
+        float duration = 0.25f;
+        float elapsed = 0f;
+        
+        while (elapsed < duration) {
+            if (ghostObj == null || ghostImg == null) yield break;
+            
+            elapsed += Time.unscaledDeltaTime;
+            float alpha = Mathf.Lerp(0.4f, 0f, elapsed / duration);
+            Color corAtual = ghostImg.color;
+            corAtual.a = alpha;
+            ghostImg.color = corAtual;
+            yield return null;
+        }
+        
+        if (ghostObj != null) {
+            listaFantasmasAtivos.Remove(ghostObj);
+            Destroy(ghostObj);
+        }
+    }
+
+    private void LimparFantasmas() {
+        foreach (var ghost in listaFantasmasAtivos) {
+            if (ghost != null) Destroy(ghost);
+        }
+        listaFantasmasAtivos.Clear();
+    }
+
+    public void OnDrag(PointerEventData eventData) {
     }
     public void OnDrop(PointerEventData eventData) {
         if(indiceOrigem == -1){
@@ -76,6 +170,10 @@ public class ArrasteSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IDrop
         LimparArrasto();
     }
     private void LimparArrasto() {
+        if (corrotinaTremorIcone != null) {
+            StopCoroutine(corrotinaTremorIcone);
+            corrotinaTremorIcone = null;
+        }
         SlotEquipamento[] todosSlotsEquipamento = FindObjectsOfType<SlotEquipamento>();
         foreach (var slotEq in todosSlotsEquipamento) {
             slotEq.DesligarDestaqueVisual();
@@ -83,6 +181,7 @@ public class ArrasteSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IDrop
         if(iconeArrastadoObj != null){
             Destroy(iconeArrastadoObj);
         }
+        LimparFantasmas();
         indiceOrigem = -1;
     }
     private InventarioJogador.ItemSlot ObterSlotPorTipo(TipoSlot tipo, int indice) {
