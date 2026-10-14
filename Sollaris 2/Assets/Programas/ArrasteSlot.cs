@@ -18,6 +18,8 @@ public class ArrasteSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IDrop
     private static List<GameObject> listaFantasmasAtivos = new List<GameObject>();
     public Material materialPixelArt;
     
+    public Sprite spriteBrilho; // Arraste aqui no Inspector o sprite da textura de brilho!
+    
     public void OnBeginDrag(PointerEventData eventData) {
         var inventario = InventarioJogador.Instance;
         if(inventario == null){
@@ -100,14 +102,11 @@ public class ArrasteSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IDrop
     private void SpawnGhost(Vector3 pos, Sprite spr, ArrasteSlot contexto) {
         if (iconeArrastadoObj == null) return;
 
+        // 1. Cria a pós-imagem (fantasma) centralizada no item
         GameObject ghost = new GameObject("IconeGhost");
         ghost.transform.SetParent(transform.root, false);
         ghost.transform.position = pos;
-        
         ghost.transform.SetAsLastSibling();
-        if (iconeArrastadoObj != null) {
-            iconeArrastadoObj.transform.SetAsLastSibling();
-        }
         
         Image ghostImg = ghost.AddComponent<Image>();
         ghostImg.sprite = spr;
@@ -119,6 +118,34 @@ public class ArrasteSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IDrop
         
         listaFantasmasAtivos.Add(ghost);
         contexto.StartCoroutine(FadeOutGhost(ghost, ghostImg));
+
+        // 2. Cria o brilho BEM MAIS LONGE e MAIS FORTE (sem ficar excessivamente transparente)
+        if (spriteBrilho != null) {
+            Vector2 anguloAleatorio = Random.insideUnitCircle.normalized;
+            float distanciaDoCentro = Random.Range(35f, 65f); // Distância bem maior para espalhar longe do item
+            Vector3 offsetEmVolta = new Vector3(anguloAleatorio.x * distanciaDoCentro, anguloAleatorio.y * distanciaDoCentro, 0f);
+
+            GameObject brilhoObj = new GameObject("BrilhoGhost");
+            brilhoObj.transform.SetParent(transform.root, false);
+            brilhoObj.transform.position = pos + offsetEmVolta;
+            brilhoObj.transform.SetAsLastSibling();
+
+            Image brilhoImg = brilhoObj.AddComponent<Image>();
+            brilhoImg.sprite = spriteBrilho;
+            brilhoImg.raycastTarget = false;
+            // Amarelo vibrante com alfa inicial alto (0.9) para brilhar bastante
+            brilhoImg.color = new Color(1f, 0.95f, 0.3f, 0.9f);
+
+            RectTransform brilhoRect = brilhoObj.GetComponent<RectTransform>();
+            brilhoRect.sizeDelta = new Vector2(16f, 16f);
+
+            listaFantasmasAtivos.Add(brilhoObj);
+            contexto.StartCoroutine(FadeOutBrilho(brilhoObj, brilhoImg));
+        }
+
+        if (iconeArrastadoObj != null) {
+            iconeArrastadoObj.transform.SetAsLastSibling();
+        }
     }
 
     private IEnumerator FadeOutGhost(GameObject ghostObj, Image ghostImg) {
@@ -139,6 +166,28 @@ public class ArrasteSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IDrop
         if (ghostObj != null) {
             listaFantasmasAtivos.Remove(ghostObj);
             Destroy(ghostObj);
+        }
+    }
+
+    private IEnumerator FadeOutBrilho(GameObject brilhoObj, Image brilhoImg) {
+        float duration = 0.3f; // Um pouco mais de duração para o brilho durar bem no rastro
+        float elapsed = 0f;
+        
+        while (elapsed < duration) {
+            if (brilhoObj == null || brilhoImg == null) yield break;
+            
+            elapsed += Time.unscaledDeltaTime;
+            // Começa forte (0.9) e cai suavemente, mantendo-se mais opaco que o fantasma
+            float alpha = Mathf.Lerp(0.9f, 0.1f, elapsed / duration);
+            Color corAtual = brilhoImg.color;
+            corAtual.a = alpha;
+            brilhoImg.color = corAtual;
+            yield return null;
+        }
+        
+        if (brilhoObj != null) {
+            listaFantasmasAtivos.Remove(brilhoObj);
+            Destroy(brilhoObj);
         }
     }
 

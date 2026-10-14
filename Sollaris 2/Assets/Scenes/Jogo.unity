@@ -882,6 +882,7 @@ MonoBehaviour:
   tipoSlot: 6
   indiceSlot: 0
   materialPixelArt: {fileID: 0}
+  spriteBrilho: {fileID: 21300000, guid: da734047a03045144bcc74ba60f02197, type: 3}
 --- !u!114 &112120561
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -992,6 +993,7 @@ MonoBehaviour:
   tipoSlot: 4
   indiceSlot: 0
   materialPixelArt: {fileID: 0}
+  spriteBrilho: {fileID: 21300000, guid: da734047a03045144bcc74ba60f02197, type: 3}
 --- !u!114 &113376597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2080,6 +2082,7 @@ MonoBehaviour:
   tipoSlot: 1
   indiceSlot: 11
   materialPixelArt: {fileID: 0}
+  spriteBrilho: {fileID: 21300000, guid: da734047a03045144bcc74ba60f02197, type: 3}
 --- !u!1 &206310025
 GameObject:
   m_ObjectHideFlags: 0
@@ -2174,6 +2177,7 @@ MonoBehaviour:
   tipoSlot: 1
   indiceSlot: 10
   materialPixelArt: {fileID: 0}
+  spriteBrilho: {fileID: 21300000, guid: da734047a03045144bcc74ba60f02197, type: 3}
 --- !u!1 &216974180
 GameObject:
   m_ObjectHideFlags: 0
@@ -5880,6 +5884,7 @@ MonoBehaviour:
   tipoSlot: 0
   indiceSlot: 8
   materialPixelArt: {fileID: 0}
+  spriteBrilho: {fileID: 21300000, guid: da734047a03045144bcc74ba60f02197, type: 3}
 --- !u!1 &572817570
 GameObject:
   m_ObjectHideFlags: 0
@@ -6251,6 +6256,7 @@ MonoBehaviour:
   tipoSlot: 1
   indiceSlot: 8
   materialPixelArt: {fileID: 0}
+  spriteBrilho: {fileID: 21300000, guid: da734047a03045144bcc74ba60f02197, type: 3}
 --- !u!1 &606207181
 GameObject:
   m_ObjectHideFlags: 0
@@ -6538,6 +6544,7 @@ MonoBehaviour:
   tipoSlot: 5
   indiceSlot: 0
   materialPixelArt: {fileID: 0}
+  spriteBrilho: {fileID: 21300000, guid: da734047a03045144bcc74ba60f02197, type: 3}
 --- !u!114 &610857534
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6648,6 +6655,7 @@ MonoBehaviour:
   tipoSlot: 2
   indiceSlot: 0
   materialPixelArt: {fileID: 0}
+  spriteBrilho: {fileID: 21300000, guid: da734047a03045144bcc74ba60f02197, type: 3}
 --- !u!114 &631157951
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9728,6 +9736,7 @@ MonoBehaviour:
   tipoSlot: 0
   indiceSlot: 1
   materialPixelArt: {fileID: 0}
+  spriteBrilho: {fileID: 21300000, guid: da734047a03045144bcc74ba60f02197, type: 3}
 --- !u!1 &785995153
 GameObject:
   m_ObjectHideFlags: 0
@@ -10739,6 +10748,7 @@ MonoBehaviour:
   tipoSlot: 0
   indiceSlot: 4
   materialPixelArt: {fileID: 0}
+  spriteBrilho: {fileID: 21300000, guid: da734047a03045144bcc74ba60f02197, type: 3}
 --- !u!1 &854507475
 GameObject:
   m_ObjectHideFlags: 0
@@ -11000,6 +11010,7 @@ MonoBehaviour:
   tipoSlot: 0
   indiceSlot: 7
   materialPixelArt: {fileID: 0}
+  spriteBrilho: {fileID: 21300000, guid: da734047a03045144bcc74ba60f02197, type: 3}
 --- !u!1 &869955336
 GameObject:
   m_ObjectHideFlags: 0
@@ -11126,6 +11137,7 @@ MonoBehaviour:
   tipoSlot: 1
   indiceSlot: 5
   materialPixelArt: {fileID: 0}
+  spriteBrilho: {fileID: 21300000, guid: da734047a03045144bcc74ba60f02197, type: 3}
 --- !u!1 &873833028
 GameObject:
   m_ObjectHideFlags: 0
@@ -11365,7 +11377,6 @@ GameObject:
   - component: {fileID: 887092500}
   - component: {fileID: 887092504}
   - component: {fileID: 887092505}
-  - component: {fileID: 887092506}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -11578,21 +11589,6 @@ MonoBehaviour:
   duracaoTexto: 3
   textoDiaNoite: {fileID: 317164673}
   painelNoite: {fileID: 665379379}
---- !u!114 &887092506
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 887092499}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a95ccd4784a16b4b9414047c8bdc42a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ArrasteSlot
-  tipoSlot: 0
-  indiceSlot: -2147483648
-  materialPixelArt: {fileID: 0}
 --- !u!1 &893910751
 GameObject:
   m_ObjectHideFlags: 0
@@ -12116,6 +12112,7 @@ MonoBehaviour:
   tipoSlot: 1
   indiceSlot: 18
   materialPixelArt: {fileID: 0}
+  spriteBrilho: {fileID: 21300000, guid: da734047a03045144bcc74ba60f02197, type: 3}
 --- !u!1 &1001484399
 GameObject:
   m_ObjectHideFlags: 0
@@ -12505,6 +12502,7 @@ MonoBehaviour:
   tipoSlot: 1
   indiceSlot: 16
   materialPixelArt: {fileID: 0}
+  spriteBrilho: {fileID: 21300000, guid: da734047a03045144bcc74ba60f02197, type: 3}
 --- !u!1 &1046196888
 GameObject:
   m_ObjectHideFlags: 0
@@ -12948,6 +12946,7 @@ MonoBehaviour:
   tipoSlot: 1
   indiceSlot: 0
   materialPixelArt: {fileID: 0}
+  spriteBrilho: {fileID: 21300000, guid: da734047a03045144bcc74ba60f02197, type: 3}
 --- !u!1 &1080864072
 GameObject:
   m_ObjectHideFlags: 0
@@ -13293,6 +13292,7 @@ MonoBehaviour:
   tipoSlot: 3
   indiceSlot: 0
   materialPixelArt: {fileID: 0}
+  spriteBrilho: {fileID: 21300000, guid: da734047a03045144bcc74ba60f02197, type: 3}
 --- !u!114 &1146363054
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16522,6 +16522,7 @@ MonoBehaviour:
   tipoSlot: 1
   indiceSlot: 2
   materialPixelArt: {fileID: 0}
+  spriteBrilho: {fileID: 21300000, guid: da734047a03045144bcc74ba60f02197, type: 3}
 --- !u!1 &1245420553
 GameObject:
   m_ObjectHideFlags: 0
@@ -24426,6 +24427,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1344919534}
   m_CullTransparentMesh: 1
+--- !u!1 &1361073781
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1361073782}
+  m_Layer: 0
+  m_Name: Caminho
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1361073782
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1361073781}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5.34092, y: 9.3126, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1361094515
 GameObject:
   m_ObjectHideFlags: 0
@@ -24670,6 +24702,7 @@ MonoBehaviour:
   tipoSlot: 1
   indiceSlot: 15
   materialPixelArt: {fileID: 0}
+  spriteBrilho: {fileID: 21300000, guid: da734047a03045144bcc74ba60f02197, type: 3}
 --- !u!1 &1384179200
 GameObject:
   m_ObjectHideFlags: 0
@@ -25091,6 +25124,7 @@ MonoBehaviour:
   tipoSlot: 1
   indiceSlot: 1
   materialPixelArt: {fileID: 0}
+  spriteBrilho: {fileID: 21300000, guid: da734047a03045144bcc74ba60f02197, type: 3}
 --- !u!1 &1422579175
 GameObject:
   m_ObjectHideFlags: 0
@@ -25623,6 +25657,7 @@ MonoBehaviour:
   tipoSlot: 0
   indiceSlot: 2
   materialPixelArt: {fileID: 0}
+  spriteBrilho: {fileID: 21300000, guid: da734047a03045144bcc74ba60f02197, type: 3}
 --- !u!1 &1466164610
 GameObject:
   m_ObjectHideFlags: 0
@@ -25929,6 +25964,7 @@ MonoBehaviour:
   tipoSlot: 1
   indiceSlot: 17
   materialPixelArt: {fileID: 0}
+  spriteBrilho: {fileID: 21300000, guid: da734047a03045144bcc74ba60f02197, type: 3}
 --- !u!1 &1484362759
 GameObject:
   m_ObjectHideFlags: 0
@@ -26950,6 +26986,7 @@ MonoBehaviour:
   tipoSlot: 1
   indiceSlot: 13
   materialPixelArt: {fileID: 0}
+  spriteBrilho: {fileID: 21300000, guid: da734047a03045144bcc74ba60f02197, type: 3}
 --- !u!1 &1579868427
 GameObject:
   m_ObjectHideFlags: 0
@@ -27194,6 +27231,7 @@ MonoBehaviour:
   tipoSlot: 1
   indiceSlot: 9
   materialPixelArt: {fileID: 0}
+  spriteBrilho: {fileID: 21300000, guid: da734047a03045144bcc74ba60f02197, type: 3}
 --- !u!1 &1593463501
 GameObject:
   m_ObjectHideFlags: 0
@@ -28417,6 +28455,7 @@ MonoBehaviour:
   tipoSlot: 1
   indiceSlot: 7
   materialPixelArt: {fileID: 0}
+  spriteBrilho: {fileID: 21300000, guid: da734047a03045144bcc74ba60f02197, type: 3}
 --- !u!1 &1675539558
 GameObject:
   m_ObjectHideFlags: 0
@@ -29037,6 +29076,7 @@ MonoBehaviour:
   tipoSlot: 0
   indiceSlot: 3
   materialPixelArt: {fileID: 0}
+  spriteBrilho: {fileID: 21300000, guid: da734047a03045144bcc74ba60f02197, type: 3}
 --- !u!1 &1718391231
 GameObject:
   m_ObjectHideFlags: 0
@@ -29922,6 +29962,7 @@ MonoBehaviour:
   tipoSlot: 0
   indiceSlot: 6
   materialPixelArt: {fileID: 0}
+  spriteBrilho: {fileID: 21300000, guid: da734047a03045144bcc74ba60f02197, type: 3}
 --- !u!1 &1782843096 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5760022754628261994, guid: 51ba77ef951867c45abfbbaa045b8d4f, type: 3}
@@ -30233,6 +30274,7 @@ MonoBehaviour:
   tipoSlot: 1
   indiceSlot: 4
   materialPixelArt: {fileID: 0}
+  spriteBrilho: {fileID: 21300000, guid: da734047a03045144bcc74ba60f02197, type: 3}
 --- !u!1 &1808006926
 GameObject:
   m_ObjectHideFlags: 0
@@ -31536,6 +31578,7 @@ MonoBehaviour:
   tipoSlot: 0
   indiceSlot: 0
   materialPixelArt: {fileID: 0}
+  spriteBrilho: {fileID: 21300000, guid: da734047a03045144bcc74ba60f02197, type: 3}
 --- !u!1 &1875352093
 GameObject:
   m_ObjectHideFlags: 0
@@ -31630,6 +31673,7 @@ MonoBehaviour:
   tipoSlot: 1
   indiceSlot: 6
   materialPixelArt: {fileID: 0}
+  spriteBrilho: {fileID: 21300000, guid: da734047a03045144bcc74ba60f02197, type: 3}
 --- !u!1 &1880588575
 GameObject:
   m_ObjectHideFlags: 0
@@ -32011,6 +32055,7 @@ MonoBehaviour:
   tipoSlot: 1
   indiceSlot: 14
   materialPixelArt: {fileID: 0}
+  spriteBrilho: {fileID: 21300000, guid: da734047a03045144bcc74ba60f02197, type: 3}
 --- !u!1 &1926102867
 GameObject:
   m_ObjectHideFlags: 0
@@ -32242,6 +32287,7 @@ MonoBehaviour:
   tipoSlot: 1
   indiceSlot: 3
   materialPixelArt: {fileID: 0}
+  spriteBrilho: {fileID: 21300000, guid: da734047a03045144bcc74ba60f02197, type: 3}
 --- !u!1 &1932765963
 GameObject:
   m_ObjectHideFlags: 0
@@ -35601,6 +35647,7 @@ MonoBehaviour:
   tipoSlot: 0
   indiceSlot: 5
   materialPixelArt: {fileID: 0}
+  spriteBrilho: {fileID: 21300000, guid: da734047a03045144bcc74ba60f02197, type: 3}
 --- !u!1 &2068461046
 GameObject:
   m_ObjectHideFlags: 0
@@ -35785,6 +35832,7 @@ MonoBehaviour:
   tipoSlot: 1
   indiceSlot: 12
   materialPixelArt: {fileID: 0}
+  spriteBrilho: {fileID: 21300000, guid: da734047a03045144bcc74ba60f02197, type: 3}
 --- !u!1 &2080830930
 GameObject:
   m_ObjectHideFlags: 0
@@ -36016,6 +36064,7 @@ MonoBehaviour:
   tipoSlot: 1
   indiceSlot: 19
   materialPixelArt: {fileID: 0}
+  spriteBrilho: {fileID: 21300000, guid: da734047a03045144bcc74ba60f02197, type: 3}
 --- !u!1 &2109752930
 GameObject:
   m_ObjectHideFlags: 0
@@ -37128,3 +37177,4 @@ SceneRoots:
   - {fileID: 2728410663498646942}
   - {fileID: 7133821220284652085}
   - {fileID: 800276798}
+  - {fileID: 1361073782}
