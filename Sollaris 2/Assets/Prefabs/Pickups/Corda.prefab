@@ -148,7 +148,7 @@ GameObject:
   - component: {fileID: 4805945016098807867}
   - component: {fileID: 3278781471464412067}
   - component: {fileID: 3857716680551158611}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Corda
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -257,6 +257,9 @@ MonoBehaviour:
   podeColocarCintura: 0
   podeColocarCalca: 0
   podeColocarBota: 0
+  ehMachado: 0
+  ehPicareta: 0
+  ehCortante: 0
   distanciaInteracao: 1.5
 --- !u!1 &7918254114867959294
 GameObject:

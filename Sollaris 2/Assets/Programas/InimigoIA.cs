@@ -16,7 +16,20 @@ public class InimigoIA : MonoBehaviour {
     private bool aPiscarExclamacao = false;
     public float danoInimigo = 10f;
 
+    [Header("Configuração de Desvio de Obstáculos")]
+    public LayerMask oclusoresMask; 
+    public float distanciaDeteccao = 2.5f;
+
+    private Rigidbody2D rb;
+    private Vector2 direcaoDesvioAtual;
+    private float tempoDesvioRestante = 0f;
+
     private void Start(){
+        rb = GetComponent<Rigidbody2D>();
+        if (rb != null) {
+            rb.freezeRotation = true;
+        }
+
         if (objetoHitbox != null){
             BoxCollider2D col = objetoHitbox.GetComponent<BoxCollider2D>();
             if (col != null) col.enabled = false;
@@ -25,12 +38,55 @@ public class InimigoIA : MonoBehaviour {
             objetoExclamacao.SetActive(false); 
         }
     }
-    private void Update() {
+
+    private void FixedUpdate() {
         if (playerNaAreaDeVisao && playerAlvo != null){
             float distanciaAtual = Vector2.Distance(transform.position, playerAlvo.transform.position);
 
             if (distanciaAtual > distanciaAtaque){
-                transform.position = Vector2.MoveTowards(transform.position, playerAlvo.transform.position, velocidadeMovimento * Time.deltaTime);
+                Vector2 direcaoParaPlayer = ((Vector2)playerAlvo.transform.position - (Vector2)transform.position).normalized;
+                Vector2 direcaoFinal = direcaoParaPlayer;
+
+                // Se ainda estivermos no tempo de compromisso com o desvio, mantém a curva para evitar o loop
+                if (tempoDesvioRestante > 0f) {
+                    tempoDesvioRestante -= Time.fixedDeltaTime;
+                    direcaoFinal = direcaoDesvioAtual;
+                } else {
+                    // Lança raios em leque (frente, levemente à esquerda e levemente à direita) para detecção antecipada
+                    Vector2 direcaoEsquerda = new Vector2(-direcaoParaPlayer.y, direcaoParaPlayer.x);
+                    Vector2 direcaoDireita = new Vector2(direcaoParaPlayer.y, -direcaoParaPlayer.x);
+
+                    RaycastHit2D hitFrente = Physics2D.Raycast(transform.position, direcaoParaPlayer, distanciaDeteccao, oclusoresMask);
+                    RaycastHit2D hitFrenteEsquerda = Physics2D.Raycast(transform.position, (direcaoParaPlayer + direcaoEsquerda * 0.5f).normalized, distanciaDeteccao * 0.8f, oclusoresMask);
+                    RaycastHit2D hitFrenteDireita = Physics2D.Raycast(transform.position, (direcaoParaPlayer + direcaoDireita * 0.5f).normalized, distanciaDeteccao * 0.8f, oclusoresMask);
+                    
+                    if (hitFrente.collider != null || hitFrenteEsquerda.collider != null || hitFrenteDireita.collider != null) {
+                        // Verifica qual lado está mais livre para contornar
+                        RaycastHit2D hitLateralEsquerda = Physics2D.Raycast(transform.position, direcaoEsquerda, 1.5f, oclusoresMask);
+                        RaycastHit2D hitLateralDireita = Physics2D.Raycast(transform.position, direcaoDireita, 1.5f, oclusoresMask);
+
+                        if (hitLateralEsquerda.collider == null) {
+                            direcaoDesvioAtual = direcaoEsquerda;
+                        } else if (hitLateralDireita.collider == null) {
+                            direcaoDesvioAtual = direcaoDireita;
+                        } else {
+                            direcaoDesvioAtual = direcaoEsquerda; // Padrão de segurança se ambos tiverem colisão
+                        }
+
+                        // Força o inimigo a manter o desvio por 0.4 segundos para contornar o tronco de forma fluida
+                        tempoDesvioRestante = 0.4f;
+                        direcaoFinal = direcaoDesvioAtual;
+                    } else {
+                        direcaoDesvioAtual = Vector2.zero;
+                        direcaoFinal = direcaoParaPlayer;
+                    }
+                }
+
+                // Move o Rigidbody com a direção calculada
+                if (rb != null) {
+                    Vector2 novaPosicao = rb.position + direcaoFinal * velocidadeMovimento * Time.fixedDeltaTime;
+                    rb.MovePosition(novaPosicao);
+                }
             } else{
                 if (!aAtacar){
                     Vector2 direcao = playerAlvo.transform.position - pivotAtaque.position;
@@ -44,6 +100,7 @@ public class InimigoIA : MonoBehaviour {
             }
         }
     }
+
     private void OnTriggerEnter2D(Collider2D outro){
         if (outro.CompareTag("Player")){
             playerNaAreaDeVisao = true;
@@ -53,6 +110,7 @@ public class InimigoIA : MonoBehaviour {
             }
         }
     }
+
     private void OnTriggerExit2D(Collider2D outro){
         if (outro.CompareTag("Player")){
             playerNaAreaDeVisao = false;
@@ -67,6 +125,7 @@ public class InimigoIA : MonoBehaviour {
             }
         }
     }
+
     private IEnumerator PiscarExclamacao(){
         aPiscarExclamacao = true;
         for (int i = 0; i < 3; i++){
@@ -77,6 +136,7 @@ public class InimigoIA : MonoBehaviour {
         }
         aPiscarExclamacao = false;
     }
+
     private IEnumerator AtacarInstantaneo(){
         aAtacar = true;
         if (objetoHitbox != null){
@@ -114,6 +174,7 @@ public class InimigoIA : MonoBehaviour {
         }
         aAtacar = false;
     }
+
     public void PararAtaque(){
         if(aAtacar){
             StopAllCoroutines();

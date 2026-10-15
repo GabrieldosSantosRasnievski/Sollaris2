@@ -114,7 +114,7 @@ GameObject:
   - component: {fileID: 8759916627468659773}
   - component: {fileID: 1351678748725171537}
   - component: {fileID: 7392765974228244182}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Pedra
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -223,6 +223,9 @@ MonoBehaviour:
   podeColocarCintura: 0
   podeColocarCalca: 0
   podeColocarBota: 0
+  ehMachado: 0
+  ehPicareta: 0
+  ehCortante: 0
   distanciaInteracao: 1.5
 --- !u!1 &8777592713770928759
 GameObject:

@@ -10017,7 +10017,8 @@ GameObject:
   - component: {fileID: 800276801}
   - component: {fileID: 800276800}
   - component: {fileID: 800276799}
-  m_Layer: 6
+  - component: {fileID: 800276802}
+  m_Layer: 9
   m_Name: Arvore
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10212,6 +10213,33 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.56677103, y: 0.28228527}
   m_EdgeRadius: 0
+--- !u!50 &800276802
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 800276795}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 1
+  m_SleepingMode: 1
+  m_CollisionDetection: 1
+  m_Constraints: 4
 --- !u!1 &808567392
 GameObject:
   m_ObjectHideFlags: 0
@@ -11020,7 +11048,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 869955337}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: PivotAtaque
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11603,7 +11631,7 @@ GameObject:
   - component: {fileID: 893910755}
   - component: {fileID: 893910754}
   - component: {fileID: 893910753}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: HitboxAtaque
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13356,7 +13384,7 @@ GameObject:
   - component: {fileID: 1154902442}
   - component: {fileID: 1154902440}
   - component: {fileID: 1154902441}
-  m_Layer: 6
+  m_Layer: 9
   m_Name: ParticulaMadeira
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27882,7 +27910,7 @@ GameObject:
   - component: {fileID: 1632846974}
   - component: {fileID: 1632846975}
   - component: {fileID: 1632846976}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Arbusto
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36641,7 +36669,8 @@ GameObject:
   - component: {fileID: 2145697288}
   - component: {fileID: 2145697289}
   - component: {fileID: 2145697290}
-  m_Layer: 6
+  - component: {fileID: 2145697291}
+  m_Layer: 0
   m_Name: Inimigo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36803,6 +36832,10 @@ MonoBehaviour:
   objetoHitbox: {fileID: 702741966}
   objetoExclamacao: {fileID: 1271112506}
   danoInimigo: 10
+  oclusoresMask:
+    serializedVersion: 2
+    m_Bits: 512
+  distanciaDeteccao: 2
 --- !u!58 &2145697289
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -36852,6 +36885,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AutoSort
   sortingOrderBase: 5000
+--- !u!50 &2145697291
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2145697282}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 1
+  m_SleepingMode: 1
+  m_CollisionDetection: 1
+  m_Constraints: 4
 --- !u!1001 &1489381762024686128
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -36863,6 +36923,10 @@ PrefabInstance:
     - target: {fileID: 1220124952865835710, guid: e39c4aa01eacf8449818031847bb327c, type: 3}
       propertyPath: m_Name
       value: Madeira
+      objectReference: {fileID: 0}
+    - target: {fileID: 1220124952865835710, guid: e39c4aa01eacf8449818031847bb327c, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4653629512510674538, guid: e39c4aa01eacf8449818031847bb327c, type: 3}
       propertyPath: podeColocarCabeca
@@ -36924,6 +36988,10 @@ PrefabInstance:
     - target: {fileID: 6151828451507615270, guid: 89c65d248583a3a4b8b33b341c1f43f6, type: 3}
       propertyPath: m_Name
       value: Pedra
+      objectReference: {fileID: 0}
+    - target: {fileID: 6151828451507615270, guid: 89c65d248583a3a4b8b33b341c1f43f6, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7392765974228244182, guid: 89c65d248583a3a4b8b33b341c1f43f6, type: 3}
       propertyPath: podeColocarTorso
@@ -37026,6 +37094,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cafe
       objectReference: {fileID: 0}
+    - target: {fileID: 5143618537745059637, guid: 4fb3192b03a6fc942b5848be2a4d4057, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -37083,6 +37155,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Corda
       objectReference: {fileID: 0}
+    - target: {fileID: 5027080447848520616, guid: bc574c6c14b0ae8478b4fac3a5793e27, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -37103,6 +37179,10 @@ PrefabInstance:
     - target: {fileID: 4394611435354531063, guid: 51ba77ef951867c45abfbbaa045b8d4f, type: 3}
       propertyPath: m_Name
       value: fruta (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4394611435354531063, guid: 51ba77ef951867c45abfbbaa045b8d4f, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5760022754628261994, guid: 51ba77ef951867c45abfbbaa045b8d4f, type: 3}
       propertyPath: m_TagString

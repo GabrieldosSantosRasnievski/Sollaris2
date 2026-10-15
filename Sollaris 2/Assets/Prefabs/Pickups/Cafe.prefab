@@ -116,7 +116,7 @@ GameObject:
   - component: {fileID: 7416032719519994652}
   - component: {fileID: 1942185974705305406}
   - component: {fileID: 2920636287046531076}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cafe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -247,6 +247,9 @@ MonoBehaviour:
   podeColocarCintura: 0
   podeColocarCalca: 0
   podeColocarBota: 0
+  ehMachado: 0
+  ehPicareta: 0
+  ehCortante: 0
   distanciaInteracao: 1.5
 --- !u!61 &2920636287046531076
 BoxCollider2D:

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6019953713841539202}
   - component: {fileID: 1427852906626073881}
   - component: {fileID: 4653629512510674538}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Madeira
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -120,6 +120,9 @@ MonoBehaviour:
   podeColocarCintura: 0
   podeColocarCalca: 0
   podeColocarBota: 0
+  ehMachado: 0
+  ehPicareta: 0
+  ehCortante: 0
   distanciaInteracao: 1.5
 --- !u!1 &3186626704743987337
 GameObject:

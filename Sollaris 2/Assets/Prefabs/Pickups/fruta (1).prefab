@@ -115,7 +115,7 @@ GameObject:
   - component: {fileID: 6950620226262927904}
   - component: {fileID: 2804619463826368919}
   - component: {fileID: 4305222004083091655}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: fruta (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -224,6 +224,9 @@ MonoBehaviour:
   podeColocarCintura: 0
   podeColocarCalca: 0
   podeColocarBota: 0
+  ehMachado: 0
+  ehPicareta: 0
+  ehCortante: 0
   distanciaInteracao: 1.5
 --- !u!58 &4305222004083091655
 CircleCollider2D:
