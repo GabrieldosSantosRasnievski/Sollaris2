@@ -24455,37 +24455,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1344919534}
   m_CullTransparentMesh: 1
---- !u!1 &1361073781
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1361073782}
-  m_Layer: 0
-  m_Name: Caminho
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1361073782
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1361073781}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.34092, y: 9.3126, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1361094515
 GameObject:
   m_ObjectHideFlags: 0
@@ -36835,7 +36804,9 @@ MonoBehaviour:
   oclusoresMask:
     serializedVersion: 2
     m_Bits: 512
-  distanciaDeteccao: 2
+  distanciaDeteccao: 0.5
+  distanciaAndar: 3
+  tempoPausa: 2
 --- !u!58 &2145697289
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -37257,4 +37228,3 @@ SceneRoots:
   - {fileID: 2728410663498646942}
   - {fileID: 7133821220284652085}
   - {fileID: 800276798}
-  - {fileID: 1361073782}

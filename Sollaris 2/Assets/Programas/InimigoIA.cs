@@ -18,7 +18,16 @@ public class InimigoIA : MonoBehaviour {
 
     [Header("Configuração de Desvio de Obstáculos")]
     public LayerMask oclusoresMask; 
-    public float distanciaDeteccao = 2.5f;
+    public float distanciaDeteccao = 3.0f;
+
+    [Header("Configuração de Patrulha por Distância")]
+    public float distanciaAndar = 3.0f;
+    public float tempoPausa = 2.0f;
+    private Vector2 posicaoInicialPatrulha;
+    private Vector2 direcaoPatrulhaAtual;
+    private float distanciaPercorrida = 0f;
+    private bool estaPausadoPatrulhando = false;
+    private float temporizadorPausa = 0f;
 
     private Rigidbody2D rb;
     private Vector2 direcaoDesvioAtual;
@@ -37,57 +46,56 @@ public class InimigoIA : MonoBehaviour {
         if (objetoExclamacao != null){
             objetoExclamacao.SetActive(false); 
         }
+
+        posicaoInicialPatrulha = transform.position;
+        DefinirNovaDirecaoPatrulha();
     }
 
     private void FixedUpdate() {
+        Vector2 direcaoFinal = Vector2.zero;
+
         if (playerNaAreaDeVisao && playerAlvo != null){
             float distanciaAtual = Vector2.Distance(transform.position, playerAlvo.transform.position);
 
             if (distanciaAtual > distanciaAtaque){
                 Vector2 direcaoParaPlayer = ((Vector2)playerAlvo.transform.position - (Vector2)transform.position).normalized;
-                Vector2 direcaoFinal = direcaoParaPlayer;
+                direcaoFinal = direcaoParaPlayer;
 
-                // Se ainda estivermos no tempo de compromisso com o desvio, mantém a curva para evitar o loop
                 if (tempoDesvioRestante > 0f) {
                     tempoDesvioRestante -= Time.fixedDeltaTime;
                     direcaoFinal = direcaoDesvioAtual;
                 } else {
-                    // Lança raios em leque (frente, levemente à esquerda e levemente à direita) para detecção antecipada
-                    Vector2 direcaoEsquerda = new Vector2(-direcaoParaPlayer.y, direcaoParaPlayer.x);
-                    Vector2 direcaoDireita = new Vector2(direcaoParaPlayer.y, -direcaoParaPlayer.x);
-
                     RaycastHit2D hitFrente = Physics2D.Raycast(transform.position, direcaoParaPlayer, distanciaDeteccao, oclusoresMask);
-                    RaycastHit2D hitFrenteEsquerda = Physics2D.Raycast(transform.position, (direcaoParaPlayer + direcaoEsquerda * 0.5f).normalized, distanciaDeteccao * 0.8f, oclusoresMask);
-                    RaycastHit2D hitFrenteDireita = Physics2D.Raycast(transform.position, (direcaoParaPlayer + direcaoDireita * 0.5f).normalized, distanciaDeteccao * 0.8f, oclusoresMask);
                     
-                    if (hitFrente.collider != null || hitFrenteEsquerda.collider != null || hitFrenteDireita.collider != null) {
-                        // Verifica qual lado está mais livre para contornar
-                        RaycastHit2D hitLateralEsquerda = Physics2D.Raycast(transform.position, direcaoEsquerda, 1.5f, oclusoresMask);
-                        RaycastHit2D hitLateralDireita = Physics2D.Raycast(transform.position, direcaoDireita, 1.5f, oclusoresMask);
+                    if (hitFrente.collider != null) {
+                        Vector2 direcaoEsquerda = new Vector2(-direcaoParaPlayer.y, direcaoParaPlayer.x);
+                        Vector2 direcaoDireita = new Vector2(direcaoParaPlayer.y, -direcaoParaPlayer.x);
 
-                        if (hitLateralEsquerda.collider == null) {
+                        RaycastHit2D hitEsquerda = Physics2D.Raycast(transform.position, direcaoEsquerda, 2.0f, oclusoresMask);
+                        RaycastHit2D hitDireita = Physics2D.Raycast(transform.position, direcaoDireita, 2.0f, oclusoresMask);
+
+                        if (hitEsquerda.collider == null) {
                             direcaoDesvioAtual = direcaoEsquerda;
-                        } else if (hitLateralDireita.collider == null) {
+                        } else if (hitDireita.collider == null) {
                             direcaoDesvioAtual = direcaoDireita;
                         } else {
-                            direcaoDesvioAtual = direcaoEsquerda; // Padrão de segurança se ambos tiverem colisão
+                            direcaoDesvioAtual = direcaoEsquerda;
                         }
 
-                        // Força o inimigo a manter o desvio por 0.4 segundos para contornar o tronco de forma fluida
-                        tempoDesvioRestante = 0.4f;
+                        tempoDesvioRestante = 0.8f;
                         direcaoFinal = direcaoDesvioAtual;
                     } else {
+                        tempoDesvioRestante = 0f;
                         direcaoDesvioAtual = Vector2.zero;
                         direcaoFinal = direcaoParaPlayer;
                     }
                 }
 
-                // Move o Rigidbody com a direção calculada
                 if (rb != null) {
                     Vector2 novaPosicao = rb.position + direcaoFinal * velocidadeMovimento * Time.fixedDeltaTime;
                     rb.MovePosition(novaPosicao);
                 }
-            } else{
+            } else {
                 if (!aAtacar){
                     Vector2 direcao = playerAlvo.transform.position - pivotAtaque.position;
                     anguloDoAtaque = Mathf.Atan2(direcao.y, direcao.x) * Mathf.Rad2Deg;
@@ -98,16 +106,76 @@ public class InimigoIA : MonoBehaviour {
                     proximoAtaque = Time.time + tempoEntreAtaques;
                 }
             }
+        } 
+        else {
+            if (estaPausadoPatrulhando) {
+                temporizadorPausa -= Time.fixedDeltaTime;
+                if (temporizadorPausa <= 0f) {
+                    estaPausadoPatrulhando = false;
+                    posicaoInicialPatrulha = transform.position;
+                    distanciaPercorrida = 0f;
+                    DefinirNovaDirecaoPatrulha();
+                }
+            } else {
+                if (rb != null) {
+                    Vector2 passoMovimento = direcaoPatrulhaAtual * (velocidadeMovimento * 0.4f) * Time.fixedDeltaTime;
+                    Vector2 novaPosicao = rb.position + passoMovimento;
+                    
+                    distanciaPercorrida += passoMovimento.magnitude;
+
+                    RaycastHit2D hitPatrulha = Physics2D.Raycast(transform.position, direcaoPatrulhaAtual, 1.0f, oclusoresMask);
+                    if (hitPatrulha.collider != null || distanciaPercorrida >= distanciaAndar) {
+                        estaPausadoPatrulhando = true;
+                        temporizadorPausa = tempoPausa;
+                    } else {
+                        rb.MovePosition(novaPosicao);
+                    }
+                }
+            }
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D outro){
-        if (outro.CompareTag("Player")){
-            playerNaAreaDeVisao = true;
-            playerAlvo = outro.gameObject;
-            if (objetoExclamacao != null && !aPiscarExclamacao){
-                StartCoroutine(PiscarExclamacao());
+    private void DefinirNovaDirecaoPatrulha() {
+        float anguloAleatorio = Random.Range(0f, 360f) * Mathf.Deg2Rad;
+        direcaoPatrulhaAtual = new Vector2(Mathf.Cos(anguloAleatorio), Mathf.Sin(anguloAleatorio)).normalized;
+    }
+
+    private void ProcessarVisaoPlayer(GameObject outroObjeto) {
+        Vector2 direcaoAtePlayer = (Vector2)outroObjeto.transform.position - (Vector2)transform.position;
+        float distanciaReal = direcaoAtePlayer.magnitude;
+
+        // Lança um raio para ver se há obstáculo entre o inimigo e o player
+        RaycastHit2D hitVisao = Physics2D.Raycast(transform.position, direcaoAtePlayer.normalized, distanciaReal, oclusoresMask);
+
+        if (hitVisao.collider == null) {
+            // Caminho totalmente livre, inimigo vê o player
+            if (!playerNaAreaDeVisao) {
+                playerNaAreaDeVisao = true;
+                playerAlvo = outroObjeto;
+                if (objetoExclamacao != null && !aPiscarExclamacao){
+                    StartCoroutine(PiscarExclamacao());
+                }
             }
+        } else {
+            // O player está na zona, mas escondido atrás da árvore
+            if (playerNaAreaDeVisao) {
+                playerNaAreaDeVisao = false;
+                playerAlvo = null;
+                if (objetoHitbox != null){
+                    BoxCollider2D col = objetoHitbox.GetComponent<BoxCollider2D>();
+                    if (col != null) col.enabled = false;
+                    objetoHitbox.SetActive(false);
+                }
+                if (objetoExclamacao != null){
+                    objetoExclamacao.SetActive(false);
+                }
+            }
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D outro){
+        if (outro.CompareTag("Player")){
+            ProcessarVisaoPlayer(outro.gameObject);
         }
     }
 
@@ -123,6 +191,9 @@ public class InimigoIA : MonoBehaviour {
             if (objetoExclamacao != null){
                 objetoExclamacao.SetActive(false);
             }
+            posicaoInicialPatrulha = transform.position;
+            distanciaPercorrida = 0f;
+            DefinirNovaDirecaoPatrulha();
         }
     }
 
