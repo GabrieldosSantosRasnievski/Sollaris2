@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: da734047a03045144bcc74ba60f02197
+guid: 16e79a0bbc63224469aebffa744f4a0d
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 1283442445541010712
-    second: Brilho_0
+      213: 4556617768182904718
+    second: Escudo_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 32
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -102,13 +102,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Brilho_0
+      name: Escudo_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 2
         y: 0
-        width: 8
-        height: 8
+        width: 28
+        height: 31
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -117,8 +117,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 81d6120ba14bfc110800000000000000
-      internalID: 1283442445541010712
+      spriteID: e8776c9d7bb5c3f30800000000000000
+      internalID: 4556617768182904718
       vertices: []
       indices: 
       edges: []
@@ -137,7 +137,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Brilho_0: 1283442445541010712
+      Escudo_0: 4556617768182904718
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

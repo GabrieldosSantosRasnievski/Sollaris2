@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 8082efb1cc0c70149ba91cde11b84d59
+guid: a4133d8f1cc290248b4b7c767363ce29
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3766391456551020374
-    second: arbusto 32x20_0
+      213: -8051687792659377286
+    second: arvore_teste 32x64_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 32
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -102,13 +102,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: arbusto 32x20_0
+      name: arvore_teste 32x64_0
       rect:
         serializedVersion: 2
-        x: 3
-        y: 0
-        width: 26
-        height: 20
+        x: 0
+        y: 4
+        width: 32
+        height: 55
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -117,8 +117,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: aa8d53bece61bbbc0800000000000000
-      internalID: -3766391456551020374
+      spriteID: a73503cbc98a24090800000000000000
+      internalID: -8051687792659377286
       vertices: []
       indices: 
       edges: []
@@ -137,7 +137,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      arbusto 32x20_0: -3766391456551020374
+      arvore_teste 32x64_0: -8051687792659377286
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

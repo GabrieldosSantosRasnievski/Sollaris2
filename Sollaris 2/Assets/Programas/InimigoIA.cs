@@ -15,12 +15,8 @@ public class InimigoIA : MonoBehaviour {
     public GameObject objetoExclamacao; 
     private bool aPiscarExclamacao = false;
     public float danoInimigo = 10f;
-
-    [Header("Configuração de Desvio de Obstáculos")]
     public LayerMask oclusoresMask; 
     public float distanciaDeteccao = 3.0f;
-
-    [Header("Configuração de Patrulha por Distância")]
     public float distanciaAndar = 3.0f;
     public float tempoPausa = 2.0f;
     private Vector2 posicaoInicialPatrulha;
@@ -62,18 +58,15 @@ public class InimigoIA : MonoBehaviour {
                 direcaoFinal = direcaoParaPlayer;
 
                 if (tempoDesvioRestante > 0f) {
-                    tempoDesvioRestante -= Time.fixedDeltaTime;
+                    tempoDesvioRestante = tempoDesvioRestante - Time.fixedDeltaTime;
                     direcaoFinal = direcaoDesvioAtual;
                 } else {
                     RaycastHit2D hitFrente = Physics2D.Raycast(transform.position, direcaoParaPlayer, distanciaDeteccao, oclusoresMask);
-                    
                     if (hitFrente.collider != null) {
                         Vector2 direcaoEsquerda = new Vector2(-direcaoParaPlayer.y, direcaoParaPlayer.x);
                         Vector2 direcaoDireita = new Vector2(direcaoParaPlayer.y, -direcaoParaPlayer.x);
-
                         RaycastHit2D hitEsquerda = Physics2D.Raycast(transform.position, direcaoEsquerda, 2.0f, oclusoresMask);
                         RaycastHit2D hitDireita = Physics2D.Raycast(transform.position, direcaoDireita, 2.0f, oclusoresMask);
-
                         if (hitEsquerda.collider == null) {
                             direcaoDesvioAtual = direcaoEsquerda;
                         } else if (hitDireita.collider == null) {
@@ -81,7 +74,6 @@ public class InimigoIA : MonoBehaviour {
                         } else {
                             direcaoDesvioAtual = direcaoEsquerda;
                         }
-
                         tempoDesvioRestante = 0.8f;
                         direcaoFinal = direcaoDesvioAtual;
                     } else {
@@ -90,7 +82,6 @@ public class InimigoIA : MonoBehaviour {
                         direcaoFinal = direcaoParaPlayer;
                     }
                 }
-
                 if (rb != null) {
                     Vector2 novaPosicao = rb.position + direcaoFinal * velocidadeMovimento * Time.fixedDeltaTime;
                     rb.MovePosition(novaPosicao);
@@ -109,7 +100,7 @@ public class InimigoIA : MonoBehaviour {
         } 
         else {
             if (estaPausadoPatrulhando) {
-                temporizadorPausa -= Time.fixedDeltaTime;
+                temporizadorPausa = temporizadorPausa - Time.fixedDeltaTime;
                 if (temporizadorPausa <= 0f) {
                     estaPausadoPatrulhando = false;
                     posicaoInicialPatrulha = transform.position;
@@ -120,9 +111,7 @@ public class InimigoIA : MonoBehaviour {
                 if (rb != null) {
                     Vector2 passoMovimento = direcaoPatrulhaAtual * (velocidadeMovimento * 0.4f) * Time.fixedDeltaTime;
                     Vector2 novaPosicao = rb.position + passoMovimento;
-                    
-                    distanciaPercorrida += passoMovimento.magnitude;
-
+                    distanciaPercorrida = distanciaPercorrida + passoMovimento.magnitude;
                     RaycastHit2D hitPatrulha = Physics2D.Raycast(transform.position, direcaoPatrulhaAtual, 1.0f, oclusoresMask);
                     if (hitPatrulha.collider != null || distanciaPercorrida >= distanciaAndar) {
                         estaPausadoPatrulhando = true;
@@ -134,51 +123,19 @@ public class InimigoIA : MonoBehaviour {
             }
         }
     }
-
     private void DefinirNovaDirecaoPatrulha() {
         float anguloAleatorio = Random.Range(0f, 360f) * Mathf.Deg2Rad;
         direcaoPatrulhaAtual = new Vector2(Mathf.Cos(anguloAleatorio), Mathf.Sin(anguloAleatorio)).normalized;
     }
-
-    private void ProcessarVisaoPlayer(GameObject outroObjeto) {
-        Vector2 direcaoAtePlayer = (Vector2)outroObjeto.transform.position - (Vector2)transform.position;
-        float distanciaReal = direcaoAtePlayer.magnitude;
-
-        // Lança um raio para ver se há obstáculo entre o inimigo e o player
-        RaycastHit2D hitVisao = Physics2D.Raycast(transform.position, direcaoAtePlayer.normalized, distanciaReal, oclusoresMask);
-
-        if (hitVisao.collider == null) {
-            // Caminho totalmente livre, inimigo vê o player
-            if (!playerNaAreaDeVisao) {
-                playerNaAreaDeVisao = true;
-                playerAlvo = outroObjeto;
-                if (objetoExclamacao != null && !aPiscarExclamacao){
-                    StartCoroutine(PiscarExclamacao());
-                }
-            }
-        } else {
-            // O player está na zona, mas escondido atrás da árvore
-            if (playerNaAreaDeVisao) {
-                playerNaAreaDeVisao = false;
-                playerAlvo = null;
-                if (objetoHitbox != null){
-                    BoxCollider2D col = objetoHitbox.GetComponent<BoxCollider2D>();
-                    if (col != null) col.enabled = false;
-                    objetoHitbox.SetActive(false);
-                }
-                if (objetoExclamacao != null){
-                    objetoExclamacao.SetActive(false);
-                }
-            }
-        }
-    }
-
-    private void OnTriggerStay2D(Collider2D outro){
+    private void OnTriggerEnter2D(Collider2D outro){
         if (outro.CompareTag("Player")){
-            ProcessarVisaoPlayer(outro.gameObject);
+            playerNaAreaDeVisao = true;
+            playerAlvo = outro.gameObject;
+            if (objetoExclamacao != null && !aPiscarExclamacao){
+                StartCoroutine(PiscarExclamacao());
+            }
         }
     }
-
     private void OnTriggerExit2D(Collider2D outro){
         if (outro.CompareTag("Player")){
             playerNaAreaDeVisao = false;
@@ -196,7 +153,6 @@ public class InimigoIA : MonoBehaviour {
             DefinirNovaDirecaoPatrulha();
         }
     }
-
     private IEnumerator PiscarExclamacao(){
         aPiscarExclamacao = true;
         for (int i = 0; i < 3; i++){
@@ -207,7 +163,6 @@ public class InimigoIA : MonoBehaviour {
         }
         aPiscarExclamacao = false;
     }
-
     private IEnumerator AtacarInstantaneo(){
         aAtacar = true;
         if (objetoHitbox != null){
@@ -245,7 +200,6 @@ public class InimigoIA : MonoBehaviour {
         }
         aAtacar = false;
     }
-
     public void PararAtaque(){
         if(aAtacar){
             StopAllCoroutines();

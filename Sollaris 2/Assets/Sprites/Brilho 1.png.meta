@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 4f23889136d1c0f49b00e736a620cf2b
+guid: e00998e812bc15d4bb88b6340c527c49
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3525921472725369070
-    second: Arbusto seco_0
+      213: 1283442445541010712
+    second: Brilho_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -49,9 +49,9 @@ TextureImporter:
   spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
-  alignment: 7
+  alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 32
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -102,13 +102,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Arbusto seco_0
+      name: Brilho_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 2
-        width: 32
-        height: 19
+        y: 0
+        width: 8
+        height: 8
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -117,8 +117,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ee0c7b7f5e69ee030800000000000000
-      internalID: 3525921472725369070
+      spriteID: 81d6120ba14bfc110800000000000000
+      internalID: 1283442445541010712
       vertices: []
       indices: 
       edges: []
@@ -137,7 +137,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Arbusto seco_0: 3525921472725369070
+      Brilho_0: 1283442445541010712
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

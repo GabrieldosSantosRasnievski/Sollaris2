@@ -24,7 +24,13 @@ public class AtaqueJogador : MonoBehaviour {
             float anguloDoAtaque = Mathf.Atan2(direcao.y, direcao.x) * Mathf.Rad2Deg;
             pivotAtaque.rotation = Quaternion.Euler(new Vector3(0, 0, anguloDoAtaque));
         }
+
         if (Input.GetMouseButtonDown(0)){
+            // Se o script de construção estiver ativo e houver um fantasma pronto para construir, BLOQUEIA o ataque do jogador
+            if (ColocarObjeto.ConstrucaoAtiva) {
+                return; 
+            }
+
             if (Time.time >= proximoAtaque && !aAtacar){
                 TentarAtacar();
                 proximoAtaque = Time.time + tempoEntreAtaques;

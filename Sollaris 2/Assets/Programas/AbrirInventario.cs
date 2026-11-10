@@ -22,6 +22,9 @@ public class AbrirInventario : MonoBehaviour {
     public Image imagemCalca;
     public Image imagemBota;
 
+    public static bool bloqueadoPorOutraUI = false;
+    private static float ultimoTempoFechamentoUI = -1f;
+
     void Start() {
         if (painelMenuGeral != null) {
             painelMenuGeral.SetActive(false);
@@ -31,22 +34,47 @@ public class AbrirInventario : MonoBehaviour {
             painelSlotsRapidos.SetActive(true);
         }
     }
+
+    // Função estática chamada pela Bancada de Trabalho ao fechar
+    public static void RegistrarFechamentoUI() {
+        bloqueadoPorOutraUI = false;
+        ultimoTempoFechamentoUI = Time.unscaledTime;
+    }
+
     void Update() {
+        // Bloqueia se ainda estiver marcado como bloqueado por outra UI
+        if (bloqueadoPorOutraUI) {
+            return;
+        }
+
+        // Se uma UI fechou há menos de 0.2 segundos, ignora os botões B e ESC
+        if (Time.unscaledTime - ultimoTempoFechamentoUI < 0.2f) {
+            return;
+        }
+
         if (Input.GetKeyDown(KeyCode.B) || Input.GetKeyDown(KeyCode.Escape)) {
             AlternarMenuGeral();
         }
+
         if (painelMenuGeral != null && painelMenuGeral.activeSelf) {
             AtualizarUI();
         }
     }
+
     public void AlternarMenuGeral() {
+        if (bloqueadoPorOutraUI) {
+            return;
+        }
+
         if (painelMenuGeral != null) {
             bool ativar = !painelMenuGeral.activeSelf;
             painelMenuGeral.SetActive(ativar);
+
             if (ativar) {
                 Time.timeScale = 0f;
                 AbrirPainelInventario();
-            } else {
+            } 
+            else {
                 Time.timeScale = 1f;
                 if (painelSlotsRapidos != null) {
                     painelSlotsRapidos.SetActive(true);
@@ -54,6 +82,7 @@ public class AbrirInventario : MonoBehaviour {
             }
         }
     }
+
     public void AbrirPainelInventario() {
         if (painelInventario != null) {
             painelInventario.SetActive(true);
@@ -65,6 +94,7 @@ public class AbrirInventario : MonoBehaviour {
             painelSlotsRapidos.SetActive(true);
         }
     }
+
     public void AbrirPainelCrafting() {
         if (painelCrafting != null) {
             painelCrafting.SetActive(true);
@@ -76,6 +106,7 @@ public class AbrirInventario : MonoBehaviour {
             painelSlotsRapidos.SetActive(false);
         }
     }
+
     public void AtualizarUI() {
         if (InventarioJogador.Instance == null) {
             return;
@@ -85,7 +116,8 @@ public class AbrirInventario : MonoBehaviour {
             if (i < fundosSlotsRapidos.Count && fundosSlotsRapidos[i] != null) {
                 if (i == slotAtivo) {
                     fundosSlotsRapidos[i].color = corSelecionado;
-                } else {
+                } 
+                else {
                     fundosSlotsRapidos[i].color = corNormal;
                 }
             }
@@ -94,22 +126,29 @@ public class AbrirInventario : MonoBehaviour {
                 if (!string.IsNullOrEmpty(slot.nomeItem) && slot.quantidadeItem > 0) {
                     if (slot.quantidadeItem > 1) {
                         textosSlotsRapidos[i].text = slot.nomeItem + "\nx" + slot.quantidadeItem;
-                    } else {
+                    } 
+                    else {
                         textosSlotsRapidos[i].text = slot.nomeItem;
                     }
                     if (i < imagensSlotsRapidos.Count && imagensSlotsRapidos[i] != null) {
                         imagensSlotsRapidos[i].sprite = slot.iconeItem;
                         imagensSlotsRapidos[i].enabled = true;
                     }
-                } else {
-                    if (textosSlotsRapidos[i] != null) textosSlotsRapidos[i].text = "";
+                } 
+                else {
+                    if (textosSlotsRapidos[i] != null) {
+                        textosSlotsRapidos[i].text = "";
+                    }
                     if (i < imagensSlotsRapidos.Count && imagensSlotsRapidos[i] != null) {
                         imagensSlotsRapidos[i].sprite = null;
                         imagensSlotsRapidos[i].enabled = false;
                     }
                 }
-            } else {
-                if (textosSlotsRapidos[i] != null) textosSlotsRapidos[i].text = "";
+            } 
+            else {
+                if (textosSlotsRapidos[i] != null) {
+                    textosSlotsRapidos[i].text = "";
+                }
                 if (i < imagensSlotsRapidos.Count && imagensSlotsRapidos[i] != null) {
                     imagensSlotsRapidos[i].sprite = null;
                     imagensSlotsRapidos[i].enabled = false;
@@ -122,22 +161,29 @@ public class AbrirInventario : MonoBehaviour {
                 if (!string.IsNullOrEmpty(slot.nomeItem) && slot.quantidadeItem > 0) {
                     if (slot.quantidadeItem > 1) {
                         textosSlotsInventario[i].text = slot.nomeItem + "\nx" + slot.quantidadeItem;
-                    } else {
+                    } 
+                    else {
                         textosSlotsInventario[i].text = slot.nomeItem;
                     }
                     if (i < imagensSlotsInventario.Count && imagensSlotsInventario[i] != null) {
                         imagensSlotsInventario[i].sprite = slot.iconeItem;
                         imagensSlotsInventario[i].enabled = true;
                     }
-                } else {
-                    if (textosSlotsInventario[i] != null) textosSlotsInventario[i].text = "";
+                } 
+                else {
+                    if (textosSlotsInventario[i] != null) {
+                        textosSlotsInventario[i].text = "";
+                    }
                     if (i < imagensSlotsInventario.Count && imagensSlotsInventario[i] != null) {
                         imagensSlotsInventario[i].sprite = null;
                         imagensSlotsInventario[i].enabled = false;
                     }
                 }
-            } else {
-                if (textosSlotsInventario[i] != null) textosSlotsInventario[i].text = "";
+            } 
+            else {
+                if (textosSlotsInventario[i] != null) {
+                    textosSlotsInventario[i].text = "";
+                }
                 if (i < imagensSlotsInventario.Count && imagensSlotsInventario[i] != null) {
                     imagensSlotsInventario[i].sprite = null;
                     imagensSlotsInventario[i].enabled = false;
@@ -151,12 +197,14 @@ public class AbrirInventario : MonoBehaviour {
         AtualizarIconeEquipamento(imagemCalca, inv.slotCalca);
         AtualizarIconeEquipamento(imagemBota, inv.slotBota);
     }
+
     private void AtualizarIconeEquipamento(Image imagemUI, InventarioJogador.ItemSlot slotEquipado) {
         if (imagemUI != null) {
             if (slotEquipado != null && !string.IsNullOrEmpty(slotEquipado.nomeItem) && slotEquipado.iconeItem != null) {
                 imagemUI.sprite = slotEquipado.iconeItem;
                 imagemUI.enabled = true;
-            } else {
+            } 
+            else {
                 imagemUI.sprite = null;
                 imagemUI.enabled = false;
             }

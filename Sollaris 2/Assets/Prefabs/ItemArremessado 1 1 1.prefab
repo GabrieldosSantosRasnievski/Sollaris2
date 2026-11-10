@@ -34,7 +34,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1.4029236, y: -0.000030517578}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 459.1373, y: 53.6777}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6886415318044114834
@@ -67,7 +67,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Aperte "E" para coletar
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: b7ad56a2b87bebe4991b730dea6199af, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: ed1c53e07aeed744ea46aa31d11aa94b, type: 2}
   m_sharedMaterial: {fileID: 5088955997255119829, guid: b7ad56a2b87bebe4991b730dea6199af, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -134,7 +134,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &6251773277008814003
@@ -443,6 +443,15 @@ MonoBehaviour:
   podeConsumir: 0
   valorFome: 0
   danoItem: 0
+  defesaItem: 0
   tamanhoHitbox: {x: 1, y: 1}
   quebraAoAtingir: 0
+  podeColocarCabeca: 0
+  podeColocarTorso: 0
+  podeColocarCintura: 0
+  podeColocarCalca: 0
+  podeColocarBota: 0
+  ehMachado: 0
+  ehPicareta: 0
+  ehCortante: 0
   distanciaInteracao: 0.8

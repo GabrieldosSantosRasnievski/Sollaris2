@@ -12,7 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7891d202c28f24a48be8ad2803a72b42, type: 3}
   m_Name: BancadaTrabalho
   m_EditorClassIdentifier: Assembly-CSharp::ReceitaCrafting
-  ingredientes: []
+  ingredientes:
+  - nomeItem: Madeira
+    quantidade: 5
+  - nomeItem: Corda
+    quantidade: 3
   nomeItemResultado: Bancada de Trabalho
   iconeResultado: {fileID: 0}
   quantidadeResultado: 1
@@ -24,3 +28,4 @@ MonoBehaviour:
   ehMachadoResultado: 0
   ehPicaretaResultado: 0
   ehCortanteResultado: 0
+  prefabParaConstruir: {fileID: 1511396133728163870, guid: cf0d8397395550146ae1ee05cf157ae2, type: 3}
