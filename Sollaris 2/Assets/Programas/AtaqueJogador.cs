@@ -17,6 +17,11 @@ public class AtaqueJogador : MonoBehaviour {
     }
 
     private void Update() {
+        // Se o inventário estiver aberto ou construindo, bloqueia totalmente o ataque e a rotação da arma
+        if (AbrirInventario.InventarioAberto || ColocarObjeto.ConstrucaoAtiva) {
+            return;
+        }
+
         if (pivotAtaque != null && !aAtacar){
             Vector3 posicaoMouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             posicaoMouse.z = 0f;
@@ -26,11 +31,6 @@ public class AtaqueJogador : MonoBehaviour {
         }
 
         if (Input.GetMouseButtonDown(0)){
-            // Se o script de construção estiver ativo e houver um fantasma pronto para construir, BLOQUEIA o ataque do jogador
-            if (ColocarObjeto.ConstrucaoAtiva) {
-                return; 
-            }
-
             if (Time.time >= proximoAtaque && !aAtacar){
                 TentarAtacar();
                 proximoAtaque = Time.time + tempoEntreAtaques;

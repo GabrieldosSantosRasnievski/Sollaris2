@@ -25,29 +25,30 @@ public class AbrirInventario : MonoBehaviour {
     public static bool bloqueadoPorOutraUI = false;
     private static float ultimoTempoFechamentoUI = -1f;
 
+    // Propriedade para outros scripts saberem se o menu/inventario está aberto
+    public static bool InventarioAberto { get; private set; } = false;
+
     void Start() {
         if (painelMenuGeral != null) {
             painelMenuGeral.SetActive(false);
         }
+        InventarioAberto = false;
         AbrirPainelInventario();
         if (painelSlotsRapidos != null) {
             painelSlotsRapidos.SetActive(true);
         }
     }
 
-    // Função estática chamada pela Bancada de Trabalho ao fechar
     public static void RegistrarFechamentoUI() {
         bloqueadoPorOutraUI = false;
         ultimoTempoFechamentoUI = Time.unscaledTime;
     }
 
     void Update() {
-        // Bloqueia se ainda estiver marcado como bloqueado por outra UI
         if (bloqueadoPorOutraUI) {
             return;
         }
 
-        // Se uma UI fechou há menos de 0.2 segundos, ignora os botões B e ESC
         if (Time.unscaledTime - ultimoTempoFechamentoUI < 0.2f) {
             return;
         }
@@ -69,6 +70,7 @@ public class AbrirInventario : MonoBehaviour {
         if (painelMenuGeral != null) {
             bool ativar = !painelMenuGeral.activeSelf;
             painelMenuGeral.SetActive(ativar);
+            InventarioAberto = ativar; // Atualiza o estado global
 
             if (ativar) {
                 Time.timeScale = 0f;

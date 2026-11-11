@@ -9025,17 +9025,17 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.0022666752, y: -0.06800064}
+  m_Offset: {x: 0.0009599328, y: -0.20566906}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.19, y: 0.32}
+    oldSize: {x: 0.59375, y: 1}
     newSize: {x: 0.19, y: 0.32}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.10386583, y: 0.18399872}
+  m_Size: {x: 0.28670663, y: 0.5927019}
   m_EdgeRadius: 0
 --- !u!114 &764646598
 MonoBehaviour:
@@ -9049,9 +9049,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31a273b5fafcc524ab240e2f2a8bf0d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TesteMovimento
-  velocidade: 3
-  velocidadeDefendendo: 0.5
-  velocidadeDash: 6
+  velocidade: 5
+  velocidadeDefendendo: 2
+  velocidadeDash: 10
   duracaoDash: 0.5
   recargaDash: 1
   spriteRenderer: {fileID: 764646594}
@@ -10018,12 +10018,12 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.6416073
+  m_Radius: 1
 --- !u!61 &800276801
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -10058,17 +10058,17 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.0038955212, y: -0.21646595}
+  m_Offset: {x: 0.0033955574, y: -0.7062755}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.32, y: 0.64}
+    oldSize: {x: 1, y: 2}
     newSize: {x: 0.32, y: 0.64}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.23429728, y: 0.11357403}
+  m_Size: {x: 0.57215977, y: 0.30222237}
   m_EdgeRadius: 0
 --- !u!50 &800276802
 Rigidbody2D:
@@ -11640,7 +11640,7 @@ Transform:
   m_GameObject: {fileID: 893910751}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 0, z: 0}
+  m_LocalPosition: {x: 1, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -16627,7 +16627,7 @@ TilemapRenderer:
   m_SortingOrder: -32768
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
-  m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
+  m_ChunkCullingBounds: {x: 0.5, y: 0.5, z: 0}
   m_MaxChunkCount: 32
   m_MaxFrameAge: 64
   m_SortOrder: 0
@@ -28081,7 +28081,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 10
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 9a9fda0e83e2f7f48b416dbd4c47b62c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a8029a054b6a4a749b7dc86e7be808bd, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -28089,7 +28089,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 1
   m_BlendShapeWeights: []
 --- !u!114 &1632846973
@@ -28104,8 +28104,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71439511e5756b2469596fe6ead83bec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Arbusto
-  spriteComFrutas: {fileID: 21300000, guid: 9a9fda0e83e2f7f48b416dbd4c47b62c, type: 3}
-  spriteSemFrutas: {fileID: 21300000, guid: 8082efb1cc0c70149ba91cde11b84d59, type: 3}
+  spriteComFrutas: {fileID: 21300000, guid: a8029a054b6a4a749b7dc86e7be808bd, type: 3}
+  spriteSemFrutas: {fileID: 21300000, guid: c8f782e4118d08d40b7c7801a66775c4, type: 3}
   prefabFruta: {fileID: 573463245}
   textoInteracao: {fileID: 1514669666}
 --- !u!61 &1632846974
@@ -29592,7 +29592,7 @@ Grid:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1733690247}
   m_Enabled: 1
-  m_CellSize: {x: 0.64, y: 0.64, z: 0}
+  m_CellSize: {x: 2, y: 2, z: 0}
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
@@ -30603,7 +30603,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 2
+  orthographic size: 5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -35329,7 +35329,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 764646595}
@@ -37215,7 +37215,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3857716680551158611, guid: bc574c6c14b0ae8478b4fac3a5793e27, type: 3}
       propertyPath: distanciaInteracao
-      value: 0.5
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 4805945016098807867, guid: bc574c6c14b0ae8478b4fac3a5793e27, type: 3}
       propertyPath: m_LocalPosition.x

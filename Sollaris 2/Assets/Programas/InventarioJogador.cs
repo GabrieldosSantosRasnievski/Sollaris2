@@ -73,6 +73,11 @@ public class InventarioJogador : MonoBehaviour {
         }
     }
     private void Update() {
+        // Se o inventário estiver aberto, ignora cliques e teclas de atalho do hotbar
+        if (AbrirInventario.InventarioAberto) {
+            return;
+        }
+
         if (Input.GetMouseButtonDown(0)) {
             UsarItemSelecionado();
         }
