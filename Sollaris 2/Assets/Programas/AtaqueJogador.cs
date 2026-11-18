@@ -9,10 +9,15 @@ public class AtaqueJogador : MonoBehaviour {
     public Transform pivotAtaque; 
     public GameObject objetoHitbox;
 
+    [Header("Configuração de Alcance do Ataque")]
+    public float offsetHitbox = 0.8f; // Distância exata em que a hitbox surge à frente do jogador
+
     private void Start(){
         if (objetoHitbox != null){
+            // Garante que a hitbox começa estritamente desligada ao iniciar o jogo
             BoxCollider2D col = objetoHitbox.GetComponent<BoxCollider2D>();
             if (col != null) col.enabled = false;
+            objetoHitbox.SetActive(false);
         }
     }
 
@@ -31,6 +36,11 @@ public class AtaqueJogador : MonoBehaviour {
         }
 
         if (Input.GetMouseButtonDown(0)){
+            // Proteção dupla para garantir o bloqueio caso clique com UI ou Construção ativas
+            if (AbrirInventario.InventarioAberto || ColocarObjeto.ConstrucaoAtiva) {
+                return;
+            }
+
             if (Time.time >= proximoAtaque && !aAtacar){
                 TentarAtacar();
                 proximoAtaque = Time.time + tempoEntreAtaques;
@@ -66,7 +76,13 @@ public class AtaqueJogador : MonoBehaviour {
             ehCortante = slotAtivo.ehCortante;
         }
 
-        if (objetoHitbox != null){
+        if (objetoHitbox != null && pivotAtaque != null){
+            // --- POSICIONAMENTO DINÂMICO DA HITBOX POR CÓDIGO ---
+            // Em vez de usar a distância fixa da hierarquia, calculamos o offset exato na direção do pivot/mouse
+            Vector2 direcaoAtaque = pivotAtaque.right; 
+            objetoHitbox.transform.position = (Vector2)transform.position + (direcaoAtaque * offsetHitbox);
+            // ----------------------------------------------------
+
             objetoHitbox.SetActive(true);
 
             Animator animHitbox = objetoHitbox.GetComponent<Animator>();
@@ -90,6 +106,15 @@ public class AtaqueJogador : MonoBehaviour {
 
             foreach(Collider2D alvo in alvosAtingidos){
                 if(alvo.gameObject == gameObject) continue;
+
+                // --- TRAVA DE DIREÇÃO: Impede de acertar inimigos nas costas ---
+                Vector2 direcaoAteAlvo = ((Vector2)alvo.transform.position - (Vector2)transform.position).normalized;
+                float produtoEscalar = Vector2.Dot(direcaoAtaque, direcaoAteAlvo);
+                if (produtoEscalar < 0.2f) { 
+                    continue; // Ignora se o alvo estiver nas costas ou fora do arco frontal
+                }
+                // ----------------------------------------------------------------
+
                 VidaInimigo vida = alvo.GetComponent<VidaInimigo>();
                 if(vida != null){
                     vida.TomarDano(danoFinal);

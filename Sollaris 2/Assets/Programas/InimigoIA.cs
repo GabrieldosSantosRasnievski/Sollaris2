@@ -15,6 +15,10 @@ public class InimigoIA : MonoBehaviour {
     public GameObject objetoExclamacao; 
     private bool aPiscarExclamacao = false;
     public float danoInimigo = 10f;
+    
+    [Header("Configuração de Alcance do Ataque")]
+    public float offsetHitbox = 1.2f; // Ajuste isto no Inspetor para o ataque alcançar perfeitamente o player!
+
     public LayerMask oclusoresMask; 
     public float distanciaDeteccao = 3.0f;
     public float distanciaAndar = 3.0f;
@@ -33,11 +37,13 @@ public class InimigoIA : MonoBehaviour {
         rb = GetComponent<Rigidbody2D>();
         if (rb != null) {
             rb.freezeRotation = true;
+            rb.interpolation = RigidbodyInterpolation2D.Interpolate;
         }
 
         if (objetoHitbox != null){
             BoxCollider2D col = objetoHitbox.GetComponent<BoxCollider2D>();
             if (col != null) col.enabled = false;
+            objetoHitbox.SetActive(false);
         }
         if (objetoExclamacao != null){
             objetoExclamacao.SetActive(false); 
@@ -53,7 +59,7 @@ public class InimigoIA : MonoBehaviour {
         if (playerNaAreaDeVisao && playerAlvo != null){
             float distanciaAtual = Vector2.Distance(transform.position, playerAlvo.transform.position);
 
-            if (distanciaAtual > distanciaAtaque){
+            if (distanciaAtual > (distanciaAtaque - 0.1f)){
                 Vector2 direcaoParaPlayer = ((Vector2)playerAlvo.transform.position - (Vector2)transform.position).normalized;
                 direcaoFinal = direcaoParaPlayer;
 
@@ -87,11 +93,16 @@ public class InimigoIA : MonoBehaviour {
                     rb.MovePosition(novaPosicao);
                 }
             } else {
-                if (!aAtacar){
-                    Vector2 direcao = playerAlvo.transform.position - pivotAtaque.position;
-                    anguloDoAtaque = Mathf.Atan2(direcao.y, direcao.x) * Mathf.Rad2Deg;
+                if (rb != null) {
+                    rb.linearVelocity = Vector2.zero;
                 }
-                pivotAtaque.rotation = Quaternion.Euler(new Vector3(0, 0, anguloDoAtaque));
+
+                if (!aAtacar && pivotAtaque != null && playerAlvo != null){
+                    Vector2 direcao = (Vector2)playerAlvo.transform.position - (Vector2)pivotAtaque.position;
+                    anguloDoAtaque = Mathf.Atan2(direcao.y, direcao.x) * Mathf.Rad2Deg;
+                    pivotAtaque.rotation = Quaternion.Euler(new Vector3(0, 0, anguloDoAtaque));
+                }
+
                 if (Time.time >= proximoAtaque && !aAtacar){
                     StartCoroutine(AtacarInstantaneo());
                     proximoAtaque = Time.time + tempoEntreAtaques;
@@ -123,10 +134,12 @@ public class InimigoIA : MonoBehaviour {
             }
         }
     }
+
     private void DefinirNovaDirecaoPatrulha() {
         float anguloAleatorio = Random.Range(0f, 360f) * Mathf.Deg2Rad;
         direcaoPatrulhaAtual = new Vector2(Mathf.Cos(anguloAleatorio), Mathf.Sin(anguloAleatorio)).normalized;
     }
+
     private void OnTriggerEnter2D(Collider2D outro){
         if (outro.CompareTag("Player")){
             playerNaAreaDeVisao = true;
@@ -136,6 +149,7 @@ public class InimigoIA : MonoBehaviour {
             }
         }
     }
+
     private void OnTriggerExit2D(Collider2D outro){
         if (outro.CompareTag("Player")){
             playerNaAreaDeVisao = false;
@@ -153,6 +167,7 @@ public class InimigoIA : MonoBehaviour {
             DefinirNovaDirecaoPatrulha();
         }
     }
+
     private IEnumerator PiscarExclamacao(){
         aPiscarExclamacao = true;
         for (int i = 0; i < 3; i++){
@@ -163,9 +178,18 @@ public class InimigoIA : MonoBehaviour {
         }
         aPiscarExclamacao = false;
     }
+
     private IEnumerator AtacarInstantaneo(){
         aAtacar = true;
-        if (objetoHitbox != null){
+        if (objetoHitbox != null && playerAlvo != null){
+            // --- POSICIONAMENTO DINÂMICO USANDO O OFFSET CONFIGURÁVEL ---
+            Vector2 direcaoAtePlayer = ((Vector2)playerAlvo.transform.position - (Vector2)transform.position).normalized;
+            objetoHitbox.transform.position = (Vector2)transform.position + (direcaoAtePlayer * offsetHitbox);
+            
+            float angulo = Mathf.Atan2(direcaoAtePlayer.y, direcaoAtePlayer.x) * Mathf.Rad2Deg;
+            objetoHitbox.transform.rotation = Quaternion.Euler(0, 0, angulo);
+            // -----------------------------------------------------------
+
             objetoHitbox.SetActive(true);
             Animator animHitbox = objetoHitbox.GetComponent<Animator>();
             if (animHitbox != null){
@@ -176,11 +200,13 @@ public class InimigoIA : MonoBehaviour {
                 col.enabled = true;
             }
             yield return new WaitForSeconds(0.05f);
+            
             Collider2D[] alvosAtingidos = Physics2D.OverlapBoxAll(
                 objetoHitbox.transform.position, 
                 col != null ? col.size : new Vector2(1f, 1f), 
                 objetoHitbox.transform.rotation.eulerAngles.z
             );
+            
             foreach(Collider2D alvo in alvosAtingidos){
                 if(alvo.gameObject == gameObject){
                     continue;
@@ -200,6 +226,7 @@ public class InimigoIA : MonoBehaviour {
         }
         aAtacar = false;
     }
+
     public void PararAtaque(){
         if(aAtacar){
             StopAllCoroutines();
